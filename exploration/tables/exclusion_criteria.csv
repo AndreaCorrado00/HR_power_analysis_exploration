@@ -1,0 +1,4 @@
+criterion,condition,rationale
+HR_NON_POSITIVE,heart_rate <= 0 bpm,A non-positive heart rate is not physiologically compatible with a recorded cycling activity.
+HR_EXTREME_HIGH,heart_rate > 240 bpm,A deliberately permissive absolute ceiling avoids age-predicted HRmax formulas while flagging extreme values.
+HR_RATE_OF_CHANGE,abs(delta heart_rate) / delta time > 20 bpm/s for 0 < delta time <= 2 s,Changes faster than an exceptionally rapid sinus response are treated as discontinuities.
