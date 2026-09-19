@@ -1,2 +1,8 @@
 /dateset
-/exploration
+/exploration/images/
+/tmp/pdfs/
+/.test_tmp/
+/.pytest_cache/
+/.mplconfig/
+/pytest-cache-files-*/
+/tests/_generated/
