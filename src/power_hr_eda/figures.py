@@ -287,8 +287,6 @@ def generate_report_figures(summary: DatasetSummary, output_dir: Path) -> list[t
     figures: list[tuple[str, Path]] = [
         ("Durata osservata delle attività. La durata è la differenza tra primo e ultimo timestamp record valido.", save_duration_distribution(summary.inventory, output_dir)),
         ("Volume mensile osservato. Le barre mostrano le ore tra primo e ultimo record; la linea mostra il numero di file.", _save_monthly_volume(summary, output_dir)),
-        ("Copertura dei campi record. Il denominatore è il numero complessivo di file FIT inventariati.", _save_field_coverage(summary, output_dir)),
-        ("Regolarità del campionamento. Sono mostrati la mediana degli intervalli positivi e i gap superiori a cinque secondi.", _save_sampling(summary, output_dir)),
         ("Copertura congiunta di potenza e frequenza cardiaca. Ogni attività contribuisce con una percentuale.", _save_joint_coverage(summary, output_dir)),
         ("Distribuzione della potenza osservata, senza filtraggio o sostituzione degli zeri.", save_signal_distribution(records.get("power", pd.Series(dtype=float)), "power", "W", output_dir)),
         ("Distribuzione della frequenza cardiaca osservata, senza imputazione dei campioni assenti.", save_signal_distribution(records.get("heart_rate", pd.Series(dtype=float)), "heart_rate", "bpm", output_dir)),

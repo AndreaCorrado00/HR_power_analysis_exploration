@@ -327,8 +327,6 @@ def build_pdf_report(
         lag_correlations = pd.to_numeric(summary.lag_summary["max_correlation"], errors="coerce")
         if lag_correlations.notna().any():
             min_lag_row = summary.lag_summary.loc[lag_correlations.idxmin()]
-    unknown_observed = _signal_stat(summary, "unknown_66", "observed_count")
-    unknown_zeros = _signal_stat(summary, "unknown_66", "zero_count")
     hr_zero_count = _signal_stat(summary, "heart_rate", "zero_count")
     temperature_run = _signal_stat(summary, "temperature", "longest_constant_run_samples", "max")
     story: list[object] = [
@@ -420,15 +418,11 @@ def build_pdf_report(
             ),
             _paragraph("5. Campi esclusi, ridondanti o non interpretabili", styles["h1"]),
             _paragraph(
-                "<b>Campo escluso.</b> <font name='EdaSans'>left_right_balance</font> è escluso dalle tabelle, dalle distribuzioni e dalle figure analitiche perché il dato non è disponibile in forma utilizzabile. I file FIT originali non sono modificati.",
+                "<b>Campi esclusi.</b> <font name='EdaSans'>left_right_balance</font> e <font name='EdaSans'>unknown_66</font> sono esclusi dalle tabelle, dalle distribuzioni e dalle figure analitiche perché non disponibili in forma scientificamente utilizzabile. I file FIT originali non sono modificati.",
                 styles["body"],
             ),
             _paragraph(
                 f"<b>Campi ridondanti.</b> altitude ed enhanced_altitude coincidono in {altitude_pairs - altitude_mismatches} coppie su {altitude_pairs}; speed ed enhanced_speed coincidono in {speed_pairs - speed_mismatches} coppie su {speed_pairs}. Le coppie sono conservate nell'inventario raw ma rappresentano la stessa informazione nei dati osservati.",
-                styles["body"],
-            ),
-            _paragraph(
-                (f"<b>Campo non interpretabile.</b> unknown_66 contiene {int(unknown_zeros or 0)} zeri su {int(unknown_observed or 0)} valori osservati. Il nome non identifica una grandezza né un'unità, quindi il campo non viene interpretato scientificamente."),
                 styles["body"],
             ),
             _paragraph(

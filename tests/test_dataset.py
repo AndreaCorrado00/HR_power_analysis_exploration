@@ -110,6 +110,24 @@ def test_excludes_unavailable_left_right_balance_from_eda_outputs() -> None:
     summary = build_dataset_summary([activity("ride.fit", records.to_dict("records"))])
 
     assert "left_right_balance" not in summary.field_coverage["field"].tolist()
+
+
+def test_excludes_unknown_66_from_eda_outputs() -> None:
+    records = pd.DataFrame(
+        {
+            "timestamp": pd.date_range("2026-01-01", periods=3, freq="s", tz="UTC"),
+            "power": [100, 110, 120],
+            "heart_rate": [120, 121, 122],
+            "unknown_66": [0, 0, 0],
+        }
+    )
+    summary = build_dataset_summary(
+        [FitActivity(Path("ride.fit"), records, {}, {"record": 3})]
+    )
+
+    assert "unknown_66" not in summary.field_coverage["field"].tolist()
+    assert "unknown_66" not in summary.signal_distributions["field"].tolist()
+    assert "unknown_66" not in summary.signal_quality["field"].tolist()
     assert "left_right_balance" not in summary.signal_quality["field"].tolist()
     assert "left_right_balance" not in summary.signal_distributions["field"].tolist()
 

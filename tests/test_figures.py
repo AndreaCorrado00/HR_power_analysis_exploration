@@ -55,7 +55,10 @@ def test_report_figure_set_covers_core_diagnostics() -> None:
     captions = " ".join(caption for caption, _ in figures)
 
     assert len(figures) >= 8
-    assert "campionamento" in captions.lower()
+    generated_names = {path.name for _, path in figures}
+    assert "campionamento" not in captions.lower()
+    assert "sampling_quality.png" not in generated_names
+    assert "field_coverage.png" not in generated_names
     assert "potenza" in captions.lower()
     assert "frequenza cardiaca" in captions.lower()
     assert all(path.exists() for _, path in figures)

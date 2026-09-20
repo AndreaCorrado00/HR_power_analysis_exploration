@@ -12,7 +12,7 @@ from .quality import summarize_joint_coverage, summarize_signal, summarize_timin
 from .synchronization import lagged_correlations, summarize_apparent_lag
 
 
-EXCLUDED_RECORD_FIELDS = {"left_right_balance"}
+EXCLUDED_RECORD_FIELDS = {"left_right_balance", "unknown_66"}
 
 
 @dataclass(frozen=True)
