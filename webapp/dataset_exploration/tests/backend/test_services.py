@@ -44,6 +44,9 @@ def test_normalization_preserves_originals_and_export_is_reconstructible():
     with zipfile.ZipFile(io.BytesIO(blob)) as z:
       assert not any(n.endswith('.fit') for n in z.namelist())
       manifest=json.loads(z.read('manifest.json')); assert manifest['normalization']['weight_kg']==70
-      assert 'elapsed_seconds' in z.read(manifest['segments'][0]['csv_file']).decode()
+      csv_text=z.read(manifest['segments'][0]['csv_file']).decode()
+      assert 'activity_id,first_lap,last_lap,timestamp,elapsed_seconds' in csv_text
+      assert manifest['columns']['power_w']['unit']=='W'
+      assert manifest['segments'][0]['start_timestamp']=='2026-01-01T00:00:00+00:00'
     fallback=write_or_return_export(blob,str(tmp_path/'missing'/'x.zip'))
     assert fallback.download_bytes==blob and fallback.written_path is None

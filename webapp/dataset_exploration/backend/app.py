@@ -24,7 +24,7 @@ class PreviewBody(SegmentBody,NormBody): pass
 class ExportBody(Camel): segments:list[SegmentBody]; normalization:NormBody=NormBody(); destination:str|None=None
 
 class State:
-    root:str|None=None; summaries:dict[str,Any]={}
+    def __init__(self): self.root:str|None=None; self.summaries:dict[str,Any]={}
 
 def _summary(s):
     d={'activityId':s.activity_id,'sourcePath':s.source_path,'durationSeconds':float(s.duration_seconds),'recordCount':int(s.record_count),'hasPower':bool(s.has_power),'hasHeartRate':bool(s.has_heart_rate),'extractable':bool(s.extractable),'exclusionReason':s.exclusion_reason,'laps':[]}
@@ -32,8 +32,8 @@ def _summary(s):
       for l in s.laps: d['laps'].append({'index':l.index,'startElapsedSeconds':(l.start_time-s.start_time).total_seconds(),'endElapsedSeconds':(l.end_time-s.start_time).total_seconds(),'durationSeconds':(l.end_time-l.start_time).total_seconds()})
     return d
 def _points(frame):
-    clean=frame.where(pd.notna(frame),None)
-    return [{'elapsedSeconds':float(r.elapsed_seconds),'power':r.get('power'),'heartRate':r.get('heart_rate'),'powerWKg':r.get('power_w_kg'),'hrPctMax':r.get('hr_pct_max'),'hrPctThreshold':r.get('hr_pct_threshold')} for _,r in clean.iterrows()]
+    def scalar(value): return None if value is None or pd.isna(value) else float(value)
+    return [{'elapsedSeconds':float(r.elapsed_seconds),'power':scalar(r.get('power')),'heartRate':scalar(r.get('heart_rate')),'powerWKg':scalar(r.get('power_w_kg')),'hrPctMax':scalar(r.get('hr_pct_max')),'hrPctThreshold':scalar(r.get('hr_pct_threshold'))} for _,r in frame.iterrows()]
 def _norm(n): return NormalizationRequest(n.weight_kg,n.hr_max_bpm,n.hr_threshold_bpm,n.normalize_power,n.normalize_hr_max,n.normalize_hr_threshold)
 
 def create_app()->FastAPI:
