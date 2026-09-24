@@ -22,12 +22,16 @@ sorgente sono letti senza essere modificati.
 2. Indicare, se necessario, la durata massima in ore e caricare il dataset.
 3. La griglia separa le attività con lap utilizzabili da **Esclusi
    dall'estrazione**. Ogni esclusione riporta il motivo.
-4. Aprire una scheda per usare lo zoom temporale, selezionare un lap e unire
-   lap immediatamente contigui.
-5. Attivare facoltativamente W/kg, % FCmax o % FC di soglia dichiarando i
-   rispettivi parametri.
-6. Visualizzare l'anteprima e indicare una destinazione ZIP. Se la destinazione
-   non è scrivibile, il browser scarica lo ZIP.
+4. Attivare facoltativamente W/kg, % FCmax o % FC di soglia nella sezione di
+   caricamento, dichiarando i rispettivi parametri.
+5. Aprire una scheda per usare lo zoom temporale. Ogni lap è inizialmente un
+   segmento: si possono unire segmenti adiacenti e annullare ogni unione.
+6. Selezionare uno o più segmenti risultanti e aggiungerli alla coda di
+   esportazione.
+7. Aprire **Pre-esportazione** per controllare grafici, durata e campioni di
+   tutti i segmenti accodati, rimuoverli oppure esportarli insieme.
+8. Indicare facoltativamente una destinazione ZIP. Se la destinazione non è
+   scrivibile, il browser scarica lo ZIP.
 
 Lo ZIP contiene un CSV per segmento e `manifest.json`. I CSV conservano
 timestamp originale, tempo relativo da zero, potenza e frequenza cardiaca
@@ -36,7 +40,7 @@ lap, unità, formule e parametri di normalizzazione.
 
 ## Indirizzo verificato
 
-`127.0.0.1:59713`
+`127.0.0.1:50614`
 
 La porta viene scelta nuovamente a ogni avvio; usare sempre anche l'indirizzo
 stampato dal processo corrente.

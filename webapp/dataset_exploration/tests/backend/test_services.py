@@ -3,18 +3,41 @@ from pathlib import Path
 import io, json, zipfile
 import pandas as pd
 import pytest
+from unittest.mock import Mock
 
 from backend.domain import ActivitySummary, LapBoundary, SegmentSelection
-from backend.dataset_service import DatasetPathError, discover_fit_files, resolve_dataset
+from backend.dataset_service import DatasetPathError, discover_fit_files, resolve_dataset, summarize_activity
+from power_hr_eda.fit_reader import FitActivity
 from backend.segment_service import SelectionError, activity_series, extract_segment, validate_selection
 from backend.normalization import NormalizationError, NormalizationRequest, apply_normalizations
 from backend.export_service import ExportSegment, build_export_zip, write_or_return_export
+from backend import run
 
 def test_resolve_dataset_and_discover_fit():
     tmp_path=Path('webapp/dataset_exploration/tests/_tmp/discovery'); tmp_path.mkdir(parents=True,exist_ok=True)
     (tmp_path/'a.fit').write_bytes(b'x'); (tmp_path/'b.txt').write_text('x')
     assert [p.name for p in discover_fit_files(resolve_dataset(str(tmp_path)))] == ['a.fit']
     with pytest.raises(DatasetPathError): resolve_dataset(str(tmp_path/'missing'))
+
+def test_summarize_activity_decodes_resolved_target(monkeypatch):
+    root=Path('webapp/dataset_exploration/tests/_tmp/resolution'); root.mkdir(parents=True,exist_ok=True)
+    logical=root/'ride.fit'; logical.write_bytes(b'not-empty'); seen=[]
+    def fake_reader(path):
+        seen.append(path)
+        return FitActivity(path,pd.DataFrame(),{}, {},None)
+    monkeypatch.setattr('backend.dataset_service.read_fit_activity',fake_reader)
+    summarize_activity(logical,root)
+    assert seen == [logical.resolve(strict=True)]
+
+def test_runner_opens_the_selected_local_address(monkeypatch):
+    timer=Mock(); timer_factory=Mock(return_value=timer)
+    monkeypatch.setattr(run,'find_free_port',lambda host:54321)
+    monkeypatch.setattr(run.threading,'Timer',timer_factory)
+    monkeypatch.setattr(run.uvicorn,'run',Mock())
+    run.main()
+    assert timer_factory.call_args.args[0] == 1.0
+    timer.start.assert_called_once_with()
+    assert run.uvicorn.run.call_args.kwargs == {'host':'127.0.0.1','port':54321}
 
 def _summary():
     t=datetime(2026,1,1,tzinfo=timezone.utc)

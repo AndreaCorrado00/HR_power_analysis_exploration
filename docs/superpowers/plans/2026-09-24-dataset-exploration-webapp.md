@@ -900,3 +900,16 @@ git commit -m "docs: add verified dataset explorer startup"
 ```
 
 Keep the verified local server running for the user and report the same `http://127.0.0.1:<port>` address recorded in the README.
+
+### Approved amendment: editable lap partitions and export review
+
+- Resolve symbolic FIT targets before decoding while retaining the logical
+  dataset-relative activity identifier.
+- Place normalization parameters and activation controls in the dataset-load
+  surface and apply them globally.
+- Represent each activity initially as one segment per lap; merge only adjacent
+  segments and allow a merged segment to be restored to its original laps.
+- Add any subset of the resulting segments to a deduplicated export collection.
+- Provide a pre-export view with segment metadata, charts, individual removal,
+  and one ZIP export for the entire collection.
+- Open the local URL in the default browser after server startup.

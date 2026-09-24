@@ -65,6 +65,9 @@ L'interfaccia accetta un percorso locale. Il backend:
 
 Il browser non deve essere considerato responsabile della risoluzione dei
 collegamenti simbolici: questa operazione appartiene al backend locale.
+Il backend conserva il percorso simbolico come identificativo, ma risolve il
+target reale prima di passarlo al decoder FIT. Link non risolvibili, file vuoti
+e FIT non validi devono produrre motivazioni di esclusione distinguibili.
 
 ## Inventario e classificazione delle attività
 
@@ -108,11 +111,28 @@ Il dettaglio della singola attività mostra:
 - confini dei lap sovrapposti al grafico;
 - controllo di zoom/finestra temporale;
 - elenco ordinato dei lap con numero, inizio, fine e durata;
-- selezione del lap iniziale e finale del blocco da estrarre.
+- una partizione iniziale composta da un segmento per ciascun lap;
+- selezione di uno o più segmenti della partizione;
+- unione di segmenti adiacenti;
+- annullamento dell'unione, con ripristino dei lap originari;
+- aggiunta dei segmenti selezionati alla raccolta di esportazione.
 
 L'unione è valida soltanto quando comprende una sequenza senza interruzioni di
 lap contigui della stessa attività. Non è consentito unire lap non contigui o
 appartenenti ad attività differenti.
+
+La raccolta di esportazione può contenere più segmenti della stessa attività e
+segmenti provenienti da attività differenti. I duplicati della stessa attività
+e dello stesso intervallo di lap non devono essere aggiunti.
+
+## Vista pre-esportazione
+
+Prima dell'esportazione l'utente accede a una vista dedicata che mostra tutti i
+segmenti raccolti, con attività sorgente, intervallo di lap, durata, numero di
+campioni e grafico della serie temporale. Da questa vista può rimuovere singoli
+segmenti ed esportare l'intera raccolta. I parametri e le opzioni di
+normalizzazione sono globali, dichiarati nella schermata di caricamento e
+riportati nella vista pre-esportazione.
 
 ## Assunzioni sui lap
 
