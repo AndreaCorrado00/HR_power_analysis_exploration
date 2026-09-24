@@ -1,2 +1,4 @@
 node_modules/
 tests/_tmp/
+__pycache__/
+*.pyc
