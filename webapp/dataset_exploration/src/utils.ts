@@ -1,0 +1,2 @@
+export function formatDuration(v:number){const s=Math.max(0,Math.round(v));return `${Math.floor(s/3600)}:${String(Math.floor(s%3600/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`}
+export function normalizationError(active:boolean,value:string,label:string){if(!active)return null;const n=Number(value);return !value||!Number.isFinite(n)||n<=0?`${label}: il valore deve essere maggiore di zero`:null}
