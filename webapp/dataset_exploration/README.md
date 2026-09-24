@@ -36,7 +36,7 @@ lap, unità, formule e parametri di normalizzazione.
 
 ## Indirizzo verificato
 
-`127.0.0.1:53057`
+`127.0.0.1:59713`
 
 La porta viene scelta nuovamente a ogni avvio; usare sempre anche l'indirizzo
 stampato dal processo corrente.
