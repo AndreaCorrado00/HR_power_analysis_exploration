@@ -3,14 +3,6 @@
 ## Obiettivo
 
 Implementare una prima identificazione del modello dinamico HR–Power su segmenti già selezionati e preprocessati.
-
-Non introdurre per ora:
-- detrending aggiuntivo;
-- normalizzazione rispetto a FTP;
-- modelli time-varying;
-- modelli di ordine superiore;
-- interpretazioni fisiologiche longitudinali.
-
 L'obiettivo è stimare il modello, verificarne il fit in modo minimale e quantificare l'incertezza dei parametri.
 
 ---
@@ -40,9 +32,6 @@ Output:
 \[
 HR(t)
 \]
-
-I segmenti possono essere sia UP sia DOWN e avere durata indicativamente compresa tra 40 s e 5 min.
-
 ---
 
 ## 2. Identificazione
@@ -118,8 +107,6 @@ Calcolare:
 \frac{1}{N}\sum_t e(t)
 \]
 
-Il residuo medio dovrebbe essere vicino a zero.
-
 ### Struttura temporale
 
 Visualizzare:
@@ -129,12 +116,6 @@ e(t)
 \]
 
 nel tempo.
-
-Segnalare fit sospetti se i residui mostrano:
-
-- trend crescente o decrescente evidente;
-- pattern sistematico;
-- errore persistentemente positivo o negativo.
 
 ### Autocorrelazione
 
@@ -151,8 +132,6 @@ residual_autocorrelation_lag1
 ```
 
 e grafico dei residui nel tempo.
-
-Non è necessario, in questa fase, eseguire test formali di normalità o eteroschedasticità.
 
 ---
 
@@ -220,50 +199,23 @@ RSE_tau
 ```
 
 ---
+### Output atteso per segmento
+Produrre un grafico con due subplot:
 
-## 5. Output finale per ogni segmento
-
-Produrre una riga riassuntiva con almeno:
-
-```text
-segment_id
-direction
-duration_s
-
-K_hat
-L_hat
-tau_hat
-
-RMSE
-
-residual_mean
-residual_sd
-residual_autocorrelation_lag1
-
-SE_K
-SE_L
-SE_tau
-
-RSE_K
-RSE_L
-RSE_tau
-
-optimizer_status
-```
-
-Produrre inoltre due grafici:
-
-1. HR osservata vs HR prevista;
+1. HR osservata vs HR prevista + input di potenza;
 2. residui nel tempo.
 
 ---
 
-## 6. Obiettivo della fase
+Crea una web app, SPA con framework vue, sotto webapp/model_identification_app che permetta il seguente workflow di esperimenti:
+- pagina di carimento del dataset: poter caricare più dataset a partire da quelli presenti nella repository. Un dataset viene caricato importando i record csv, e ne devo poter caricare più di uno, eventualmente rinominandoli
+- nella medesima pagina, caricato il dataset, quando viene selezionato, si deve visulizzare la durata media +-std dei segmenti. 
+- sempre nella stessa pagina, devo poter suddividere il dataset in train val e test con percentuali di defoult 70-10-20% con seed regolabile ma fissato a un vaore qualsiasi di defoult
+- pagina di identificazione del modello: devo poter selezionare il modello (al momento uno unico, ma prevedi di poterne attaccare di più) e lanciare (solo sul train) la stima dei parametri
+- Nella medesima pagina devo visualizzare le proprietà della run che sta per partire e le run precedenti, potendovi eventualmente riaccedervi in un secondo momento
+- Pagina di analisi: devo poter visualizzare tutti i fit di train con i doppi grafici come sopra e le distribuzioni dei parametri (tramite boxplots). Essendo l'analisi modello dipendendente, prepara il tutto in modo che sia scalabile modulabile per analisi diverse su modelli diversi
+- Pagina di confronto: devo poter conforntare le distribuzioni dei parametri e le performance tra due modelli. Al momento è sufficiente la distribuzione dei parametri, ma anche il confronto dipende dal modello, quindi anche qui prepara il codice come al punto precedente
 
-Questa fase deve rispondere solo a tre domande:
+Devo sempre poter recuperare le run precedenti anche quando riavvio il servizio (procedura da documentare) e ogni esperimetno deve essere rigidamente documentato nelle sue impostazioni per essere perfettamente riproducibile. Quando lancio un esperimento il suo manifest deve venire salvato, e quando invece lo elimino, solo il suo manifest, deve venire archiviato in una folder apposita. Considera inoltre una rinomina dei manifest intelligente che permetta di capire rapidamente i parametri di esperimento.
 
-1. Il modello P1D converge sul segmento?
-2. I residui mostrano errori sistematici evidenti?
-3. \(K\), \(L\) e \(\tau\) risultano stimati con precisione ragionevole?
-
-Non utilizzare ancora i parametri per conclusioni su fitness, fatica o stato di forma.
+Appositamente non vengono, al momento, usati validation e test set

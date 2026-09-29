@@ -10,6 +10,7 @@ import uuid
 from .datasets import series, SIGNALS, utc_now
 from .models import get_model
 from .storage import sha, slug
+from .context import pre_window
 
 
 class RunService:
@@ -40,6 +41,8 @@ class RunService:
                 'code_blobs': sources, 'code_sha256': sha(str(sorted(sources.items())).encode())}
 
     def start(self, dataset_id, model_id, signal, config, original=None):
+        if original is None and config.get('initialization_protocol') == 'legacy_v1':
+            raise ValueError('Il protocollo storico e riservato alla riesecuzione di run storiche')
         model = get_model(model_id)
         config = model.validate_config(config)
         ds = self.datasets.get(dataset_id) if original is None else original['dataset']
@@ -48,14 +51,33 @@ class RunService:
         if signal not in SIGNALS: raise ValueError('Segnali non validi')
         selected = [s for s in ds['segments'] if s['id'] in split['assignments']['train']]
         if any(signal not in s['signals'] for s in selected): raise ValueError('Colonne selezionate mancanti in almeno un segmento train')
-        for segment in selected: self.store.read_blob(segment['sha256'])
+        inventory = []
+        for segment in selected:
+            context = pre_window(*series(self.store.read_blob(segment['sha256']), signal))
+            inventory.append(dict(segment_id=segment['id'], **{k:v for k,v in context.items() if k not in ('time','power','observed','used')}))
         key = uuid.uuid4().hex
         stamp = datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%SZ')
         split_name = '-'.join(f'{v:g}' for v in split['percentages'])
         name = f"{stamp}__{slug(ds['name'])}__{model_id}__{signal}__{split_name}__s{split['seed']}__n{config['n_starts']}-f{config['seed']}__{key[:8]}.json"
-        manifest = {'schema_version': 1, 'id': key, 'manifest_filename': name,
+        method = 'pre_window_mean' if config['use_pre_window'] else 'first_segment_sample'
+        if config['initialization_protocol'] == 'legacy_v1': method = 'first_record_legacy'
+        estimated = config['initialization_mode'] == 'estimated_equilibrium'
+        model_metadata = model.metadata(config)
+        manifest = {'schema_version': 3, 'id': key, 'manifest_filename': name,
                     'created_at': utc_now(), 'status': 'queued', 'dataset': ds, 'split': split,
-                    'model': model.METADATA, 'signal': signal, 'columns': list(SIGNALS[signal]),
+                    'model': model_metadata, 'signal': signal, 'columns': list(SIGNALS[signal]),
+                    'model_structure': config['model_structure'], 'pre_window_seconds': 10,
+                    'use_pre_window': config['use_pre_window'], 'pre_window_inventory': inventory,
+                    'initialization_mode': config['initialization_mode'],
+                    'P0_method': method, 'HR0_method': 'first_segment_sample' if estimated else method,
+                    'B_method': 'estimated' if estimated else 'fixed_HR0',
+                    'parameter_bounds': {'keys':[p['key'] for p in model_metadata['parameters']],
+                                         'lower':config['lower'] + ([config['equilibrium_bounds'][0]] if estimated else []),
+                                         'upper':config['upper'] + ([config['equilibrium_bounds'][1]] if estimated else []), 'delay_upper_rule':'min(Lmax,T); null means T'},
+                    'n_multistart': config['n_starts'],
+                    'optimizer_settings': {k:config[k] for k in ('method','loss','jac','ftol','xtol','gtol','x_scale','max_nfev','seed','search_strategy','grid_delay_points','grid_tau_points','grid_refinements')},
+                    'diagnostic_schema': {'rho': {'formula':'(T-L)/tau', 'applicable':config['model_structure']=='p1d_full', 'thresholds':None},
+                                          'residual':'observed - predicted', 'acf_lag_unit':'samples'},
                     'config': config, 'environment': self.provenance(), 'scope': 'train-only in-sample',
                     'progress': {'done': 0, 'total': len(selected), 'failed': 0},
                     'replay_of': original['id'] if original else None}
@@ -76,13 +98,22 @@ class RunService:
             by_id = {s['id']: s for s in manifest['dataset']['segments']}
             for sid in manifest['split']['assignments']['train']:
                 segment = by_id[sid]
-                result = {'segment_id': sid, 'filename': segment['filename'], 'status': 'failed'}
+                result = {'segment_id': sid, 'filename': segment['filename'], 'status': 'failed',
+                          'optimizer_success': None, 'identification_valid': False, 'failure_reasons': []}
                 try:
                     data = self.store.read_blob(segment['sha256'])
-                    result.update(model.fit(*series(data, manifest['signal']), manifest['config']))
-                    result['status'] = 'fitted'
+                    values = series(data, manifest['signal'])
+                    result['pre_window'] = pre_window(*values)
+                    result['model_structure'] = manifest['model_structure']
+                    result['initialization_mode'] = manifest['config']['initialization_mode']
+                    result['rho'] = None
+                    result.update(model.fit(*values, manifest['config']))
+                    result['status'] = 'fitted' if result['identification_valid'] else 'failed'
                 except (ValueError, ArithmeticError) as exc:
                     result['error'] = str(exc)
+                    result['identification_valid'] = False
+                    result['failure_reasons'] = [str(exc)]
+                if result['status'] == 'failed':
                     manifest['progress']['failed'] += 1
                 self.store.write_path(self.store.root/'runs'/key/(sid+'.json'), result)
                 manifest['progress']['done'] += 1
@@ -120,7 +151,28 @@ class RunService:
 
     def replay(self, key, archived=False):
         original = self.get(key,archived)
-        return self.start(original['dataset']['id'], original['model']['id'], original['signal'], original['config'], original)
+        config = dict(original['config'])
+        config.setdefault('search_strategy', 'multistart')
+        config.setdefault('initialization_mode', 'equilibrium')
+        if original.get('schema_version',1) < 2:
+            config['initialization_protocol'] = 'legacy_v1'
+        return self.start(original['dataset']['id'], original['model']['id'], original['signal'], config, original)
+
+    def export(self, key, kind):
+        from .reporting import tables_zip, pdf_report
+        with self.store.lock:
+            manifest = self.get(key)
+            if manifest['status'] in ('queued','running'):
+                raise ValueError('Attendere la fine della run prima di esportare')
+            results = self.results(key, detail=True)
+            data = pdf_report(manifest, results) if kind == 'pdf' else tables_zip(manifest, results)
+            folder = self.store.root/'runs'/key/'exports'
+            folder.mkdir(exist_ok=True)
+            name = 'report.pdf' if kind=='pdf' else 'tables.zip'
+            temp = folder/(name+'.tmp')
+            temp.write_bytes(data)
+            temp.replace(folder/name)
+            return data, name
 
     def close(self):
         self.executor.shutdown(wait=True)

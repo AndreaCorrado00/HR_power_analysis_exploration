@@ -1,4 +1,5 @@
-/dateset/
+/dataset/
+/docs/*
 /exploration/images/
 /exploration/cleaned/images
 /tmp/pdfs/
@@ -8,3 +9,6 @@
 /pytest-cache-files-*/
 /tests/_generated/
 /test/*
+/tmp/
+/reports/
+webapp/model_identification_app\storage

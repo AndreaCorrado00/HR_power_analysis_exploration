@@ -12,6 +12,7 @@ from .storage import Store
 from .datasets import DatasetService, MAX_BYTES
 from .models import REGISTRY
 from .runs import RunService
+from .source_paths import dataset_path
 
 APP_ROOT = Path(__file__).resolve().parents[1]
 REPO_ROOT = APP_ROOT.parents[1]
@@ -50,7 +51,7 @@ class RunBody(Body):
 
 def create_app(storage=None):
     store = Store(storage or APP_ROOT/'storage')
-    datasets = DatasetService(store)
+    datasets = DatasetService(store, dataset_root=REPO_ROOT/'dataset')
     runs = RunService(store,datasets)
 
     @asynccontextmanager
@@ -72,24 +73,25 @@ def create_app(storage=None):
     def health(): return {'status':'ok','storage': str(store.root)}
 
     @app.get('/api/models')
-    def models(): return [dict(m.METADATA, default_config=m.default_config()) for m in REGISTRY.values()]
+    def models(): return [dict(m.metadata(), default_config=m.default_config()) for m in REGISTRY.values()]
 
     @app.get('/api/sources')
     def sources():
         root = REPO_ROOT/'dataset'
         return [str(p.relative_to(REPO_ROOT)).replace('\\','/') for p in sorted(root.rglob('*'))
-                if p.is_file() and p.suffix.lower() in ('.csv','.zip') and (p.suffix.lower()=='.csv' or 'segment' in p.name.lower())]
+                if p.is_file() and p.suffix.lower() in ('.csv','.zip','.fit')]
 
     @app.post('/api/datasets/import')
     def import_paths(body: ImportBody):
-        files, total = [], 0
+        files, total, local_paths = [], 0, {}
         for name in body.paths:
-            path = (REPO_ROOT/name).resolve()
-            if not path.is_relative_to((REPO_ROOT/'dataset').resolve()): raise ValueError('Selezionare una sorgente in dataset/')
+            path = dataset_path(REPO_ROOT/name, REPO_ROOT/'dataset')
             total += path.stat().st_size
             if total>MAX_BYTES: raise ValueError('Import oltre 256 MiB')
-            files.append((path.name,path.read_bytes()))
-        return datasets.import_files(files,body.name)
+            relative = (REPO_ROOT/name).relative_to(REPO_ROOT).as_posix()
+            files.append((relative,path.read_bytes()))
+            local_paths[relative] = path
+        return datasets.import_files(files,body.name,local_paths=local_paths)
 
     @app.post('/api/datasets/upload')
     async def upload(name: Annotated[str,Form()], files: Annotated[list[UploadFile],File()]):
@@ -139,6 +141,13 @@ def create_app(storage=None):
     def download_manifest(key: str):
         m = runs.get(key)
         return manifest_response(m)
+
+    @app.post('/api/runs/{key}/exports/{kind}')
+    def export_run(key: str, kind: str):
+        if kind not in ('pdf','tables'): raise ValueError('Formato export sconosciuto')
+        data, name = runs.export(key,kind)
+        return Response(data, media_type='application/pdf' if kind=='pdf' else 'application/zip',
+                        headers={'Content-Disposition': f'attachment; filename="{key}_{name}"'})
 
     @app.get('/api/archives/{key}/manifest')
     def download_archive(key: str):

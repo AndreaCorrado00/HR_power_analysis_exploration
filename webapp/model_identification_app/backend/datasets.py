@@ -5,13 +5,15 @@ import csv
 from datetime import datetime, timezone
 import io
 import json
-from pathlib import PurePosixPath
+from pathlib import Path, PurePosixPath
+import stat
 import uuid
 import zipfile
 
 import numpy as np
 
 from .storage import sha
+from .source_paths import dataset_path
 
 MAX_BYTES = 256 * 1024**2
 SIGNALS = {'raw': ('power_w','heart_rate_bpm'), 'ma': ('power_ma_w','heart_rate_ma_bpm')}
@@ -48,8 +50,9 @@ def statistics(segments):
             'duration_sd': float(np.std(durations, ddof=1)) if len(durations)>1 else None}
 
 
-def unpack(files):
+def unpack(files, dataset_root=None, local_paths=None):
     records, manifests, sources = [], [], []
+    expanded_bytes = 0
     if sum(len(data) for _,data in files) > MAX_BYTES: raise ValueError('Import oltre 256 MiB')
     for filename, data in files:
         sources.append({'name': filename, 'sha256': sha(data)})
@@ -72,11 +75,34 @@ def unpack(files):
                 csv_names = [n for n in names if n.lower().endswith('.csv') and not n.startswith('metadata/')]
                 if entries and set(by_file) != set(csv_names): raise ValueError('CSV e manifest non corrispondono')
                 for name in csv_names: records.append((filename+'::'+name, z.read(name), by_file.get(name,{})))
+                for item in infos:
+                    if item.is_dir() or not item.filename.lower().endswith('.fit'): continue
+                    fit_data = z.read(item)
+                    metadata = {}
+                    if stat.S_ISLNK(item.external_attr >> 16):
+                        archive_path = (local_paths or {}).get(filename)
+                        if archive_path is None or dataset_root is None:
+                            raise ValueError('ZIP con collegamenti: importare dalla repository; per upload usare FIT reali')
+                        target = Path(fit_data.decode('utf-8').strip())
+                        if not target.is_absolute():
+                            target = Path(archive_path).parent / PurePosixPath(item.filename).parent / target
+                        target = dataset_path(target, dataset_root)
+                        if not target.is_file(): raise ValueError(f'FIT sorgente non trovato: {item.filename}')
+                        if target.stat().st_size > MAX_BYTES-expanded_bytes: raise ValueError('FIT risolti oltre 256 MiB')
+                        fit_data = target.read_bytes()
+                        metadata['resolved_source'] = str(target)
+                    expanded_bytes += len(fit_data)
+                    if expanded_bytes > MAX_BYTES: raise ValueError('FIT risolti oltre 256 MiB')
+                    records.append((filename+'::'+item.filename, fit_data, metadata))
+        elif filename.lower().endswith('.fit'):
+            expanded_bytes += len(data)
+            if expanded_bytes > MAX_BYTES: raise ValueError('FIT risolti oltre 256 MiB')
+            records.append((filename, data, {}))
         elif filename.lower().endswith('.csv'):
             records.append((filename, data, {}))
         elif filename.lower().endswith('.json'):
             manifests.append({'source': filename, 'manifest': json.loads(data)})
-        else: raise ValueError('Importare CSV, ZIP o manifest JSON')
+        else: raise ValueError('Importare CSV, FIT, ZIP o manifest JSON')
     # Optional loose manifest maps basenames or relative CSV names.
     for i, (name, data, meta) in enumerate(records):
         if '::' in name: continue
@@ -84,20 +110,28 @@ def unpack(files):
                    if e.get('csv_file') == name or PurePosixPath(e.get('csv_file','')).name == name]
         if len(matches)>1: raise ValueError('Manifest ambiguo per '+name)
         if matches: records[i] = (name,data,matches[0])
-    if not records: raise ValueError('Nessun CSV di segmento trovato')
+    if not records: raise ValueError('Nessun CSV o FIT trovato')
     if len({r[0] for r in records}) != len(records): raise ValueError('Nomi CSV duplicati')
     return records, manifests, sources
 
 
 class DatasetService:
-    def __init__(self, store): self.store = store
+    def __init__(self, store, dataset_root=None):
+        self.store = store
+        self.dataset_root = dataset_root
 
     def get(self, key): return self.store.read('datasets',key)
 
-    def import_files(self, files, name):
-        records, manifests, sources = unpack(files)
+    def import_files(self, files, name, local_paths=None):
+        records, manifests, sources = unpack(files, self.dataset_root, local_paths)
         segments = []
         for filename, data, meta in records:
+            if filename.lower().endswith('.fit'):
+                from .fit_import import convert_fit
+                original = data
+                data, fit_meta = convert_fit(data, filename)
+                meta = {**meta, **fit_meta}
+                self.store.blob(original)
             columns, rows = read_csv(data)
             try: t = np.array([float(r['elapsed_seconds']) for r in rows])
             except (ValueError, TypeError): raise ValueError(f'{filename}: tempi non validi')
@@ -109,12 +143,12 @@ class DatasetService:
                 raise ValueError('activity_id differente tra CSV e manifest')
             pathparts = filename.replace('::','/').split('/')
             group, label = str(meta.get('duration_group','unknown')), meta.get('empirical_label','unknown')
-            for part in pathparts:
+            for part in ([] if meta.get('kind') == 'activity' else pathparts):
                 for g in ('1','2','3','4'):
                     if part in [f'{l}_G{g}' for l in ('UtD','DtU','Ambigui')]:
                         group, label = g, part.split('_')[0]
             if label == 'Ambiguo': label = 'Ambigui'
-            warnings = []
+            warnings = list(meta.get('warnings', []))
             if not activity: warnings.append('activity_missing')
             start, end = rows[0].get('timestamp'), rows[-1].get('timestamp')
             if start and end:
@@ -128,9 +162,15 @@ class DatasetService:
             available = [key for key,(p,h) in SIGNALS.items() if p in columns and h in columns]
             if not available: raise ValueError(f'{filename}: nessuna coppia potenza/HR in W e bpm')
             digest = self.store.blob(data)
+            objective_t = t[t >= 0]
+            if not len(objective_t): raise ValueError(f'{filename}: nessun campione nel segmento t>=0')
+            pre_times = t[(t >= -10) & (t < 0)]
             segments.append({'id': sha((filename+digest).encode())[:24], 'filename': filename,
+                             'kind': meta.get('kind', 'segment'), 'quality': meta.get('quality'),
                              'sha256': digest, 'activity_id': activity, 'group': group, 'label': label,
-                             'duration_seconds': float(t[-1]-t[0]), 'samples': len(t),
+                             'duration_seconds': float(objective_t[-1]-objective_t[0]), 'samples': len(t),
+                             'objective_samples': len(objective_t),
+                             'pre_window': {'available': bool(len(pre_times)), 'samples': len(pre_times), 'seconds': 10},
                              'start_timestamp': start, 'end_timestamp': end,
                              'first_lap': meta.get('first_lap', rows[0].get('first_lap')),
                              'last_lap': meta.get('last_lap', rows[0].get('last_lap')),
@@ -169,6 +209,9 @@ class DatasetService:
         with self.store.lock:
             ds = self.get(key)
             segments = ds['segments']
+            kinds = {s.get('kind', 'segment') for s in segments}
+            if len(kinds) > 1:
+                raise ValueError('FIT completi e segmenti CSV: usare dataset separati; identità e sovrapposizioni tra formati non verificabili')
             if any(not s['activity_id'] for s in segments):
                 raise ValueError('activity_id necessario per verificare le sovrapposizioni prima dello split; importare anche il manifest originale')
             if unit == 'segment':
