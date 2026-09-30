@@ -6,8 +6,10 @@ import DatasetPage from './pages/DatasetPage.vue'
 import IdentificationPage from './pages/IdentificationPage.vue'
 import AnalysisPage from './pages/AnalysisPage.vue'
 import ComparisonPage from './pages/ComparisonPage.vue'
+import PopulationPage from './pages/PopulationPage.vue'
 const pages=[{id:'datasets',label:'Dataset',hint:'Importa e suddividi',icon:'01'},{id:'identification',label:'Identificazione',hint:'Configura gli esperimenti',icon:'02'},{id:'analysis',label:'Analisi',hint:'Esplora i fit',icon:'03'},{id:'comparison',label:'Confronto',hint:'Confronta le distribuzioni',icon:'04'}]
 const page=ref('datasets'),datasets=ref<Dataset[]>([]),runs=ref<Run[]>([]),models=ref<Model[]>([])
+pages.push({id:'population',label:'Parametri atleta',hint:'Popolazione e previsione test',icon:'05'})
 const selectedDataset=ref(localStorage.getItem('hrpower.dataset')||''), selectedRun=ref('')
 const error=ref(''),notice=ref(''),busy=ref(false),storage=ref('')
 const current= computed(()=>pages.find(p=>p.id===page.value)||pages[0])
@@ -31,8 +33,8 @@ onUnmounted(()=>{clearInterval(timer);window.removeEventListener('hashchange',ro
       <div class="sidebar-bottom"><span class="live-dot"></span> Ambiente locale<small>Singolo atleta · ciclismo<br>Potenza → frequenza cardiaca</small><span class="version">PROTOCOLLO P1D / v1.0</span></div>
     </aside>
     <main>
-      <header class="topbar"><div><span class="muted">Workspace</span><span class="divider">/</span>{{current.label}}</div><span class="pill"><span class="live-dot"></span> Train only</span></header>
-      <div class="page-header"><div><div class="eyebrow">IDENTIFICAZIONE DI SISTEMI</div><h1>{{current.label}}</h1><p>{{({datasets:'Dai segmenti selezionati a un esperimento riproducibile.',identification:'Una stima indipendente per ogni segmento del training set.',analysis:'Osserva la risposta, i residui e la precisione delle stime.',comparison:'Due esperimenti, le loro distribuzioni di parametri.'} as Record<string,string>)[page]}}</p></div><div class="context"><small>DATASET ATTIVO</small><strong>{{active?.name||'Nessun dataset'}}</strong></div></div>
+      <header class="topbar"><div><span class="muted">Workspace</span><span class="divider">/</span>{{current.label}}</div><span class="pill"><span class="live-dot"></span> Fit train · previsione test</span></header>
+      <div class="page-header"><div><div class="eyebrow">IDENTIFICAZIONE DI SISTEMI</div><h1>{{current.label}}</h1><p>{{({datasets:'Dai segmenti selezionati a un esperimento riproducibile.',identification:'Una stima indipendente per ogni segmento del training set.',analysis:'Osserva la risposta, i residui e la precisione delle stime.',comparison:'Due esperimenti, le loro distribuzioni di parametri.',population:'Dai parametri del training alla previsione HR su dati non osservati.'} as Record<string,string>)[page]}}</p></div><div class="context"><small>DATASET ATTIVO</small><strong>{{active?.name||'Nessun dataset'}}</strong></div></div>
       <div v-if="error" class="message error" role="alert">{{error}}<button @click="error=''" aria-label="Chiudi errore">×</button></div>
       <div v-if="notice" class="message success" role="status">{{notice}}<button @click="notice=''" aria-label="Chiudi messaggio">×</button></div>
       <div v-if="busy" class="working" role="status">Operazione in corso…</div>
@@ -40,7 +42,8 @@ onUnmounted(()=>{clearInterval(timer);window.removeEventListener('hashchange',ro
       <IdentificationPage v-if="page==='identification'" :datasets="datasets" :selected="selectedDataset" :models="models" :runs="runs" :busy="busy" :act="act" @select="select" @open="id=>navigate('analysis',id)"/>
       <AnalysisPage v-if="page==='analysis'" :runs="runs" :selected="selectedRun" @select="id=>navigate('analysis',id)" @error="error=$event"/>
       <ComparisonPage v-if="page==='comparison'" :runs="runs" @error="error=$event"/>
-      <footer><span>Fit in-sample · validation e test non utilizzati</span><details><summary>Persistenza locale</summary><code>{{storage}}</code></details></footer>
+      <PopulationPage v-if="page==='population'" :runs="runs" :selected="selectedRun" @select="id=>navigate('population',id)" @error="error=$event"/>
+      <footer><span>Identificazione sul train · previsione test nella pagina Parametri atleta</span><details><summary>Persistenza locale</summary><code>{{storage}}</code></details></footer>
     </main>
   </div>
 </template>

@@ -1,0 +1,74 @@
+"""PDF view of a saved population analysis; never fits or predicts."""
+import json
+import numpy as np
+from matplotlib.figure import Figure
+
+
+def append_population(a, p, heading, table, plot, page):
+    heading('Parametri dell atleta - popolazione intra-soggetto')
+    p(f"Analisi {a.get('id', '')} | {a.get('created_at', '')} | Protocollo {a['version']} | Stato: {a['status']}")
+    p('theta_j = theta_sub + nu_j; nu_j ~ N(0, Omega). Covarianza osservata = Omega + S_j. Stima REML multivariata a due stadi sui soli fit train.')
+    p(f"Train: {a['train_count']}; vettori completi affidabili: {a['retained_vectors']}; minimo: {a.get('minimum_vectors', 'n.d.')}.")
+    p('Configurazione: '+json.dumps(a['config'],ensure_ascii=True))
+    p('Le distribuzioni marginali usano le singole stime ammesse; il modello congiunto usa solo vettori completamente ammessi. Correlazione locale di stima e correlazione tra segmenti sono grandezze diverse.')
+    if a.get('reason'): p(a['reason'])
+    for warning in a['warnings']: p(warning)
+    p('Soglie operative da scegliere sul train. Modificarle dopo aver osservato il test rende esplorativa la valutazione ripetuta.')
+    for index,param in enumerate(a['parameters']):
+        k = param['key']
+        if k not in a['distributions']: continue
+        if index and index % 2 == 0: page()
+        d = a['distributions'][k]
+        heading(f"{k} ({param['unit']}) - distribuzione e gaussianita")
+        table(['Campione','n','Media','Mediana','SD'], [[label,*[d[key][q] for q in ('n','mean','median','sd')]] for label,key in [('Tutte le stime','all'),('Stime ammesse','retained')]])
+        fig = Figure(figsize=(8.2,2.5),layout='constrained'); axes = fig.subplots(1,2)
+        for label,key,color in [('Tutte','all','#bdc7c9'),('Ammesse','retained','#268575')]:
+            v = d[key]['values']
+            if v: axes[0].hist(v,bins=min(15,max(1,int(np.sqrt(len(v))))),alpha=.65,label=label,color=color)
+        axes[0].set_xlabel(k+' ('+param['unit']+')'); axes[0].set_ylabel('Segmenti'); axes[0].legend(fontsize=7)
+        qq = d['retained']['qq']; axes[1].scatter(qq['theoretical'],qq['observed'],s=12,color='#268575')
+        if d['retained']['sd'] is not None:
+            x = np.asarray(qq['theoretical']); axes[1].plot(x,d['retained']['mean']+d['retained']['sd']*x,color='#d59b4c')
+        axes[1].set_xlabel('Quantile normale standard'); axes[1].set_ylabel(k+' osservato')
+        for ax in axes: ax.tick_params(labelsize=7)
+        plot(fig,155)
+    page(); heading('Identificabilita - registro delle esclusioni')
+    table(['Segmento','Vettore ammesso','Motivi per parametro'], [[s['segment_id'],s['included'], '; '.join(k+': '+', '.join(v) for k,v in s['parameters'].items() if v) or 'Nessuno'] for s in a['screening']], [145,80,274])
+    if a.get('fit_correlations'):
+        page(); heading('Correlazioni osservate tra parametri dei fit')
+        keys = [v['key'] for v in a['parameters']]
+        for label,entry in a['fit_correlations'].items():
+            p(('Tutti i fit completi' if label=='all' else 'Vettori completi ammessi')+f" (n={entry['n']})")
+            if entry['matrix'] is None: p('Servono almeno due vettori completi.')
+            else: table(['Parametro',*keys],[[k,*entry['matrix'][i]] for i,k in enumerate(keys)])
+        p('Correlazioni campionarie descrittive: non separano variabilita reale e incertezza dei fit. n.d. per parametri costanti.')
+    model = a['model']
+    if model is None: return
+    page(); heading('Modello dei parametri dell atleta')
+    p('CI95 della media locali e condizionati a Omega e S_j; non includono l incertezza della covarianza di popolazione. SD tra segmenti distinta da SE della media.')
+    table(['Parametro','Media','SD tra segmenti','CI95 media'], [[k, model['mean'][i], model['sd'][i], ' / '.join(f'{v:.5g}' for v in model['mean_ci95'][i])] for i,k in enumerate(model['keys'])])
+    for title,key in [('Omega: covarianza tra segmenti (prodotti delle unita)','covariance'),('Correlazione degli effetti casuali','correlation'),('Correlazione osservata tra fit completi ammessi','observed_correlation')]:
+        heading(title); table(['Parametro',*model['keys']],[[k,*model[key][i]] for i,k in enumerate(model['keys'])])
+    page(); heading('Previsione HR sul test - nessuna ristima')
+    p('HR_hat = B+x; x(0)=0; HR_hat(0)=B_sub. Solo potenza in ingresso, P0 secondo protocollo della run. HR test usata esclusivamente per valutazione. Assunzione di equilibrio iniziale.')
+    p('Fascia 95%: variabilita delle traiettorie campionate congiuntamente dai parametri, condizionata ai bounds. Non include rumore residuo o incertezza della media. Nessuna garanzia di copertura predittiva 95%. Baseline: HR costante uguale a B_sub.')
+    if not a['test']: p('Nessun segmento test disponibile.')
+    table(['Segmento','MAE bpm','RMSE bpm','Bias bpm','RMSE B costante'],[[r['segment_id'],*[r.get('metrics',{}).get(k) if r.get('metrics') else None for k in ('MAE','RMSE','bias','constant_B_RMSE')]] for r in a['test']],[155,86,86,86,86])
+    for r in a['test']:
+        heading('Test '+r['segment_id'])
+        if r['status'] != 'predicted': p('Non previsto: '+r.get('error','')); continue
+        p(f"P0={r['P0']:.5g} W; HR iniziale=B={r['initial_HR']:.5g} bpm; HR mancanti={r['missing_hr']}; accettazione dominio={r['gaussian_domain_acceptance']:.1%}; fascia disponibile={r['band_available']}.")
+        if r['metrics']:
+            m = r['metrics']
+            p('Campioni valutati: '+str(m['N'])+'; SD residui: '+(f"{m['residual_sd']:.4g} bpm" if m['residual_sd'] is not None else 'n.d.')+'; copertura empirica fascia: '+(f"{m['band_coverage']:.1%}" if m['band_coverage'] is not None else 'n.d.'))
+        s = r['series']; fig = Figure(figsize=(8.2,4.5),layout='constrained'); axes = fig.subplots(3,1,sharex=True)
+        axes[0].plot(s['time'],s['observed'],label='HR osservata',color='#536a80',linewidth=.8)
+        axes[0].plot(s['time'],s['predicted'],label='HR prevista',color='#268575',linewidth=1)
+        if r['band_available']: axes[0].fill_between(s['time'],s['lower'],s['upper'],color='#268575',alpha=.2,label='Variabilita parametri 95%')
+        axes[0].legend(fontsize=7); axes[0].set_ylabel('HR (bpm)')
+        axes[1].step(s['time'],s['power'],where='post',color='#a07a3f',linewidth=.7); axes[1].set_ylabel('Potenza (W)')
+        axes[2].plot(s['time'],s['residual'],color='#536a80',linewidth=.7); axes[2].axhline(0,color='grey',linewidth=.5)
+        axes[2].set_ylabel('Residuo (bpm)'); axes[2].set_xlabel('Tempo (s)')
+        for ax in axes: ax.tick_params(labelsize=7)
+        plot(fig,280)
+    p('Provenienza analisi: risultati train SHA256 '+a.get('source_results_sha256','n.d.')+'; codice '+a.get('environment',{}).get('code_sha256','n.d.'))

@@ -34,7 +34,7 @@ def csv_data(rows):
     return stream.getvalue().encode('utf-8-sig')
 
 
-def tables_zip(manifest, results):
+def tables_zip(manifest, results, population=None):
     tables = {k: [] for k in ('fits', 'parameters', 'multistart', 'series', 'pre_window', 'residual_acf')}
     for r in results:
         identity = {'run_id':manifest['id'], 'segment_id':r['segment_id'], 'status':r['status']}
@@ -55,6 +55,10 @@ def tables_zip(manifest, results):
         for name,rows in tables.items(): z.writestr(name+'.csv',csv_data(rows))
         z.writestr('manifest.json',json.dumps(manifest,ensure_ascii=False,indent=2,allow_nan=False))
         z.writestr('results.json',json.dumps(results,ensure_ascii=False,indent=2,allow_nan=False))
+        if population is not None:
+            z.writestr('population.json', json.dumps(population,ensure_ascii=False,indent=2,allow_nan=False))
+            z.writestr('population_screening.csv', csv_data([flatten(r) for r in population['screening']]))
+            z.writestr('population_test_metrics.csv', csv_data([flatten({k:v for k,v in r.items() if k!='series'}) for r in population['test']]))
         z.writestr('README.txt','UTF-8 CSV. Empty cells = unavailable/not applicable. Failed records retained; aggregate reports use status=fitted only. Residual = observed - predicted. ACF lags are sample counts. Pre-window never contributes to new segment_v2 objectives. Full diagnostics and context metadata: results.json. Units and parameter order: manifest.json.\n')
     return stream.getvalue()
 
@@ -75,7 +79,7 @@ def fmt(value):
     return str(value)
 
 
-def pdf_report(manifest, results):
+def pdf_report(manifest, results, population=None):
     from matplotlib.figure import Figure
     from matplotlib.backends.backend_agg import FigureCanvasAgg
     from reportlab.lib import colors
@@ -142,7 +146,7 @@ def pdf_report(manifest, results):
     p('Struttura: '+structure+' | '+manifest.get('model',{}).get('equation',''))
     p('Inizializzazione: '+manifest.get('initialization_mode','equilibrium (storico)')+' | '+manifest.get('model',{}).get('initial_conditions',''))
     p(f"Dataset: {len(manifest['dataset'].get('segments',[]))} segmenti; train richiesti: {manifest['progress']['total']}; risultati: {len(results)}; validi: {len(valid)}; falliti: {sum(r['status']!='fitted' for r in results)}.")
-    p('Ambito: fit in-sample sui soli segmenti train. Val/test non utilizzati. Aggregati non pesati per durata, calcolati solo sui record fitted; n indica i valori numerici disponibili. n.d. = non disponibile o non applicabile. Nessuna conclusione fisiologica automatica.')
+    p('Ambito identificazione: fit in-sample sui soli segmenti train. '+('Previsione test separata nella sezione Parametri dell atleta; nessun refit sul test.' if population else 'Val/test non utilizzati.')+' Aggregati non pesati per durata, calcolati solo sui record fitted; n indica i valori numerici disponibili. n.d. = non disponibile o non applicabile. Nessuna conclusione fisiologica automatica.')
     p('Pre-window richiesta: '+fmt(manifest.get('use_pre_window'))+'; durata: '+fmt(manifest.get('pre_window_seconds'))+' s. P0: '+manifest.get('P0_method','protocollo storico')+'; HR0: '+manifest.get('HR0_method','protocollo storico'))
     inventory = manifest.get('pre_window_inventory',[])
     p(f"Pre-window disponibili: {sum(bool(s.get('available')) for s in inventory)} / {len(inventory)} segmenti train inventariati.")
@@ -237,6 +241,10 @@ def pdf_report(manifest, results):
         p('Segnalazioni: '+(', '.join(r.get('warnings',[])) or 'nessuna'))
 
     story.append(PageBreak())
+    if population is not None:
+        from .population_report import append_population
+        append_population(population, p, heading, table, plot, lambda: story.append(PageBreak()))
+        story.append(PageBreak())
     heading('Configurazione completa dell esperimento')
     config = {k:v for k,v in manifest.items() if k not in ('dataset','environment','model')}
     config['model'] = {k:v for k,v in manifest.get('model',{}).items() if k!='structures'}

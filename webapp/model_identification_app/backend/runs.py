@@ -165,7 +165,8 @@ class RunService:
             if manifest['status'] in ('queued','running'):
                 raise ValueError('Attendere la fine della run prima di esportare')
             results = self.results(key, detail=True)
-            data = pdf_report(manifest, results) if kind == 'pdf' else tables_zip(manifest, results)
+            population = self.population(key)
+            data = pdf_report(manifest, results, population) if kind == 'pdf' else tables_zip(manifest, results, population)
             folder = self.store.root/'runs'/key/'exports'
             folder.mkdir(exist_ok=True)
             name = 'report.pdf' if kind=='pdf' else 'tables.zip'
@@ -173,6 +174,45 @@ class RunService:
             temp.write_bytes(data)
             temp.replace(folder/name)
             return data, name
+
+    def population(self, key):
+        import json
+        self.get(key)
+        path = self.store.root/'runs'/key/'population'/'analysis.json'
+        with self.store.lock:
+            return json.loads(path.read_text(encoding='utf-8')) if path.exists() else None
+
+    def estimate_population(self, key, config):
+        from .population import analyze, predict
+        import json
+        with self.store.lock:
+            manifest = self.get(key)
+            if manifest['status'] not in ('completed', 'completed_with_errors'):
+                raise ValueError('Richiesta una run completata')
+            results = self.results(key, detail=True)
+        analysis = analyze(manifest, results, config)
+        analysis.update(created_at=utc_now(), id=uuid.uuid4().hex,
+                        source_results_sha256=sha(json.dumps(results, sort_keys=True, allow_nan=False).encode()),
+                        environment=self.provenance(), split=manifest['split'])
+        if analysis['model'] is not None:
+            segments = {s['id']: s for s in manifest['dataset']['segments']}
+            for sid in manifest['split']['assignments']['test']:
+                segment = segments[sid]
+                record = {'segment_id': sid, 'filename': segment['filename'], 'activity_id': segment.get('activity_id')}
+                try:
+                    values = series(self.store.read_blob(segment['sha256']), manifest['signal'])
+                    record.update(predict(manifest, analysis, *values))
+                except (ValueError, ArithmeticError) as exc:
+                    record.update(status='failed', error=str(exc))
+                analysis['test'].append(record)
+            if not analysis['test']: analysis['warnings'].append('Split test vuoto: modello stimato, validazione non disponibile.')
+        with self.store.lock:
+            self.get(key)  # A run may have been archived while computing.
+            folder = self.store.root/'runs'/key/'population'
+            folder.mkdir(exist_ok=True)
+            self.store.write_path(folder/(analysis['id']+'.json'), analysis)
+            self.store.write_path(folder/'analysis.json', analysis)
+        return analysis
 
     def close(self):
         self.executor.shutdown(wait=True)

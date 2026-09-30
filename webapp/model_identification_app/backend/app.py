@@ -49,6 +49,14 @@ class RunBody(Body):
     config: dict = Field(default_factory=dict)
 
 
+class PopulationBody(Body):
+    max_rse_pct: float = Field(default=100, gt=0, le=10000)
+    max_correlation: float = Field(default=.98, ge=.5, le=1)
+    exclude_near_bounds: bool = False
+    draws: int = Field(default=200, ge=50, le=1000)
+    seed: int = Field(default=42, ge=0, lt=2**32)
+
+
 def create_app(storage=None):
     store = Store(storage or APP_ROOT/'storage')
     datasets = DatasetService(store, dataset_root=REPO_ROOT/'dataset')
@@ -129,6 +137,13 @@ def create_app(storage=None):
 
     @app.get('/api/runs/{key}/results')
     def results(key: str): return runs.results(key)
+
+    @app.get('/api/runs/{key}/population')
+    def population(key: str): return runs.population(key)
+
+    @app.post('/api/runs/{key}/population')
+    def estimate_population(key: str, body: PopulationBody):
+        return runs.estimate_population(key, body.model_dump())
 
     @app.get('/api/runs/{key}/segments/{sid}')
     def result(key: str, sid: str):
