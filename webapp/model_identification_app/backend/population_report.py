@@ -2,11 +2,20 @@
 import json
 import numpy as np
 from matplotlib.figure import Figure
+from matplotlib.ticker import FuncFormatter
+from .population_review import metric_color, elapsed
 
 
 def append_population(a, p, heading, table, plot, page):
     heading('Parametri dell atleta - popolazione intra-soggetto')
     p(f"Analisi {a.get('id', '')} | {a.get('created_at', '')} | Protocollo {a['version']} | Stato: {a['status']}")
+    context = a.get('review_context')
+    reviews = a.get('reviews', {})
+    if context:
+        p('Modello: '+context['equation'])
+        for warning in context['warnings']: p('AVVISO: '+warning)
+        counts = {k:sum(reviews.get(r['segment_id'],{}).get('verdict','unreviewed')==k for r in a['test']) for k in context['verdicts']}
+        p('Revisione manuale: '+', '.join(context['verdicts'][k]+': '+str(v) for k,v in counts.items()))
     p('theta_j = theta_sub + nu_j; nu_j ~ N(0, Omega). Covarianza osservata = Omega + S_j. Stima REML multivariata a due stadi sui soli fit train.')
     p(f"Train: {a['train_count']}; vettori completi affidabili: {a['retained_vectors']}; minimo: {a.get('minimum_vectors', 'n.d.')}.")
     p('Configurazione: '+json.dumps(a['config'],ensure_ascii=True))
@@ -49,15 +58,37 @@ def append_population(a, p, heading, table, plot, page):
     table(['Parametro','Media','SD tra segmenti','CI95 media'], [[k, model['mean'][i], model['sd'][i], ' / '.join(f'{v:.5g}' for v in model['mean_ci95'][i])] for i,k in enumerate(model['keys'])])
     for title,key in [('Omega: covarianza tra segmenti (prodotti delle unita)','covariance'),('Correlazione degli effetti casuali','correlation'),('Correlazione osservata tra fit completi ammessi','observed_correlation')]:
         heading(title); table(['Parametro',*model['keys']],[[k,*model[key][i]] for i,k in enumerate(model['keys'])])
-    page(); heading('Previsione HR sul test - nessuna ristima')
-    p('HR_hat = B+x; x(0)=0; HR_hat(0)=B_sub. Solo potenza in ingresso, P0 secondo protocollo della run. HR test usata esclusivamente per valutazione. Assunzione di equilibrio iniziale.')
-    p('Fascia 95%: variabilita delle traiettorie campionate congiuntamente dai parametri, condizionata ai bounds. Non include rumore residuo o incertezza della media. Nessuna garanzia di copertura predittiva 95%. Baseline: HR costante uguale a B_sub.')
+    page(); heading('Previsione HR sul test')
+    mode = a['config'].get('prediction_mode', 'legacy_power_only')
+    if mode == 'legacy_power_only':
+        p('Protocollo storico: HR_hat=B+x; x(0)=0; HR iniziale=B_sub. HR test solo per valutazione.')
+    elif mode == 'observed_hr':
+        p('B di popolazione; x(0)=HR(0)-B_sub. HR iniziale osservata, nessuna ristima. Metriche da t >= 10 s.')
+    else:
+        p('K,L,tau di popolazione; B locale calibrato su HR e potenza in [0,10 s). x(0)=HR(0)-B_locale. Stato propagato senza reset; metriche da t >= 10 s. B ricalibrato per ogni estrazione. Fasce prive di incertezza del rumore di calibrazione.')
+    p('Fascia 95%: variabilita delle traiettorie campionate congiuntamente dai parametri, condizionata ai bounds. Non include rumore residuo o incertezza della media. Nessuna garanzia di copertura predittiva 95%. Baseline: HR costante uguale al B usato nella previsione.')
     if not a['test']: p('Nessun segmento test disponibile.')
-    table(['Segmento','MAE bpm','RMSE bpm','Bias bpm','RMSE B costante'],[[r['segment_id'],*[r.get('metrics',{}).get(k) if r.get('metrics') else None for k in ('MAE','RMSE','bias','constant_B_RMSE')]] for r in a['test']],[155,86,86,86,86])
+    metric_keys = ('MAE','RMSE','bias','constant_B_RMSE')
+    backgrounds = [[None,*[metric_color((r.get('metrics') or {}).get(k),context['scales'][k],context['colors']) for k in metric_keys]] for r in a['test']] if context else None
+    if context:
+        p(context['legend'])
+        table(['Verde: migliore','Rosso: peggiore','Grigio: n.d. / parità'],[['Minimo errore','Massimo errore','Nessuna graduazione']],
+              backgrounds=[[context['colors'][k] for k in ('best','worst','neutral')]])
+    table(['Segmento','MAE bpm','RMSE bpm','Bias bpm','RMSE B costante'],[[r['segment_id'],*[(r.get('metrics') or {}).get(k) for k in metric_keys]] for r in a['test']],[155,86,86,86,86],backgrounds=backgrounds)
     for r in a['test']:
+        page()
         heading('Test '+r['segment_id'])
+        p(r['filename'])
+        if context:
+            review = reviews.get(r['segment_id'],{})
+            p('Valutazione: '+context['verdicts'][review.get('verdict','unreviewed')])
+            p('Osservazioni: '+('; '.join(context['labels'][k] for k in review.get('labels',[])) or 'Nessuna etichetta'))
+            if review.get('notes'): p('Note: '+review['notes'])
+            if review.get('updated_at'): p('Salvata: '+review['updated_at'])
         if r['status'] != 'predicted': p('Non previsto: '+r.get('error','')); continue
-        p(f"P0={r['P0']:.5g} W; HR iniziale=B={r['initial_HR']:.5g} bpm; HR mancanti={r['missing_hr']}; accettazione dominio={r['gaussian_domain_acceptance']:.1%}; fascia disponibile={r['band_available']}.")
+        p(f"P0={r['P0']:.5g} W; HR iniziale={r['initial_HR']:.5g} bpm; HR mancanti={r['missing_hr']}; accettazione dominio={r['gaussian_domain_acceptance']:.1%}; fascia disponibile={r['band_available']}.")
+        p(f"Equilibrio B: {r.get('equilibrium_B', r['initial_HR'])}; valutazione da {r.get('evaluation_start_s', 0)} s.")
+        if r.get('calibration'): p('Calibrazione B (SE condizionale approssimato): '+json.dumps(r['calibration'], ensure_ascii=True))
         if r['metrics']:
             m = r['metrics']
             p('Campioni valutati: '+str(m['N'])+'; SD residui: '+(f"{m['residual_sd']:.4g} bpm" if m['residual_sd'] is not None else 'n.d.')+'; copertura empirica fascia: '+(f"{m['band_coverage']:.1%}" if m['band_coverage'] is not None else 'n.d.'))
@@ -67,8 +98,13 @@ def append_population(a, p, heading, table, plot, page):
         if r['band_available']: axes[0].fill_between(s['time'],s['lower'],s['upper'],color='#268575',alpha=.2,label='Variabilita parametri 95%')
         axes[0].legend(fontsize=7); axes[0].set_ylabel('HR (bpm)')
         axes[1].step(s['time'],s['power'],where='post',color='#a07a3f',linewidth=.7); axes[1].set_ylabel('Potenza (W)')
+        axes[1].lines[0].set_label('Potenza'); axes[1].legend(fontsize=7)
         axes[2].plot(s['time'],s['residual'],color='#536a80',linewidth=.7); axes[2].axhline(0,color='grey',linewidth=.5)
-        axes[2].set_ylabel('Residuo (bpm)'); axes[2].set_xlabel('Tempo (s)')
+        axes[2].set_ylabel('Residuo (bpm)'); axes[2].set_xlabel('Tempo (hh:mm:ss)')
+        axes[2].xaxis.set_major_formatter(FuncFormatter(lambda value,pos: elapsed(value)))
+        axes[2].lines[0].set_label('Osservata - prevista'); axes[2].legend(fontsize=7)
+        if r.get('evaluation_start_s',0):
+            for ax in axes: ax.axvspan(0,r['evaluation_start_s'],color='#dbe6df',alpha=.5)
         for ax in axes: ax.tick_params(labelsize=7)
         plot(fig,280)
     p('Provenienza analisi: risultati train SHA256 '+a.get('source_results_sha256','n.d.')+'; codice '+a.get('environment',{}).get('code_sha256','n.d.'))

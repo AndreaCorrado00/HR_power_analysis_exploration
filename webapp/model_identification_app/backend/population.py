@@ -10,9 +10,9 @@ from scipy.stats import norm
 
 from .models.p1d import simulate
 
-VERSION = '1.0.0'
+VERSION = '2.0.0'
 DEFAULTS = {'max_rse_pct': 100., 'max_correlation': .98,
-            'exclude_near_bounds': False, 'draws': 200, 'seed': 42}
+            'exclude_near_bounds': False, 'draws': 200, 'seed': 42, 'prediction_mode': 'legacy_power_only'}
 
 
 def configuration(value=None):
@@ -28,6 +28,8 @@ def configuration(value=None):
         raise ValueError('Simulazioni: intero tra 50 e 1000')
     if isinstance(c['seed'], bool) or not isinstance(c['seed'], int) or not 0 <= c['seed'] < 2**32:
         raise ValueError('Seed: intero tra 0 e 2^32-1')
+    if c['prediction_mode'] not in ('legacy_power_only', 'observed_hr', 'local_B_10s'):
+        raise ValueError('Modalita predittiva sconosciuta')
     return c
 
 
@@ -115,11 +117,18 @@ def analyze(manifest, results, config=None):
     if manifest['config'].get('initialization_protocol') == 'legacy_v1':
         out.update(status='incompatible', reason='Protocollo storico non compatibile: creare una run segment_v2 con B stimato.')
         return out
+    original_keys = keys[:]
+    indices = [i for i,k in enumerate(keys) if c['prediction_mode'] != 'local_B_10s' or k != 'B']
+    params = [params[i] for i in indices]; keys = [p['key'] for p in params]
+    out['parameters'] = params
     raw = {k: [] for k in keys}; retained = {k: [] for k in keys}
     vectors, covariances, ids, all_vectors = [], [], [], []
     # Only explicitly fixed bounds identify a fixed coordinate.
     limits = manifest['parameter_bounds']
     fixed = np.array([a is not None and b is not None and a == b for a,b in zip(limits['lower'],limits['upper'])])
+    original_p = int((~fixed).sum())
+    fixed = fixed[indices]
+    limits = {name: [limits[name][i] for i in indices] for name in ('lower', 'upper')}
     free = ~fixed; p = int(free.sum())
     for sid in manifest['split']['assignments']['train']:
         r = fits.get(sid, {})
@@ -131,10 +140,12 @@ def analyze(manifest, results, config=None):
         global_reasons = []
         if r.get('status') != 'fitted': global_reasons.append('fit_failed_or_missing')
         unc = r.get('uncertainty', {})
-        if unc.get('rank') != p: global_reasons.append('rank_deficient_or_missing')
+        if unc.get('rank') != original_p: global_reasons.append('rank_deficient_or_missing')
         if 'equivalent_predictions_different_parameters' in r.get('warnings', []):
             global_reasons.append('equivalent_predictions_different_parameters')
         cov = np.asarray(unc.get('covariance'), float)
+        if cov.shape == (len(original_keys), len(original_keys)):
+            cov = cov[np.ix_(indices, indices)]
         valid_cov = cov.shape == (len(keys),len(keys)) and np.isfinite(cov).all()
         if valid_cov:
             try:
@@ -199,7 +210,7 @@ def analyze(manifest, results, config=None):
 
 
 def predict(manifest, analysis, time, power, observed):
-    """HR observations are used only after simulating, for scoring/display."""
+    """Saved protocol controls HR conditioning; scoring never feeds prediction."""
     if analysis['model'] is None: raise ValueError('Modello di popolazione non disponibile')
     t, u, hr = (np.asarray(a, float) for a in (time, power, observed))
     if t.ndim != 1 or u.shape != t.shape or hr.shape != t.shape or not len(t): raise ValueError('Dimensioni non coerenti')
@@ -213,14 +224,55 @@ def predict(manifest, analysis, time, power, observed):
     else: p0 = float(u[mask][0])
     t, u, hr = t[mask], u[mask], hr[mask]; t = t-t[0]
     if len(t) < 2 or not np.isfinite(u).all(): raise ValueError('Potenza non finita o segmento troppo corto')
-    model = analysis['model']; mean = np.asarray(model['mean']); b = model['keys'].index('B')
-    def trajectory(theta):
-        return simulate(t, u, theta[b], theta, p0, 'p1d_full', 'estimated_equilibrium')
+    model = analysis['model']; mean = np.asarray(model['mean'])
+    mode = analysis['config'].get('prediction_mode', 'legacy_power_only')
+    local = mode == 'local_B_10s'
+    legacy = mode == 'legacy_power_only'
+    if not legacy and not np.isfinite(hr[0]):
+        raise ValueError('HR iniziale mancante o non finita')
+    if not legacy and not np.any(t >= 10):
+        raise ValueError('Segmento senza tratto di valutazione dopo 10 s')
     bounds = manifest['parameter_bounds']
-    lo = np.array([-np.inf if v is None else v for v in bounds['lower']])
-    hi = np.array([np.inf if v is None else v for v in bounds['upper']])
+    source_keys = bounds['keys']
+    selected = [source_keys.index(k) for k in model['keys']]
+    lo_full = np.array([-np.inf if v is None else v for v in bounds['lower']])
+    hi_full = np.array([np.inf if v is None else v for v in bounds['upper']])
+    lo, hi = lo_full[selected], hi_full[selected]
+    b_index = source_keys.index('B')
+    calibration_mask = (t < 10) & np.isfinite(hr)
+    if local and calibration_mask.sum() < 3:
+        raise ValueError('HR insufficienti nei primi 10 s per calibrare B')
+
+    def trajectory(theta, details=False):
+        if local:
+            # With fixed K,L,tau and observed HR(0), output is affine in B.
+            base = simulate(t, u, hr[0], [*theta, 0.], p0, 'p1d_full', 'estimated_equilibrium')
+            weight = -np.expm1(-t/theta[model['keys'].index('tau')])
+            w = weight[calibration_mask]
+            information = float(w@w)
+            if information <= 1e-12: raise ValueError('B non identificabile nella finestra di 10 s')
+            estimate = float(w@(hr[calibration_mask]-base[calibration_mask])/information)
+            equilibrium = float(np.clip(estimate, lo_full[b_index], hi_full[b_index]))
+            result = base + weight*equilibrium
+            errors = hr[calibration_mask]-result[calibration_mask]
+            se = float(np.sqrt(errors@errors/(len(errors)-1)/information))
+            warnings = []
+            at_bound = bool(equilibrium == lo_full[b_index] or equilibrium == hi_full[b_index])
+            if at_bound: warnings.append('B locale al limite ammesso')
+            if weight[calibration_mask].max() < .5:
+                warnings.append('Finestra breve rispetto a tau: sensibilita a B debole')
+            if 1.96*se > abs(equilibrium): warnings.append('Incertezza locale di B elevata')
+            diagnostic = {'duration_s': 10, 'samples': int(calibration_mask.sum()),
+                          'B_se_conditional': se, 'at_bound': at_bound, 'warnings': warnings}
+        else:
+            equilibrium = float(theta[model['keys'].index('B')])
+            result = simulate(t, u, equilibrium if legacy else hr[0], theta, p0,
+                              'p1d_full', 'estimated_equilibrium')
+            diagnostic = None
+        return (result, equilibrium, diagnostic) if details else result
+
     if np.any(mean < lo) or np.any(mean > hi): raise ValueError('Media REML fuori dal dominio del modello')
-    central = trajectory(mean)
+    central, equilibrium, calibration = trajectory(mean, True)
     c = analysis['config']; rng = np.random.default_rng(c['seed'])
     samples = rng.multivariate_normal(mean, model['covariance'], size=c['draws']*20, check_valid='raise')
     admissible = np.all((samples >= lo)&(samples <= hi), axis=1)
@@ -229,18 +281,20 @@ def predict(manifest, analysis, time, power, observed):
     if len(accepted) == c['draws']:
         trajectories = np.array([trajectory(a) for a in accepted])
         band = np.quantile(trajectories,[.025,.975],axis=0)
-    valid = np.isfinite(hr)
+    valid = np.isfinite(hr) & (True if legacy else t >= 10)
     residual = hr-central
     metrics = None
     if valid.any():
         e = residual[valid]
         metrics = {'N': int(valid.sum()), 'MAE': float(np.mean(abs(e))), 'RMSE': float(np.sqrt(np.mean(e**2))),
                    'bias': float(e.mean()), 'residual_sd': float(e.std(ddof=1)) if len(e)>1 else None,
-                   'constant_B_RMSE': float(np.sqrt(np.mean((hr[valid]-mean[b])**2))),
+                   'constant_B_RMSE': float(np.sqrt(np.mean((hr[valid]-equilibrium)**2))),
                    'band_coverage': float(np.mean((hr[valid]>=band[0,valid])&(hr[valid]<=band[1,valid]))) if band is not None else None}
     clean = lambda a: [float(v) if np.isfinite(v) else None for v in a]
-    return {'status': 'predicted', 'P0': p0, 'initial_HR': float(mean[b]), 'metrics': metrics,
-            'missing_hr': int((~valid).sum()), 'gaussian_domain_acceptance': float(admissible.mean()),
+    return {'status': 'predicted', 'P0': p0, 'initial_HR': float(central[0]), 'equilibrium_B': equilibrium,
+            'prediction_mode': mode, 'evaluation_start_s': 0 if legacy else 10,
+            'calibration': calibration, 'metrics': metrics,
+            'missing_hr': int((~np.isfinite(hr)).sum()), 'gaussian_domain_acceptance': float(admissible.mean()),
             'band_draws': len(accepted), 'band_available': band is not None,
             'series': {'time': t.tolist(), 'power': u.tolist(), 'observed': clean(hr), 'predicted': central.tolist(),
                        'residual': clean(residual), 'lower': band[0].tolist() if band is not None else [],

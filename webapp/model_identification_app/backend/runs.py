@@ -177,10 +177,59 @@ class RunService:
 
     def population(self, key):
         import json
-        self.get(key)
+        from .population_review import review_context
+        manifest = self.get(key)
         path = self.store.root/'runs'/key/'population'/'analysis.json'
         with self.store.lock:
-            return json.loads(path.read_text(encoding='utf-8')) if path.exists() else None
+            if not path.exists(): return None
+            analysis = json.loads(path.read_text(encoding='utf-8'))
+            reviews = path.parent/(analysis['id']+'.reviews.json')
+            analysis['reviews'] = json.loads(reviews.read_text(encoding='utf-8')) if reviews.exists() else {}
+            analysis['review_context'] = review_context(manifest, analysis)
+            return analysis
+
+    def save_population_review(self, key, sid, body):
+        from fastapi import HTTPException
+        from .population_review import LABELS, VERDICTS
+        with self.store.lock:
+            a = self.population(key)
+            if a is None or a['id'] != body['analysis_id']:
+                raise HTTPException(409, 'Analisi cambiata: ricaricare prima di salvare o esportare.')
+            record = next((r for r in a['test'] if r['segment_id']==sid), None)
+            if record is None: raise FileNotFoundError('Segmento test non presente')
+            if body['verdict'] not in VERDICTS or any(k not in LABELS for k in body['labels']):
+                raise ValueError('Valutazione o etichette non valide')
+            if record['status'] != 'predicted' and body['verdict'] != 'unreviewed':
+                raise ValueError('Predizione non disponibile: impossibile classificarla')
+            if body['verdict'] != 'negative' and body['labels']:
+                raise ValueError('Le etichette descrittive si applicano alle predizioni negative')
+            a['reviews'][sid] = dict(verdict=body['verdict'], labels=list(dict.fromkeys(body['labels'])),
+                                    notes=body['notes'], updated_at=utc_now())
+            self.store.write_path(self.store.root/'runs'/key/'population'/(a['id']+'.reviews.json'),a['reviews'])
+            return a['reviews'][sid]
+
+    def export_population(self, key, kind, analysis_id):
+        import json
+        from fastapi import HTTPException
+        from .reporting import pdf_report
+        if kind not in ('json','pdf'): raise ValueError('Formato export sconosciuto')
+        with self.store.lock:
+            manifest = self.get(key)
+            a = self.population(key)
+            if a is None or a['id'] != analysis_id:
+                raise HTTPException(409, 'Analisi cambiata: ricaricare prima di salvare o esportare.')
+            a['run_id'] = key
+            a = {'review_summary':[dict(segment_id=r['segment_id'], filename=r['filename'],
+                      status=r['status'], metrics=r.get('metrics'),
+                      **a['reviews'].get(r['segment_id'],dict(verdict='unreviewed',labels=[],notes='')))
+                      for r in a['test']], **a}
+            data = (json.dumps(a,ensure_ascii=False,indent=2,allow_nan=False).encode('utf-8') if kind=='json'
+                    else pdf_report(manifest, [], a, population_only=True))
+            folder = self.store.root/'runs'/key/'exports'
+            folder.mkdir(exist_ok=True)
+            name = a['id']+'_population_review.'+kind
+            temp = folder/(name+'.tmp'); temp.write_bytes(data); temp.replace(folder/name)
+            return data, name
 
     def estimate_population(self, key, config):
         from .population import analyze, predict
@@ -212,7 +261,7 @@ class RunService:
             folder.mkdir(exist_ok=True)
             self.store.write_path(folder/(analysis['id']+'.json'), analysis)
             self.store.write_path(folder/'analysis.json', analysis)
-        return analysis
+        return self.population(key)
 
     def close(self):
         self.executor.shutdown(wait=True)

@@ -115,7 +115,8 @@ def test_invalid_covariance_and_multistart_failures_are_excluded():
     assert not any(s['included'] for s in a['screening'][:3])
 
 
-def test_population_api_persistence_and_export(tmp_path):
+@pytest.mark.parametrize('mode', ['legacy_power_only', 'observed_hr', 'local_B_10s'])
+def test_population_api_persistence_and_export(tmp_path, mode):
     import io
     import zipfile
     from fastapi.testclient import TestClient
@@ -127,20 +128,37 @@ def test_population_api_persistence_and_export(tmp_path):
     manifest['config']['use_pre_window'] = False
     with TestClient(create_app(tmp_path)) as c:
         service = c.app.state.runs
-        data = b'elapsed_seconds,power_w,heart_rate_bpm\n0,100,120\n1,200,122\n2,200,124\n3,200,126\n'
+        data = ('elapsed_seconds,power_w,heart_rate_bpm\n'+''.join(f'{i},100,120\n' for i in range(31))).encode()
         digest = service.store.blob(data)
         manifest['dataset']['segments'].append({'id':'test','filename':'test.csv','sha256':digest,'activity_id':'unseen'})
         folder = tmp_path/'runs'/manifest['id']; folder.mkdir()
         for r in fits: service.store.write_path(folder/(r['segment_id']+'.json'),r)
         service.save(manifest)
         assert c.get('/api/runs/population-test/population').json() is None
-        response = c.post('/api/runs/population-test/population',json={'draws':50})
+        response = c.post('/api/runs/population-test/population',json={'draws':50, 'prediction_mode':mode})
         assert response.status_code == 200, response.text
         analysis = response.json()
-        assert analysis['test'][0]['series']['predicted'][0] == analysis['model']['mean'][3]
+        assert analysis['config']['prediction_mode'] == mode
+        assert analysis['test'][0]['series']['predicted'][0] == (analysis['model']['mean'][3] if mode == 'legacy_power_only' else 120)
         assert c.get('/api/runs/population-test/population').json() == analysis
         assert len(c.get('/api/runs/population-test/results').json()) == 12
         assert (folder/'population'/(analysis['id']+'.json')).exists()
+        review_url = '/api/runs/population-test/population/reviews/test'
+        body = {'analysis_id':analysis['id'], 'verdict':'negative', 'labels':['systematic_overestimate'], 'notes':'Offset < 10 bpm & recupero'}
+        reviewed = c.put(review_url, json=body)
+        assert reviewed.status_code == 200, reviewed.text
+        reopened = c.get('/api/runs/population-test/population').json()
+        assert reopened['reviews']['test']['notes'] == body['notes']
+        assert reopened['reviews']['test']['verdict'] == 'negative'
+        assert c.put(review_url, json={**body,'analysis_id':'stale'}).status_code == 409
+        assert c.put(review_url, json={**body,'labels':['invented']}).status_code == 400
+        exported_review = c.post('/api/runs/population-test/population/exports/json', json={'analysis_id':analysis['id']})
+        assert exported_review.status_code == 200
+        assert exported_review.json()['reviews']['test']['labels'] == ['systematic_overestimate']
+        assert exported_review.json()['review_context']['warnings']
+        review_pdf = c.post('/api/runs/population-test/population/exports/pdf', json={'analysis_id':analysis['id']})
+        assert review_pdf.status_code == 200, review_pdf.text[:100]
+        assert review_pdf.content.startswith(b'%PDF')
         exported = c.post('/api/runs/population-test/exports/tables')
         with zipfile.ZipFile(io.BytesIO(exported.content)) as z:
             assert 'population.json' in z.namelist()
@@ -149,3 +167,77 @@ def test_population_api_persistence_and_export(tmp_path):
         assert pdf.status_code == 200, pdf.text[:100] if not pdf.content.startswith(b'%PDF') else ''
         assert pdf.content.startswith(b'%PDF')
         assert c.post('/api/runs/population-test/population',json={'draws':1}).status_code == 422
+        fresh = c.post('/api/runs/population-test/population', json={'draws':50, 'prediction_mode':mode}).json()
+        assert fresh['reviews'] == {}
+        assert c.put(review_url, json=body).status_code == 409
+
+
+def test_review_colors_use_full_set_absolute_bias_and_fixed_bounds():
+    from webapp.model_identification_app.backend.population_review import review_context
+    manifest, _ = fixture(12)
+    manifest['parameter_bounds']['upper'][1] = 0
+    a = {'config':{'prediction_mode':'observed_hr'}, 'test':[
+        {'metrics':{'MAE':1, 'bias':-10}}, {'metrics':{'MAE':5,'bias':0}},
+        {'metrics':{'MAE':None,'bias':5}}]}
+    context = review_context(manifest,a)
+    assert context['scales']['MAE'] == {'min':1, 'max':5, 'absolute':False}
+    assert context['scales']['bias'] == {'min':0, 'max':10, 'absolute':True}
+    assert context['fixed_parameters'] == [{'key':'L','value':0,'unit':'s'}]
+    assert 'P(t)-P0' in context['equation']
+
+
+@pytest.mark.parametrize('mode', ['observed_hr', 'local_B_10s'])
+def test_initialization_uses_only_allowed_hr_and_scores_after_window(mode):
+    from webapp.model_identification_app.backend.population import analyze, predict
+    manifest, fits = fixture(12)
+    a = analyze(manifest, fits, {'prediction_mode': mode, 'draws': 50})
+    t = np.arange(-10., 101.)
+    power = np.full(len(t), 100.)
+    tau = a['model']['mean'][a['model']['keys'].index('tau')]
+    hr = 110 - 50*np.exp(-np.maximum(t, 0)/tau)
+    first = predict(manifest, a, t, power, hr)
+    changed = hr.copy(); changed[t >= 10] = 999
+    second = predict(manifest, a, t, power, changed)
+    assert first['series']['predicted'] == second['series']['predicted']
+    assert first['series']['lower'] == second['series']['lower']
+    assert first['initial_HR'] == 60
+    assert first['metrics']['N'] == 91
+    if mode == 'local_B_10s':
+        assert a['model']['keys'] == ['K', 'L', 'tau']
+        assert first['equilibrium_B'] == pytest.approx(110)
+        assert first['metrics']['RMSE'] < 1e-8
+    else:
+        assert first['equilibrium_B'] == a['model']['mean'][3]
+    hr[t == 0] = np.nan
+    with pytest.raises(ValueError, match='HR'):
+        predict(manifest, a, t, power, hr)
+
+
+def test_local_population_does_not_screen_on_B_only_bounds():
+    from webapp.model_identification_app.backend.population import analyze
+    manifest, fits = fixture(12)
+    for fit in fits: fit['parameters']['B']['at_bound'] = True
+    a = analyze(manifest, fits, {'prediction_mode': 'local_B_10s'})
+    assert a['retained_vectors'] == 12
+    assert a['model']['keys'] == ['K', 'L', 'tau']
+
+
+def test_local_B_bounds_and_fixed_zero_delay():
+    from webapp.model_identification_app.backend.population import analyze, predict
+    manifest, fits = fixture(12)
+    manifest['parameter_bounds']['upper'][1] = 0
+    manifest['parameter_bounds']['upper'][3] = 100
+    for fit in fits:
+        fit['parameters']['L'].update(estimate=0, se=None, at_bound=True)
+        fit['uncertainty']['rank'] = 3
+        cov = np.asarray(fit['uncertainty']['covariance']); cov[1,:] = 0; cov[:,1] = 0
+        fit['uncertainty']['covariance'] = cov.tolist()
+    a = analyze(manifest, fits, {'prediction_mode':'local_B_10s', 'draws':50})
+    assert a['model']['mean'][1] == 0
+    t = np.arange(-10., 31.)
+    result = predict(manifest, a, t, np.full(len(t),100.), np.full(len(t),140.))
+    assert result['equilibrium_B'] == 100
+    assert result['calibration']['at_bound']
+    assert result['calibration']['warnings']
+    with pytest.raises(ValueError, match='valutazione'):
+        predict(manifest, a, t[t<10], np.full(sum(t<10),100.), np.full(sum(t<10),140.))

@@ -1,0 +1,66 @@
+"""Shared presentation conventions for manual review; never alters predictions."""
+import math
+
+LABELS = {
+    'observed_hr_delay': 'Ritardo della HR osservata rispetto alla prevista',
+    'systematic_overestimate': 'Sovrastima sistematica',
+    'systematic_underestimate': 'Sottostima sistematica',
+    'observed_hr_flat': 'HR osservata piatta',
+    'excessive_excursions': 'Escursioni previste eccessive',
+    'progressive_divergence': 'Divergenza progressiva',
+    'transitions_mismatch': 'Transizioni o recuperi mal riprodotti',
+}
+VERDICTS = {'unreviewed':'Non valutata', 'positive':'Positiva', 'negative':'Negativa'}
+METRICS = ('MAE', 'RMSE', 'bias', 'constant_B_RMSE', 'residual_sd')
+LEGEND = ('Qualità relativa nell’intero test set dell’analisi: verde = minimo errore, '
+          'rosso = massimo errore; interpolazione lineare, senza soglie assolute. '
+          'Bias colorato per valore assoluto (segno conservato); residuo = osservata - prevista. '
+          'Grigio = valore mancante o nessuna variabilità. La copertura della fascia è solo descrittiva.')
+
+
+def review_context(manifest, analysis):
+    bounds = manifest.get('parameter_bounds', {})
+    units = {p['key']:p['unit'] for p in manifest['model']['parameters']}
+    fixed = [{'key':k, 'value':lo, 'unit':units.get(k,'')} for k,lo,hi in
+             zip(bounds.get('keys',[]), bounds.get('lower',[]), bounds.get('upper',[]))
+             if lo is not None and hi is not None and lo == hi]
+    no_delay = any(p['key']=='L' and p['value']==0 for p in fixed)
+    equation = 'tau dx/dt + x = K ['+('P(t)-P0' if no_delay else 'P(t-L)-P0')+']; HR prevista = B+x'
+    warnings = []
+    if fixed:
+        warnings.append('Parametri fissati dai vincoli: '+', '.join(f"{p['key']}={p['value']:g} {p['unit']}" for p in fixed)+
+                        '. Non sono stime di precisione infinita. Modello: '+equation+
+                        ('. L=0: nessun ritardo esplicito.' if no_delay else '.'))
+    mode = analysis['config'].get('prediction_mode','legacy_power_only')
+    b = 'B è un livello matematico riferito a P0, costante nel segmento, non una HR a riposo né un biomarcatore. '
+    if mode == 'local_B_10s':
+        b += ('B locale calibrato su potenza e HR in [0,10 s), senza assumere equilibrio nella finestra; '
+              'x(0)=HR(0)-B. Può essere debolmente identificato. Metriche da 10 s; '
+              'fasce condizionate ai dati iniziali, prive del rumore di calibrazione e dell’incertezza residua di B.')
+    elif mode == 'observed_hr':
+        b += 'B di popolazione; x(0)=HR(0)-B, HR iniziale osservata senza ristima. Metriche da 10 s.'
+    else:
+        b += 'Protocollo storico: B di popolazione, x(0)=0 e HR iniziale=B; equilibrio iniziale assunto.'
+    warnings.append(b)
+    scales = {}
+    for key in METRICS:
+        values = [(r.get('metrics') or {}).get(key) for r in analysis['test']]
+        values = [abs(v) if key=='bias' else v for v in values if isinstance(v,(int,float)) and math.isfinite(v)]
+        scales[key] = {'min':min(values) if values else None, 'max':max(values) if values else None, 'absolute':key=='bias'}
+    return dict(version=1, equation=equation, fixed_parameters=fixed, warnings=warnings,
+                scales=scales, legend=LEGEND, labels=LABELS, verdicts=VERDICTS,
+                colors={'best':'#c7ead2','worst':'#f4b9b4','neutral':'#edf0f2'})
+
+
+def metric_color(value, scale, colors):
+    if value is None or not math.isfinite(value) or scale['min'] is None or scale['min']==scale['max']:
+        return colors['neutral']
+    value = abs(value) if scale['absolute'] else value
+    ratio = max(0,min(1,(value-scale['min'])/(scale['max']-scale['min'])))
+    a,b = colors['best'].lstrip('#'),colors['worst'].lstrip('#')
+    return '#'+''.join(f'{int(int(a[i:i+2],16)*(1-ratio)+int(b[i:i+2],16)*ratio+.5):02x}' for i in (0,2,4))
+
+
+def elapsed(value):
+    seconds = int(abs(value)+.5)
+    return ('-' if value<0 else '')+f'{seconds//3600:02d}:{seconds//60%60:02d}:{seconds%60:02d}'

@@ -50,11 +50,22 @@ class RunBody(Body):
 
 
 class PopulationBody(Body):
+    prediction_mode: str = "legacy_power_only"
     max_rse_pct: float = Field(default=100, gt=0, le=10000)
     max_correlation: float = Field(default=.98, ge=.5, le=1)
     exclude_near_bounds: bool = False
     draws: int = Field(default=200, ge=50, le=1000)
     seed: int = Field(default=42, ge=0, lt=2**32)
+
+
+class PopulationExportBody(Body):
+    analysis_id: str
+
+
+class PopulationReviewBody(PopulationExportBody):
+    verdict: str
+    labels: list[str] = Field(default_factory=list, max_length=20)
+    notes: str = Field(default='', max_length=10000)
 
 
 def create_app(storage=None):
@@ -144,6 +155,16 @@ def create_app(storage=None):
     @app.post('/api/runs/{key}/population')
     def estimate_population(key: str, body: PopulationBody):
         return runs.estimate_population(key, body.model_dump())
+
+    @app.put('/api/runs/{key}/population/reviews/{sid}')
+    def review_population(key: str, sid: str, body: PopulationReviewBody):
+        return runs.save_population_review(key, sid, body.model_dump())
+
+    @app.post('/api/runs/{key}/population/exports/{kind}')
+    def export_population(key: str, kind: str, body: PopulationExportBody):
+        data, name = runs.export_population(key, kind, body.analysis_id)
+        return Response(data, media_type='application/pdf' if kind=='pdf' else 'application/json',
+                        headers={'Content-Disposition':f'attachment; filename="{name}"'})
 
     @app.get('/api/runs/{key}/segments/{sid}')
     def result(key: str, sid: str):

@@ -1,6 +1,6 @@
 # Parametri dell'atleta e previsione HR
 
-Protocollo v1, approvato nella conversazione del 29 settembre 2026.
+Protocollo storico v1, approvato nella conversazione del 29 settembre 2026.
 
 ## Obiettivo e dominio
 
@@ -90,3 +90,89 @@ non riutilizza analisi precedenti. PDF e ZIP incorporano l'analisi salvata senza
 ricalcoli o refit. Verifiche: REML su caso analitico, esclusioni e parametri fissi,
 assenza di dipendenza da HR test, integrazione API/persistenza/export, build UI
 e controllo visivo del PDF.
+
+
+## Protocollo v2 - inizializzazione osservata e B locale (30 settembre 2026)
+
+Estensione approvata: scelta nella pagina Popolazione, persistita in
+`config.prediction_mode`. Il fitting train non cambia. Le analisi storiche senza
+questo campo mantengono il protocollo v1 (`legacy_power_only`); la UI propone
+`observed_hr` per nuove analisi.
+
+- `observed_hr`: K,L,tau,B congiunti di popolazione; HR(0) osservata e
+  x(0)=HR(0)-B_pop. Nessun fitting sul segmento test.
+- `local_B_10s`: K,L,tau congiunti di popolazione, B escluso da REML e dalle
+  statistiche di popolazione. Con questi parametri fissi si stima B locale in
+  bpm per minimi quadrati limitati ai bounds B originali, su campioni HR finiti
+  in [0,10 s). HR(0) viene osservata, x(0)=HR(0)-B_locale. La traiettoria risulta affine
+  in B con sensibilita 1-exp(-t/tau), quindi si usa la soluzione analitica
+  vincolata. Non si assume che la media HR della finestra sia un equilibrio.
+
+Questa e una calibrazione proposta nel progetto, non una replica bibliografica.
+P0 e gestione della potenza restano quelli della run. La pre-window [-10,0)
+per P0 e distinta dalla finestra [0,10) di calibrazione. Nessuna nuova covariata.
+La HR iniziale deve essere finita; calibrazione locale con almeno tre campioni
+finiti, sensibilita non nulla e segmento con dati a t>=10 s. Nessun fallback.
+Il livello B resta riferito a P0: non rappresenta una HR a riposo.
+
+In modalita locale lo screening marginale e le correlazioni locali usano solo
+K,L,tau e la sottomatrice della covarianza originale. I controlli globali di
+rango e ambiguita multistart del fit originale restano conservativi: escludere
+B dalla popolazione non rende automaticamente identificabile il fit train.
+
+Entrambe le nuove modalita sono valutate solo a t>=10 s, senza reset dello
+stato e senza usare HR futura. Baseline costante pari al B usato. Per confronti
+usare l'intersezione dei segmenti previsti con successo, riportando i fallimenti.
+I primi 10 s nei grafici sono inizializzazione/calibrazione, non validazione.
+Split congelato, nessun utilizzo della validation per questa procedura.
+
+Per ogni estrazione K,L,tau si ricalibra B sulla stessa finestra. Le fasce sono
+condizionate ai dati iniziali: non includono rumore HR, incertezza della media
+di popolazione ne l'incertezza residua di B. La SE locale di B usa una formula Wald
+condizionata a HR(0), K,L,tau, con varianza residua SSE/(n-1); autocorrelazione,
+bounds e HR(0) rumorosa ne limitano la validita. Segnalati bounds attivi,
+CI con semiampiezza oltre |B| e sensibilita massima nella finestra inferiore
+al 50% (criterio operativo di finestra breve, non soglia fisiologica).
+
+Verifiche: recupero sintetico di B, indipendenza dalla HR successiva, mancanti,
+bounds, L fissato, persistenza API, UI e report. Decisioni e parametri di
+calibrazione vengono salvati insieme alle predizioni.
+
+## Revisione descrittiva delle predizioni (1 ottobre 2026)
+
+Ogni giudizio manuale è associato a ID analisi e ID segmento: non valutata,
+positiva o negativa. Le negative possono avere più etichette descrittive;
+le note libere descrivono quanto osservato, senza attribuire cause fisiologiche.
+Le etichette sono: ritardo della HR osservata rispetto alla prevista,
+sovrastima sistematica, sottostima sistematica, HR osservata piatta,
+escursioni previste eccessive, divergenza progressiva, transizioni o recuperi
+mal riprodotti. Non è prevista l'etichetta «HR prevista troppo piatta».
+
+Il salvataggio esplicito conserva giudizio, etichette, note e data UTC in
+`runs/<run>/population/<analysis>.reviews.json`, separato dallo snapshot
+scientifico immutabile. Una nuova analisi parte senza giudizi; quelli precedenti
+restano conservati. Le richieste con ID analisi superato sono rifiutate.
+La classificazione non modifica fitting, metriche, screening o split.
+Le bozze non salvate sono recuperate tramite sessionStorage quando si naviga
+tra le pagine nella stessa sessione browser; non sono incluse negli export
+finché non viene premuto «Salva osservazione».
+
+Ogni metrica di errore usa min e max finiti dell'intero test set dell'analisi
+salvata: minimo verde, massimo rosso, interpolazione RGB lineare. Il bias usa
+il valore assoluto per il colore ma conserva il segno (osservata meno prevista).
+Parità completa e valori mancanti sono neutri. La scala è relativa: il verde
+non certifica una previsione accettabile. La copertura resta descrittiva.
+
+Pagina e export condividono colori, legenda e avvisi calcolati dai bounds
+salvati e dal protocollo predittivo. Un parametro è fisso solo se i bounds
+inferiore e superiore coincidono, non perché la varianza stimata sia zero.
+Con L=0 si esplicita la forma senza ritardo. B resta un livello riferito a P0,
+costante nel segmento, senza interpretazione di HR a riposo. Si distinguono
+B di popolazione, B locale calibrato e inizializzazione storica all'equilibrio.
+
+Gli export JSON e PDF della revisione sono salvati in `runs/<run>/exports/`
+e scaricabili. Il JSON conserva analisi, provenienza, serie numeriche, giudizi
+e convenzioni; il PDF comprende solo analisi dei parametri e predizioni,
+con etichette, note e tracce HR/potenza/residui. Nessun refit all'esportazione.
+Gli assi temporali mostrano durate hh:mm:ss, anche oltre 24 ore; i valori
+numerici delle serie JSON rimangono in secondi.
