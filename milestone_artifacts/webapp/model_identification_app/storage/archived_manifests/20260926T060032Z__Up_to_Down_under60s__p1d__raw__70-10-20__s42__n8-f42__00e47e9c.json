@@ -1,0 +1,4400 @@
+{
+  "schema_version": 1,
+  "id": "00e47e9c0e2b41b0911e978afd611905",
+  "manifest_filename": "20260926T060032Z__Up_to_Down_under60s__p1d__raw__70-10-20__s42__n8-f42__00e47e9c.json",
+  "created_at": "2026-09-26T06:00:32.971568+00:00",
+  "status": "completed",
+  "dataset": {
+    "id": "b5a2dad90cb74a109885a8180931c555",
+    "name": "Up_to_Down_under60s",
+    "created_at": "2026-09-26T05:59:55.912129+00:00",
+    "sources": [
+      {
+        "name": "dataset_segments_G1_G2.zip",
+        "sha256": "8caa1be8abc95e4d114a4bdf5160d4e24863dc7fde42be8bef8baf6ad6977882"
+      }
+    ],
+    "source_manifests": [
+      {
+        "source": "dataset_segments_G1_G2.zip",
+        "manifest": {
+          "format_version": 1,
+          "dataset_path": "C:\\Users\\corra\\dev\\power_HR_model\\dataset\\cleaned_only_road_activieties.zip",
+          "boundary_convention": "inclusive outer bounds; duplicate timestamps removed",
+          "columns": {
+            "activity_id": {
+              "unit": null
+            },
+            "first_lap": {
+              "unit": null
+            },
+            "last_lap": {
+              "unit": null
+            },
+            "timestamp": {
+              "unit": "ISO 8601 UTC"
+            },
+            "elapsed_seconds": {
+              "unit": "s"
+            },
+            "power_w": {
+              "unit": "W"
+            },
+            "heart_rate_bpm": {
+              "unit": "bpm"
+            },
+            "power_w_kg": {
+              "unit": "W/kg"
+            },
+            "hr_pct_max": {
+              "unit": "%"
+            },
+            "hr_pct_threshold": {
+              "unit": "%"
+            }
+          },
+          "normalization": {
+            "weight_kg": null,
+            "hr_max_bpm": null,
+            "hr_threshold_bpm": null,
+            "active": {
+              "power_w_kg": false,
+              "hr_pct_max": false,
+              "hr_pct_threshold": false
+            },
+            "formulas": {
+              "power_w_kg": "power_w / weight_kg",
+              "hr_pct_max": "100 * heart_rate_bpm / hr_max_bpm",
+              "hr_pct_threshold": "100 * heart_rate_bpm / hr_threshold_bpm"
+            }
+          },
+          "segments": [
+            {
+              "activity_id": "cleaned/only_road_activities/250604173939.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\250604173939.fit",
+              "first_lap": 3,
+              "last_lap": 4,
+              "csv_file": "UtD_G2/250604173939__laps_003-004.csv",
+              "start_timestamp": "2025-06-04T15:57:40+00:00",
+              "end_timestamp": "2025-06-04T16:01:00+00:00",
+              "empirical_label": "UtD",
+              "duration_group": 2
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/250604173939.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\250604173939.fit",
+              "first_lap": 5,
+              "last_lap": 6,
+              "csv_file": "UtD_G2/250604173939__laps_005-006.csv",
+              "start_timestamp": "2025-06-04T16:01:02+00:00",
+              "end_timestamp": "2025-06-04T16:04:23+00:00",
+              "empirical_label": "UtD",
+              "duration_group": 2
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/250604173939.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\250604173939.fit",
+              "first_lap": 7,
+              "last_lap": 8,
+              "csv_file": "UtD_G2/250604173939__laps_007-008.csv",
+              "start_timestamp": "2025-06-04T16:04:24+00:00",
+              "end_timestamp": "2025-06-04T16:07:46+00:00",
+              "empirical_label": "UtD",
+              "duration_group": 2
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/250604173939.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\250604173939.fit",
+              "first_lap": 9,
+              "last_lap": 10,
+              "csv_file": "UtD_G2/250604173939__laps_009-010.csv",
+              "start_timestamp": "2025-06-04T16:07:46+00:00",
+              "end_timestamp": "2025-06-04T16:11:07+00:00",
+              "empirical_label": "UtD",
+              "duration_group": 2
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/250604173939.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\250604173939.fit",
+              "first_lap": 11,
+              "last_lap": 12,
+              "csv_file": "UtD_G2/250604173939__laps_011-012.csv",
+              "start_timestamp": "2025-06-04T16:11:08+00:00",
+              "end_timestamp": "2025-06-04T16:14:30+00:00",
+              "empirical_label": "UtD",
+              "duration_group": 2
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/250604173939.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\250604173939.fit",
+              "first_lap": 13,
+              "last_lap": 14,
+              "csv_file": "UtD_G2/250604173939__laps_013-014.csv",
+              "start_timestamp": "2025-06-04T16:14:30+00:00",
+              "end_timestamp": "2025-06-04T16:17:52+00:00",
+              "empirical_label": "UtD",
+              "duration_group": 2
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/250604173939.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\250604173939.fit",
+              "first_lap": 15,
+              "last_lap": 16,
+              "csv_file": "UtD_G2/250604173939__laps_015-016.csv",
+              "start_timestamp": "2025-06-04T16:17:52+00:00",
+              "end_timestamp": "2025-06-04T16:21:13+00:00",
+              "empirical_label": "UtD",
+              "duration_group": 2
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/250604173939.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\250604173939.fit",
+              "first_lap": 17,
+              "last_lap": 18,
+              "csv_file": "UtD_G2/250604173939__laps_017-018.csv",
+              "start_timestamp": "2025-06-04T16:21:14+00:00",
+              "end_timestamp": "2025-06-04T16:24:36+00:00",
+              "empirical_label": "UtD",
+              "duration_group": 2
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/250604173939.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\250604173939.fit",
+              "first_lap": 19,
+              "last_lap": 20,
+              "csv_file": "UtD_G2/250604173939__laps_019-020.csv",
+              "start_timestamp": "2025-06-04T16:24:36+00:00",
+              "end_timestamp": "2025-06-04T16:27:57+00:00",
+              "empirical_label": "UtD",
+              "duration_group": 2
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/250611110321.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\250611110321.fit",
+              "first_lap": 3,
+              "last_lap": 4,
+              "csv_file": "UtD_G2/250611110321__laps_003-004.csv",
+              "start_timestamp": "2025-06-11T09:18:22+00:00",
+              "end_timestamp": "2025-06-11T09:22:03+00:00",
+              "empirical_label": "UtD",
+              "duration_group": 2
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/250611110321.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\250611110321.fit",
+              "first_lap": 5,
+              "last_lap": 6,
+              "csv_file": "UtD_G2/250611110321__laps_005-006.csv",
+              "start_timestamp": "2025-06-11T09:22:04+00:00",
+              "end_timestamp": "2025-06-11T09:25:45+00:00",
+              "empirical_label": "UtD",
+              "duration_group": 2
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/250611110321.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\250611110321.fit",
+              "first_lap": 7,
+              "last_lap": 8,
+              "csv_file": "UtD_G2/250611110321__laps_007-008.csv",
+              "start_timestamp": "2025-06-11T09:25:46+00:00",
+              "end_timestamp": "2025-06-11T09:29:28+00:00",
+              "empirical_label": "UtD",
+              "duration_group": 2
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/250611110321.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\250611110321.fit",
+              "first_lap": 9,
+              "last_lap": 10,
+              "csv_file": "UtD_G2/250611110321__laps_009-010.csv",
+              "start_timestamp": "2025-06-11T09:29:28+00:00",
+              "end_timestamp": "2025-06-11T09:33:09+00:00",
+              "empirical_label": "UtD",
+              "duration_group": 2
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/250611110321.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\250611110321.fit",
+              "first_lap": 11,
+              "last_lap": 12,
+              "csv_file": "UtD_G2/250611110321__laps_011-012.csv",
+              "start_timestamp": "2025-06-11T09:33:10+00:00",
+              "end_timestamp": "2025-06-11T09:36:52+00:00",
+              "empirical_label": "UtD",
+              "duration_group": 2
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/250611110321.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\250611110321.fit",
+              "first_lap": 13,
+              "last_lap": 14,
+              "csv_file": "UtD_G2/250611110321__laps_013-014.csv",
+              "start_timestamp": "2025-06-11T09:36:52+00:00",
+              "end_timestamp": "2025-06-11T09:40:33+00:00",
+              "empirical_label": "UtD",
+              "duration_group": 2
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/250611110321.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\250611110321.fit",
+              "first_lap": 15,
+              "last_lap": 16,
+              "csv_file": "Ambigui_G2/250611110321__laps_015-016.csv",
+              "start_timestamp": "2025-06-11T09:40:34+00:00",
+              "end_timestamp": "2025-06-11T09:44:16+00:00",
+              "empirical_label": "Ambiguo",
+              "duration_group": 2
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/250611110321.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\250611110321.fit",
+              "first_lap": 17,
+              "last_lap": 18,
+              "csv_file": "UtD_G2/250611110321__laps_017-018.csv",
+              "start_timestamp": "2025-06-11T09:44:16+00:00",
+              "end_timestamp": "2025-06-11T09:47:57+00:00",
+              "empirical_label": "UtD",
+              "duration_group": 2
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/250611110321.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\250611110321.fit",
+              "first_lap": 19,
+              "last_lap": 20,
+              "csv_file": "UtD_G2/250611110321__laps_019-020.csv",
+              "start_timestamp": "2025-06-11T09:47:58+00:00",
+              "end_timestamp": "2025-06-11T09:51:40+00:00",
+              "empirical_label": "UtD",
+              "duration_group": 2
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/250625105513.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\250625105513.fit",
+              "first_lap": 9,
+              "last_lap": 12,
+              "csv_file": "UtD_G2/250625105513__laps_009-012.csv",
+              "start_timestamp": "2025-06-25T09:19:50+00:00",
+              "end_timestamp": "2025-06-25T09:29:09+00:00",
+              "empirical_label": "UtD",
+              "duration_group": 2
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/250625105513.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\250625105513.fit",
+              "first_lap": 13,
+              "last_lap": 16,
+              "csv_file": "UtD_G2/250625105513__laps_013-016.csv",
+              "start_timestamp": "2025-06-25T09:29:09+00:00",
+              "end_timestamp": "2025-06-25T09:38:27+00:00",
+              "empirical_label": "UtD",
+              "duration_group": 2
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/250625105513.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\250625105513.fit",
+              "first_lap": 18,
+              "last_lap": 20,
+              "csv_file": "UtD_G2/250625105513__laps_018-020.csv",
+              "start_timestamp": "2025-06-25T09:41:29+00:00",
+              "end_timestamp": "2025-06-25T09:47:47+00:00",
+              "empirical_label": "UtD",
+              "duration_group": 2
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/250625105513.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\250625105513.fit",
+              "first_lap": 23,
+              "last_lap": 24,
+              "csv_file": "UtD_G2/250625105513__laps_023-024.csv",
+              "start_timestamp": "2025-06-25T09:52:49+00:00",
+              "end_timestamp": "2025-06-25T09:57:05+00:00",
+              "empirical_label": "UtD",
+              "duration_group": 2
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/250708171459.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\250708171459.fit",
+              "first_lap": 2,
+              "last_lap": 3,
+              "csv_file": "UtD_G2/250708171459__laps_002-003.csv",
+              "start_timestamp": "2025-07-08T15:44:06+00:00",
+              "end_timestamp": "2025-07-08T15:50:07+00:00",
+              "empirical_label": "UtD",
+              "duration_group": 2
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/250708171459.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\250708171459.fit",
+              "first_lap": 4,
+              "last_lap": 5,
+              "csv_file": "UtD_G2/250708171459__laps_004-005.csv",
+              "start_timestamp": "2025-07-08T15:50:07+00:00",
+              "end_timestamp": "2025-07-08T15:56:10+00:00",
+              "empirical_label": "UtD",
+              "duration_group": 2
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/250708171459.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\250708171459.fit",
+              "first_lap": 6,
+              "last_lap": 7,
+              "csv_file": "UtD_G2/250708171459__laps_006-007.csv",
+              "start_timestamp": "2025-07-08T15:56:09+00:00",
+              "end_timestamp": "2025-07-08T16:02:10+00:00",
+              "empirical_label": "UtD",
+              "duration_group": 2
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/250708171459.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\250708171459.fit",
+              "first_lap": 8,
+              "last_lap": 9,
+              "csv_file": "UtD_G2/250708171459__laps_008-009.csv",
+              "start_timestamp": "2025-07-08T16:02:09+00:00",
+              "end_timestamp": "2025-07-08T16:08:16+00:00",
+              "empirical_label": "UtD",
+              "duration_group": 2
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/250708171459.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\250708171459.fit",
+              "first_lap": 17,
+              "last_lap": 18,
+              "csv_file": "UtD_G1/250708171459__laps_017-018.csv",
+              "start_timestamp": "2025-07-08T16:26:33+00:00",
+              "end_timestamp": "2025-07-08T16:27:35+00:00",
+              "empirical_label": "UtD",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/250708171459.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\250708171459.fit",
+              "first_lap": 19,
+              "last_lap": 20,
+              "csv_file": "UtD_G1/250708171459__laps_019-020.csv",
+              "start_timestamp": "2025-07-08T16:27:35+00:00",
+              "end_timestamp": "2025-07-08T16:28:47+00:00",
+              "empirical_label": "UtD",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/250708171459.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\250708171459.fit",
+              "first_lap": 21,
+              "last_lap": 22,
+              "csv_file": "Ambigui_G1/250708171459__laps_021-022.csv",
+              "start_timestamp": "2025-07-08T16:28:47+00:00",
+              "end_timestamp": "2025-07-08T16:29:48+00:00",
+              "empirical_label": "Ambiguo",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/250708171459.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\250708171459.fit",
+              "first_lap": 23,
+              "last_lap": 24,
+              "csv_file": "UtD_G1/250708171459__laps_023-024.csv",
+              "start_timestamp": "2025-07-08T16:29:48+00:00",
+              "end_timestamp": "2025-07-08T16:30:50+00:00",
+              "empirical_label": "UtD",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/250709173010.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\250709173010.fit",
+              "first_lap": 3,
+              "last_lap": 4,
+              "csv_file": "UtD_G2/250709173010__laps_003-004.csv",
+              "start_timestamp": "2025-07-09T15:48:35+00:00",
+              "end_timestamp": "2025-07-09T15:51:54+00:00",
+              "empirical_label": "UtD",
+              "duration_group": 2
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/250709173010.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\250709173010.fit",
+              "first_lap": 7,
+              "last_lap": 8,
+              "csv_file": "UtD_G2/250709173010__laps_007-008.csv",
+              "start_timestamp": "2025-07-09T15:55:12+00:00",
+              "end_timestamp": "2025-07-09T15:58:30+00:00",
+              "empirical_label": "UtD",
+              "duration_group": 2
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/250709173010.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\250709173010.fit",
+              "first_lap": 9,
+              "last_lap": 10,
+              "csv_file": "UtD_G2/250709173010__laps_009-010.csv",
+              "start_timestamp": "2025-07-09T15:58:30+00:00",
+              "end_timestamp": "2025-07-09T16:01:51+00:00",
+              "empirical_label": "UtD",
+              "duration_group": 2
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/250709173010.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\250709173010.fit",
+              "first_lap": 11,
+              "last_lap": 12,
+              "csv_file": "UtD_G2/250709173010__laps_011-012.csv",
+              "start_timestamp": "2025-07-09T16:01:51+00:00",
+              "end_timestamp": "2025-07-09T16:05:11+00:00",
+              "empirical_label": "UtD",
+              "duration_group": 2
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/250709173010.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\250709173010.fit",
+              "first_lap": 13,
+              "last_lap": 14,
+              "csv_file": "UtD_G2/250709173010__laps_013-014.csv",
+              "start_timestamp": "2025-07-09T16:05:10+00:00",
+              "end_timestamp": "2025-07-09T16:08:32+00:00",
+              "empirical_label": "UtD",
+              "duration_group": 2
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/250709173010.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\250709173010.fit",
+              "first_lap": 15,
+              "last_lap": 16,
+              "csv_file": "UtD_G2/250709173010__laps_015-016.csv",
+              "start_timestamp": "2025-07-09T16:08:32+00:00",
+              "end_timestamp": "2025-07-09T16:11:51+00:00",
+              "empirical_label": "UtD",
+              "duration_group": 2
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/250709173010.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\250709173010.fit",
+              "first_lap": 17,
+              "last_lap": 18,
+              "csv_file": "UtD_G2/250709173010__laps_017-018.csv",
+              "start_timestamp": "2025-07-09T16:11:51+00:00",
+              "end_timestamp": "2025-07-09T16:15:12+00:00",
+              "empirical_label": "UtD",
+              "duration_group": 2
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/250709173010.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\250709173010.fit",
+              "first_lap": 19,
+              "last_lap": 20,
+              "csv_file": "UtD_G2/250709173010__laps_019-020.csv",
+              "start_timestamp": "2025-07-09T16:15:12+00:00",
+              "end_timestamp": "2025-07-09T16:18:34+00:00",
+              "empirical_label": "UtD",
+              "duration_group": 2
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/250709173010.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\250709173010.fit",
+              "first_lap": 23,
+              "last_lap": 24,
+              "csv_file": "UtD_G2/250709173010__laps_023-024.csv",
+              "start_timestamp": "2025-07-09T16:29:00+00:00",
+              "end_timestamp": "2025-07-09T16:32:13+00:00",
+              "empirical_label": "UtD",
+              "duration_group": 2
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/250709173010.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\250709173010.fit",
+              "first_lap": 25,
+              "last_lap": 26,
+              "csv_file": "UtD_G2/250709173010__laps_025-026.csv",
+              "start_timestamp": "2025-07-09T16:32:14+00:00",
+              "end_timestamp": "2025-07-09T16:35:28+00:00",
+              "empirical_label": "UtD",
+              "duration_group": 2
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/250709173010.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\250709173010.fit",
+              "first_lap": 27,
+              "last_lap": 28,
+              "csv_file": "UtD_G2/250709173010__laps_027-028.csv",
+              "start_timestamp": "2025-07-09T16:35:28+00:00",
+              "end_timestamp": "2025-07-09T16:38:50+00:00",
+              "empirical_label": "UtD",
+              "duration_group": 2
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/250715165154.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\250715165154.fit",
+              "first_lap": 2,
+              "last_lap": 3,
+              "csv_file": "UtD_G2/250715165154__laps_002-003.csv",
+              "start_timestamp": "2025-07-15T15:19:56+00:00",
+              "end_timestamp": "2025-07-15T15:27:10+00:00",
+              "empirical_label": "UtD",
+              "duration_group": 2
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/250715165154.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\250715165154.fit",
+              "first_lap": 4,
+              "last_lap": 5,
+              "csv_file": "UtD_G2/250715165154__laps_004-005.csv",
+              "start_timestamp": "2025-07-15T15:27:09+00:00",
+              "end_timestamp": "2025-07-15T15:34:10+00:00",
+              "empirical_label": "UtD",
+              "duration_group": 2
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/250715165154.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\250715165154.fit",
+              "first_lap": 6,
+              "last_lap": 7,
+              "csv_file": "UtD_G2/250715165154__laps_006-007.csv",
+              "start_timestamp": "2025-07-15T15:34:10+00:00",
+              "end_timestamp": "2025-07-15T15:41:25+00:00",
+              "empirical_label": "UtD",
+              "duration_group": 2
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/250715165154.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\250715165154.fit",
+              "first_lap": 8,
+              "last_lap": 9,
+              "csv_file": "UtD_G2/250715165154__laps_008-009.csv",
+              "start_timestamp": "2025-07-15T15:41:25+00:00",
+              "end_timestamp": "2025-07-15T15:49:23+00:00",
+              "empirical_label": "UtD",
+              "duration_group": 2
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/250715165154.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\250715165154.fit",
+              "first_lap": 11,
+              "last_lap": 12,
+              "csv_file": "UtD_G1/250715165154__laps_011-012.csv",
+              "start_timestamp": "2025-07-15T16:04:24+00:00",
+              "end_timestamp": "2025-07-15T16:05:24+00:00",
+              "empirical_label": "UtD",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/250715165154.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\250715165154.fit",
+              "first_lap": 13,
+              "last_lap": 14,
+              "csv_file": "UtD_G1/250715165154__laps_013-014.csv",
+              "start_timestamp": "2025-07-15T16:05:24+00:00",
+              "end_timestamp": "2025-07-15T16:06:27+00:00",
+              "empirical_label": "UtD",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/250715165154.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\250715165154.fit",
+              "first_lap": 15,
+              "last_lap": 16,
+              "csv_file": "UtD_G1/250715165154__laps_015-016.csv",
+              "start_timestamp": "2025-07-15T16:06:27+00:00",
+              "end_timestamp": "2025-07-15T16:07:28+00:00",
+              "empirical_label": "UtD",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/250715165154.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\250715165154.fit",
+              "first_lap": 17,
+              "last_lap": 18,
+              "csv_file": "UtD_G1/250715165154__laps_017-018.csv",
+              "start_timestamp": "2025-07-15T16:07:28+00:00",
+              "end_timestamp": "2025-07-15T16:08:29+00:00",
+              "empirical_label": "UtD",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/250715165154.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\250715165154.fit",
+              "first_lap": 19,
+              "last_lap": 20,
+              "csv_file": "UtD_G1/250715165154__laps_019-020.csv",
+              "start_timestamp": "2025-07-15T16:08:29+00:00",
+              "end_timestamp": "2025-07-15T16:09:31+00:00",
+              "empirical_label": "UtD",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/250715165154.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\250715165154.fit",
+              "first_lap": 21,
+              "last_lap": 23,
+              "csv_file": "UtD_G1/250715165154__laps_021-023.csv",
+              "start_timestamp": "2025-07-15T16:09:31+00:00",
+              "end_timestamp": "2025-07-15T16:11:01+00:00",
+              "empirical_label": "UtD",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/250715165154.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\250715165154.fit",
+              "first_lap": 24,
+              "last_lap": 25,
+              "csv_file": "UtD_G1/250715165154__laps_024-025.csv",
+              "start_timestamp": "2025-07-15T16:11:02+00:00",
+              "end_timestamp": "2025-07-15T16:12:04+00:00",
+              "empirical_label": "UtD",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/250729173622.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\250729173622.fit",
+              "first_lap": 2,
+              "last_lap": 3,
+              "csv_file": "UtD_G1/250729173622__laps_002-003.csv",
+              "start_timestamp": "2025-07-29T15:46:31+00:00",
+              "end_timestamp": "2025-07-29T15:47:32+00:00",
+              "empirical_label": "UtD",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/250729173622.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\250729173622.fit",
+              "first_lap": 4,
+              "last_lap": 5,
+              "csv_file": "UtD_G1/250729173622__laps_004-005.csv",
+              "start_timestamp": "2025-07-29T15:47:32+00:00",
+              "end_timestamp": "2025-07-29T15:48:32+00:00",
+              "empirical_label": "UtD",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/250729173622.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\250729173622.fit",
+              "first_lap": 6,
+              "last_lap": 7,
+              "csv_file": "UtD_G1/250729173622__laps_006-007.csv",
+              "start_timestamp": "2025-07-29T15:48:32+00:00",
+              "end_timestamp": "2025-07-29T15:49:45+00:00",
+              "empirical_label": "UtD",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/250729173622.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\250729173622.fit",
+              "first_lap": 8,
+              "last_lap": 9,
+              "csv_file": "UtD_G1/250729173622__laps_008-009.csv",
+              "start_timestamp": "2025-07-29T15:49:46+00:00",
+              "end_timestamp": "2025-07-29T15:50:47+00:00",
+              "empirical_label": "UtD",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/250729173622.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\250729173622.fit",
+              "first_lap": 10,
+              "last_lap": 11,
+              "csv_file": "Ambigui_G1/250729173622__laps_010-011.csv",
+              "start_timestamp": "2025-07-29T15:50:48+00:00",
+              "end_timestamp": "2025-07-29T15:51:49+00:00",
+              "empirical_label": "Ambiguo",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/250729173622.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\250729173622.fit",
+              "first_lap": 20,
+              "last_lap": 21,
+              "csv_file": "UtD_G1/250729173622__laps_020-021.csv",
+              "start_timestamp": "2025-07-29T16:37:33+00:00",
+              "end_timestamp": "2025-07-29T16:38:33+00:00",
+              "empirical_label": "UtD",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/250729173622.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\250729173622.fit",
+              "first_lap": 20,
+              "last_lap": 25,
+              "csv_file": "Ambigui_G2/250729173622__laps_020-025.csv",
+              "start_timestamp": "2025-07-29T16:37:33+00:00",
+              "end_timestamp": "2025-07-29T16:40:33+00:00",
+              "empirical_label": "Ambiguo",
+              "duration_group": 2
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/250729173622.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\250729173622.fit",
+              "first_lap": 22,
+              "last_lap": 23,
+              "csv_file": "UtD_G1/250729173622__laps_022-023.csv",
+              "start_timestamp": "2025-07-29T16:38:33+00:00",
+              "end_timestamp": "2025-07-29T16:39:34+00:00",
+              "empirical_label": "UtD",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/250729173622.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\250729173622.fit",
+              "first_lap": 24,
+              "last_lap": 25,
+              "csv_file": "UtD_G1/250729173622__laps_024-025.csv",
+              "start_timestamp": "2025-07-29T16:39:33+00:00",
+              "end_timestamp": "2025-07-29T16:40:33+00:00",
+              "empirical_label": "UtD",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/250729173622.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\250729173622.fit",
+              "first_lap": 26,
+              "last_lap": 27,
+              "csv_file": "UtD_G1/250729173622__laps_026-027.csv",
+              "start_timestamp": "2025-07-29T16:40:33+00:00",
+              "end_timestamp": "2025-07-29T16:41:34+00:00",
+              "empirical_label": "UtD",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/250729173622.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\250729173622.fit",
+              "first_lap": 28,
+              "last_lap": 29,
+              "csv_file": "UtD_G1/250729173622__laps_028-029.csv",
+              "start_timestamp": "2025-07-29T16:41:34+00:00",
+              "end_timestamp": "2025-07-29T16:42:36+00:00",
+              "empirical_label": "UtD",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260321102409.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260321102409.fit",
+              "first_lap": 4,
+              "last_lap": 5,
+              "csv_file": "UtD_G2/260321102409__laps_004-005.csv",
+              "start_timestamp": "2026-03-21T09:55:31+00:00",
+              "end_timestamp": "2026-03-21T10:02:29+00:00",
+              "empirical_label": "UtD",
+              "duration_group": 2
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260321102409.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260321102409.fit",
+              "first_lap": 6,
+              "last_lap": 7,
+              "csv_file": "UtD_G2/260321102409__laps_006-007.csv",
+              "start_timestamp": "2026-03-21T10:02:29+00:00",
+              "end_timestamp": "2026-03-21T10:08:04+00:00",
+              "empirical_label": "UtD",
+              "duration_group": 2
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260321102409.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260321102409.fit",
+              "first_lap": 8,
+              "last_lap": 9,
+              "csv_file": "UtD_G2/260321102409__laps_008-009.csv",
+              "start_timestamp": "2026-03-21T10:08:04+00:00",
+              "end_timestamp": "2026-03-21T10:15:55+00:00",
+              "empirical_label": "UtD",
+              "duration_group": 2
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260321102409.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260321102409.fit",
+              "first_lap": 10,
+              "last_lap": 11,
+              "csv_file": "UtD_G2/260321102409__laps_010-011.csv",
+              "start_timestamp": "2026-03-21T10:15:55+00:00",
+              "end_timestamp": "2026-03-21T10:19:56+00:00",
+              "empirical_label": "UtD",
+              "duration_group": 2
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260321102409.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260321102409.fit",
+              "first_lap": 12,
+              "last_lap": 13,
+              "csv_file": "UtD_G2/260321102409__laps_012-013.csv",
+              "start_timestamp": "2026-03-21T10:19:56+00:00",
+              "end_timestamp": "2026-03-21T10:25:29+00:00",
+              "empirical_label": "UtD",
+              "duration_group": 2
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260407082440.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260407082440.fit",
+              "first_lap": 5,
+              "last_lap": 6,
+              "csv_file": "Ambigui_G1/260407082440__laps_005-006.csv",
+              "start_timestamp": "2026-04-07T06:35:33+00:00",
+              "end_timestamp": "2026-04-07T06:36:23+00:00",
+              "empirical_label": "Ambiguo",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260407082440.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260407082440.fit",
+              "first_lap": 7,
+              "last_lap": 8,
+              "csv_file": "DtU_G1/260407082440__laps_007-008.csv",
+              "start_timestamp": "2026-04-07T06:36:24+00:00",
+              "end_timestamp": "2026-04-07T06:37:09+00:00",
+              "empirical_label": "DtU",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260407082440.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260407082440.fit",
+              "first_lap": 9,
+              "last_lap": 10,
+              "csv_file": "Ambigui_G1/260407082440__laps_009-010.csv",
+              "start_timestamp": "2026-04-07T06:37:10+00:00",
+              "end_timestamp": "2026-04-07T06:37:57+00:00",
+              "empirical_label": "Ambiguo",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260407082440.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260407082440.fit",
+              "first_lap": 11,
+              "last_lap": 12,
+              "csv_file": "Ambigui_G1/260407082440__laps_011-012.csv",
+              "start_timestamp": "2026-04-07T06:37:57+00:00",
+              "end_timestamp": "2026-04-07T06:38:43+00:00",
+              "empirical_label": "Ambiguo",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260407082440.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260407082440.fit",
+              "first_lap": 13,
+              "last_lap": 14,
+              "csv_file": "Ambigui_G1/260407082440__laps_013-014.csv",
+              "start_timestamp": "2026-04-07T06:38:44+00:00",
+              "end_timestamp": "2026-04-07T06:39:30+00:00",
+              "empirical_label": "Ambiguo",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260407082440.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260407082440.fit",
+              "first_lap": 15,
+              "last_lap": 16,
+              "csv_file": "Ambigui_G1/260407082440__laps_015-016.csv",
+              "start_timestamp": "2026-04-07T06:39:30+00:00",
+              "end_timestamp": "2026-04-07T06:40:20+00:00",
+              "empirical_label": "Ambiguo",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260407082440.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260407082440.fit",
+              "first_lap": 17,
+              "last_lap": 18,
+              "csv_file": "Ambigui_G1/260407082440__laps_017-018.csv",
+              "start_timestamp": "2026-04-07T06:40:20+00:00",
+              "end_timestamp": "2026-04-07T06:41:05+00:00",
+              "empirical_label": "Ambiguo",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260407082440.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260407082440.fit",
+              "first_lap": 19,
+              "last_lap": 20,
+              "csv_file": "Ambigui_G1/260407082440__laps_019-020.csv",
+              "start_timestamp": "2026-04-07T06:41:06+00:00",
+              "end_timestamp": "2026-04-07T06:41:52+00:00",
+              "empirical_label": "Ambiguo",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260407082440.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260407082440.fit",
+              "first_lap": 21,
+              "last_lap": 22,
+              "csv_file": "Ambigui_G1/260407082440__laps_021-022.csv",
+              "start_timestamp": "2026-04-07T06:41:53+00:00",
+              "end_timestamp": "2026-04-07T06:42:40+00:00",
+              "empirical_label": "Ambiguo",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260407082440.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260407082440.fit",
+              "first_lap": 23,
+              "last_lap": 24,
+              "csv_file": "Ambigui_G1/260407082440__laps_023-024.csv",
+              "start_timestamp": "2026-04-07T06:42:40+00:00",
+              "end_timestamp": "2026-04-07T06:43:26+00:00",
+              "empirical_label": "Ambiguo",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260407082440.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260407082440.fit",
+              "first_lap": 25,
+              "last_lap": 26,
+              "csv_file": "Ambigui_G1/260407082440__laps_025-026.csv",
+              "start_timestamp": "2026-04-07T06:43:25+00:00",
+              "end_timestamp": "2026-04-07T06:44:13+00:00",
+              "empirical_label": "Ambiguo",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260407082440.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260407082440.fit",
+              "first_lap": 31,
+              "last_lap": 32,
+              "csv_file": "Ambigui_G1/260407082440__laps_031-032.csv",
+              "start_timestamp": "2026-04-07T06:48:16+00:00",
+              "end_timestamp": "2026-04-07T06:49:04+00:00",
+              "empirical_label": "Ambiguo",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260407082440.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260407082440.fit",
+              "first_lap": 33,
+              "last_lap": 34,
+              "csv_file": "Ambigui_G1/260407082440__laps_033-034.csv",
+              "start_timestamp": "2026-04-07T06:49:04+00:00",
+              "end_timestamp": "2026-04-07T06:49:55+00:00",
+              "empirical_label": "Ambiguo",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260407082440.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260407082440.fit",
+              "first_lap": 35,
+              "last_lap": 36,
+              "csv_file": "Ambigui_G1/260407082440__laps_035-036.csv",
+              "start_timestamp": "2026-04-07T06:49:55+00:00",
+              "end_timestamp": "2026-04-07T06:50:42+00:00",
+              "empirical_label": "Ambiguo",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260407082440.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260407082440.fit",
+              "first_lap": 37,
+              "last_lap": 38,
+              "csv_file": "Ambigui_G1/260407082440__laps_037-038.csv",
+              "start_timestamp": "2026-04-07T06:50:42+00:00",
+              "end_timestamp": "2026-04-07T06:51:28+00:00",
+              "empirical_label": "Ambiguo",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260407082440.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260407082440.fit",
+              "first_lap": 39,
+              "last_lap": 40,
+              "csv_file": "Ambigui_G1/260407082440__laps_039-040.csv",
+              "start_timestamp": "2026-04-07T06:51:28+00:00",
+              "end_timestamp": "2026-04-07T06:52:15+00:00",
+              "empirical_label": "Ambiguo",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260407082440.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260407082440.fit",
+              "first_lap": 41,
+              "last_lap": 42,
+              "csv_file": "Ambigui_G1/260407082440__laps_041-042.csv",
+              "start_timestamp": "2026-04-07T06:52:14+00:00",
+              "end_timestamp": "2026-04-07T06:52:59+00:00",
+              "empirical_label": "Ambiguo",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260407082440.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260407082440.fit",
+              "first_lap": 43,
+              "last_lap": 44,
+              "csv_file": "Ambigui_G1/260407082440__laps_043-044.csv",
+              "start_timestamp": "2026-04-07T06:52:59+00:00",
+              "end_timestamp": "2026-04-07T06:53:46+00:00",
+              "empirical_label": "Ambiguo",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260407082440.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260407082440.fit",
+              "first_lap": 45,
+              "last_lap": 46,
+              "csv_file": "Ambigui_G1/260407082440__laps_045-046.csv",
+              "start_timestamp": "2026-04-07T06:53:46+00:00",
+              "end_timestamp": "2026-04-07T06:54:33+00:00",
+              "empirical_label": "Ambiguo",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260407082440.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260407082440.fit",
+              "first_lap": 47,
+              "last_lap": 48,
+              "csv_file": "Ambigui_G1/260407082440__laps_047-048.csv",
+              "start_timestamp": "2026-04-07T06:54:33+00:00",
+              "end_timestamp": "2026-04-07T06:55:20+00:00",
+              "empirical_label": "Ambiguo",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260407082440.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260407082440.fit",
+              "first_lap": 49,
+              "last_lap": 50,
+              "csv_file": "Ambigui_G1/260407082440__laps_049-050.csv",
+              "start_timestamp": "2026-04-07T06:55:20+00:00",
+              "end_timestamp": "2026-04-07T06:56:07+00:00",
+              "empirical_label": "Ambiguo",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260407082440.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260407082440.fit",
+              "first_lap": 51,
+              "last_lap": 52,
+              "csv_file": "Ambigui_G1/260407082440__laps_051-052.csv",
+              "start_timestamp": "2026-04-07T06:56:07+00:00",
+              "end_timestamp": "2026-04-07T06:56:54+00:00",
+              "empirical_label": "Ambiguo",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260407082440.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260407082440.fit",
+              "first_lap": 53,
+              "last_lap": 54,
+              "csv_file": "Ambigui_G1/260407082440__laps_053-054.csv",
+              "start_timestamp": "2026-04-07T06:56:54+00:00",
+              "end_timestamp": "2026-04-07T06:57:39+00:00",
+              "empirical_label": "Ambiguo",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260407082440.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260407082440.fit",
+              "first_lap": 55,
+              "last_lap": 56,
+              "csv_file": "Ambigui_G1/260407082440__laps_055-056.csv",
+              "start_timestamp": "2026-04-07T06:57:39+00:00",
+              "end_timestamp": "2026-04-07T06:58:27+00:00",
+              "empirical_label": "Ambiguo",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260407082440.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260407082440.fit",
+              "first_lap": 57,
+              "last_lap": 58,
+              "csv_file": "UtD_G1/260407082440__laps_057-058.csv",
+              "start_timestamp": "2026-04-07T06:58:27+00:00",
+              "end_timestamp": "2026-04-07T06:59:18+00:00",
+              "empirical_label": "UtD",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260407082440.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260407082440.fit",
+              "first_lap": 60,
+              "last_lap": 61,
+              "csv_file": "Ambigui_G1/260407082440__laps_060-061.csv",
+              "start_timestamp": "2026-04-07T07:02:17+00:00",
+              "end_timestamp": "2026-04-07T07:03:07+00:00",
+              "empirical_label": "Ambiguo",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260407082440.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260407082440.fit",
+              "first_lap": 62,
+              "last_lap": 63,
+              "csv_file": "Ambigui_G1/260407082440__laps_062-063.csv",
+              "start_timestamp": "2026-04-07T07:03:07+00:00",
+              "end_timestamp": "2026-04-07T07:04:09+00:00",
+              "empirical_label": "Ambiguo",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260407082440.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260407082440.fit",
+              "first_lap": 64,
+              "last_lap": 65,
+              "csv_file": "Ambigui_G1/260407082440__laps_064-065.csv",
+              "start_timestamp": "2026-04-07T07:04:09+00:00",
+              "end_timestamp": "2026-04-07T07:04:55+00:00",
+              "empirical_label": "Ambiguo",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260407082440.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260407082440.fit",
+              "first_lap": 66,
+              "last_lap": 67,
+              "csv_file": "Ambigui_G1/260407082440__laps_066-067.csv",
+              "start_timestamp": "2026-04-07T07:04:54+00:00",
+              "end_timestamp": "2026-04-07T07:05:42+00:00",
+              "empirical_label": "Ambiguo",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260407082440.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260407082440.fit",
+              "first_lap": 68,
+              "last_lap": 69,
+              "csv_file": "Ambigui_G1/260407082440__laps_068-069.csv",
+              "start_timestamp": "2026-04-07T07:05:41+00:00",
+              "end_timestamp": "2026-04-07T07:06:29+00:00",
+              "empirical_label": "Ambiguo",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260407082440.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260407082440.fit",
+              "first_lap": 70,
+              "last_lap": 71,
+              "csv_file": "Ambigui_G1/260407082440__laps_070-071.csv",
+              "start_timestamp": "2026-04-07T07:06:29+00:00",
+              "end_timestamp": "2026-04-07T07:07:17+00:00",
+              "empirical_label": "Ambiguo",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260407082440.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260407082440.fit",
+              "first_lap": 72,
+              "last_lap": 73,
+              "csv_file": "Ambigui_G1/260407082440__laps_072-073.csv",
+              "start_timestamp": "2026-04-07T07:07:16+00:00",
+              "end_timestamp": "2026-04-07T07:08:01+00:00",
+              "empirical_label": "Ambiguo",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260407082440.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260407082440.fit",
+              "first_lap": 74,
+              "last_lap": 75,
+              "csv_file": "Ambigui_G1/260407082440__laps_074-075.csv",
+              "start_timestamp": "2026-04-07T07:08:01+00:00",
+              "end_timestamp": "2026-04-07T07:08:48+00:00",
+              "empirical_label": "Ambiguo",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260407082440.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260407082440.fit",
+              "first_lap": 76,
+              "last_lap": 77,
+              "csv_file": "UtD_G1/260407082440__laps_076-077.csv",
+              "start_timestamp": "2026-04-07T07:08:48+00:00",
+              "end_timestamp": "2026-04-07T07:09:34+00:00",
+              "empirical_label": "UtD",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260407082440.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260407082440.fit",
+              "first_lap": 78,
+              "last_lap": 79,
+              "csv_file": "Ambigui_G1/260407082440__laps_078-079.csv",
+              "start_timestamp": "2026-04-07T07:09:35+00:00",
+              "end_timestamp": "2026-04-07T07:10:22+00:00",
+              "empirical_label": "Ambiguo",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260407082440.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260407082440.fit",
+              "first_lap": 80,
+              "last_lap": 83,
+              "csv_file": "Ambigui_G1/260407082440__laps_080-083.csv",
+              "start_timestamp": "2026-04-07T07:10:22+00:00",
+              "end_timestamp": "2026-04-07T07:12:00+00:00",
+              "empirical_label": "Ambiguo",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260424160919.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260424160919.fit",
+              "first_lap": 6,
+              "last_lap": 7,
+              "csv_file": "UtD_G1/260424160919__laps_006-007.csv",
+              "start_timestamp": "2026-04-24T14:25:12+00:00",
+              "end_timestamp": "2026-04-24T14:26:00+00:00",
+              "empirical_label": "UtD",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260424160919.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260424160919.fit",
+              "first_lap": 8,
+              "last_lap": 9,
+              "csv_file": "Ambigui_G1/260424160919__laps_008-009.csv",
+              "start_timestamp": "2026-04-24T14:26:00+00:00",
+              "end_timestamp": "2026-04-24T14:26:46+00:00",
+              "empirical_label": "Ambiguo",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260424160919.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260424160919.fit",
+              "first_lap": 10,
+              "last_lap": 11,
+              "csv_file": "UtD_G1/260424160919__laps_010-011.csv",
+              "start_timestamp": "2026-04-24T14:26:47+00:00",
+              "end_timestamp": "2026-04-24T14:27:33+00:00",
+              "empirical_label": "UtD",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260424160919.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260424160919.fit",
+              "first_lap": 12,
+              "last_lap": 13,
+              "csv_file": "Ambigui_G1/260424160919__laps_012-013.csv",
+              "start_timestamp": "2026-04-24T14:27:34+00:00",
+              "end_timestamp": "2026-04-24T14:28:21+00:00",
+              "empirical_label": "Ambiguo",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260424160919.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260424160919.fit",
+              "first_lap": 14,
+              "last_lap": 15,
+              "csv_file": "UtD_G1/260424160919__laps_014-015.csv",
+              "start_timestamp": "2026-04-24T14:28:21+00:00",
+              "end_timestamp": "2026-04-24T14:29:07+00:00",
+              "empirical_label": "UtD",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260424160919.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260424160919.fit",
+              "first_lap": 16,
+              "last_lap": 17,
+              "csv_file": "Ambigui_G1/260424160919__laps_016-017.csv",
+              "start_timestamp": "2026-04-24T14:29:08+00:00",
+              "end_timestamp": "2026-04-24T14:29:53+00:00",
+              "empirical_label": "Ambiguo",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260424160919.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260424160919.fit",
+              "first_lap": 18,
+              "last_lap": 19,
+              "csv_file": "Ambigui_G1/260424160919__laps_018-019.csv",
+              "start_timestamp": "2026-04-24T14:29:54+00:00",
+              "end_timestamp": "2026-04-24T14:30:40+00:00",
+              "empirical_label": "Ambiguo",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260424160919.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260424160919.fit",
+              "first_lap": 20,
+              "last_lap": 21,
+              "csv_file": "Ambigui_G1/260424160919__laps_020-021.csv",
+              "start_timestamp": "2026-04-24T14:30:40+00:00",
+              "end_timestamp": "2026-04-24T14:31:26+00:00",
+              "empirical_label": "Ambiguo",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260424160919.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260424160919.fit",
+              "first_lap": 22,
+              "last_lap": 23,
+              "csv_file": "UtD_G1/260424160919__laps_022-023.csv",
+              "start_timestamp": "2026-04-24T14:31:27+00:00",
+              "end_timestamp": "2026-04-24T14:32:12+00:00",
+              "empirical_label": "UtD",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260424160919.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260424160919.fit",
+              "first_lap": 24,
+              "last_lap": 25,
+              "csv_file": "Ambigui_G1/260424160919__laps_024-025.csv",
+              "start_timestamp": "2026-04-24T14:32:12+00:00",
+              "end_timestamp": "2026-04-24T14:32:59+00:00",
+              "empirical_label": "Ambiguo",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260424160919.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260424160919.fit",
+              "first_lap": 26,
+              "last_lap": 27,
+              "csv_file": "UtD_G1/260424160919__laps_026-027.csv",
+              "start_timestamp": "2026-04-24T14:32:59+00:00",
+              "end_timestamp": "2026-04-24T14:33:44+00:00",
+              "empirical_label": "UtD",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260424160919.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260424160919.fit",
+              "first_lap": 28,
+              "last_lap": 29,
+              "csv_file": "UtD_G1/260424160919__laps_028-029.csv",
+              "start_timestamp": "2026-04-24T14:33:45+00:00",
+              "end_timestamp": "2026-04-24T14:34:32+00:00",
+              "empirical_label": "UtD",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260424160919.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260424160919.fit",
+              "first_lap": 31,
+              "last_lap": 32,
+              "csv_file": "Ambigui_G1/260424160919__laps_031-032.csv",
+              "start_timestamp": "2026-04-24T14:37:34+00:00",
+              "end_timestamp": "2026-04-24T14:38:21+00:00",
+              "empirical_label": "Ambiguo",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260424160919.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260424160919.fit",
+              "first_lap": 33,
+              "last_lap": 34,
+              "csv_file": "Ambigui_G1/260424160919__laps_033-034.csv",
+              "start_timestamp": "2026-04-24T14:38:21+00:00",
+              "end_timestamp": "2026-04-24T14:39:08+00:00",
+              "empirical_label": "Ambiguo",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260424160919.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260424160919.fit",
+              "first_lap": 35,
+              "last_lap": 36,
+              "csv_file": "UtD_G1/260424160919__laps_035-036.csv",
+              "start_timestamp": "2026-04-24T14:39:08+00:00",
+              "end_timestamp": "2026-04-24T14:39:52+00:00",
+              "empirical_label": "UtD",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260424160919.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260424160919.fit",
+              "first_lap": 37,
+              "last_lap": 38,
+              "csv_file": "Ambigui_G1/260424160919__laps_037-038.csv",
+              "start_timestamp": "2026-04-24T14:39:53+00:00",
+              "end_timestamp": "2026-04-24T14:40:41+00:00",
+              "empirical_label": "Ambiguo",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260424160919.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260424160919.fit",
+              "first_lap": 39,
+              "last_lap": 40,
+              "csv_file": "Ambigui_G1/260424160919__laps_039-040.csv",
+              "start_timestamp": "2026-04-24T14:40:41+00:00",
+              "end_timestamp": "2026-04-24T14:41:27+00:00",
+              "empirical_label": "Ambiguo",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260424160919.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260424160919.fit",
+              "first_lap": 41,
+              "last_lap": 42,
+              "csv_file": "Ambigui_G1/260424160919__laps_041-042.csv",
+              "start_timestamp": "2026-04-24T14:41:27+00:00",
+              "end_timestamp": "2026-04-24T14:42:12+00:00",
+              "empirical_label": "Ambiguo",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260424160919.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260424160919.fit",
+              "first_lap": 45,
+              "last_lap": 46,
+              "csv_file": "Ambigui_G1/260424160919__laps_045-046.csv",
+              "start_timestamp": "2026-04-24T14:43:41+00:00",
+              "end_timestamp": "2026-04-24T14:44:26+00:00",
+              "empirical_label": "Ambiguo",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260424160919.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260424160919.fit",
+              "first_lap": 47,
+              "last_lap": 48,
+              "csv_file": "Ambigui_G1/260424160919__laps_047-048.csv",
+              "start_timestamp": "2026-04-24T14:44:26+00:00",
+              "end_timestamp": "2026-04-24T14:45:11+00:00",
+              "empirical_label": "Ambiguo",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260424160919.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260424160919.fit",
+              "first_lap": 49,
+              "last_lap": 50,
+              "csv_file": "Ambigui_G1/260424160919__laps_049-050.csv",
+              "start_timestamp": "2026-04-24T14:45:12+00:00",
+              "end_timestamp": "2026-04-24T14:45:58+00:00",
+              "empirical_label": "Ambiguo",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260424160919.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260424160919.fit",
+              "first_lap": 51,
+              "last_lap": 52,
+              "csv_file": "Ambigui_G1/260424160919__laps_051-052.csv",
+              "start_timestamp": "2026-04-24T14:45:58+00:00",
+              "end_timestamp": "2026-04-24T14:46:45+00:00",
+              "empirical_label": "Ambiguo",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260424160919.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260424160919.fit",
+              "first_lap": 53,
+              "last_lap": 54,
+              "csv_file": "Ambigui_G1/260424160919__laps_053-054.csv",
+              "start_timestamp": "2026-04-24T14:46:44+00:00",
+              "end_timestamp": "2026-04-24T14:47:32+00:00",
+              "empirical_label": "Ambiguo",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260424160919.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260424160919.fit",
+              "first_lap": 55,
+              "last_lap": 56,
+              "csv_file": "Ambigui_G1/260424160919__laps_055-056.csv",
+              "start_timestamp": "2026-04-24T14:47:32+00:00",
+              "end_timestamp": "2026-04-24T14:48:20+00:00",
+              "empirical_label": "Ambiguo",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260424160919.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260424160919.fit",
+              "first_lap": 57,
+              "last_lap": 58,
+              "csv_file": "Ambigui_G1/260424160919__laps_057-058.csv",
+              "start_timestamp": "2026-04-24T14:48:21+00:00",
+              "end_timestamp": "2026-04-24T14:49:11+00:00",
+              "empirical_label": "Ambiguo",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260424160919.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260424160919.fit",
+              "first_lap": 60,
+              "last_lap": 61,
+              "csv_file": "Ambigui_G1/260424160919__laps_060-061.csv",
+              "start_timestamp": "2026-04-24T14:52:13+00:00",
+              "end_timestamp": "2026-04-24T14:53:01+00:00",
+              "empirical_label": "Ambiguo",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260424160919.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260424160919.fit",
+              "first_lap": 62,
+              "last_lap": 63,
+              "csv_file": "UtD_G1/260424160919__laps_062-063.csv",
+              "start_timestamp": "2026-04-24T14:53:02+00:00",
+              "end_timestamp": "2026-04-24T14:53:53+00:00",
+              "empirical_label": "UtD",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260424160919.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260424160919.fit",
+              "first_lap": 64,
+              "last_lap": 65,
+              "csv_file": "Ambigui_G1/260424160919__laps_064-065.csv",
+              "start_timestamp": "2026-04-24T14:53:52+00:00",
+              "end_timestamp": "2026-04-24T14:54:40+00:00",
+              "empirical_label": "Ambiguo",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260424160919.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260424160919.fit",
+              "first_lap": 66,
+              "last_lap": 67,
+              "csv_file": "UtD_G1/260424160919__laps_066-067.csv",
+              "start_timestamp": "2026-04-24T14:54:40+00:00",
+              "end_timestamp": "2026-04-24T14:55:28+00:00",
+              "empirical_label": "UtD",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260424160919.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260424160919.fit",
+              "first_lap": 68,
+              "last_lap": 69,
+              "csv_file": "UtD_G1/260424160919__laps_068-069.csv",
+              "start_timestamp": "2026-04-24T14:55:28+00:00",
+              "end_timestamp": "2026-04-24T14:56:17+00:00",
+              "empirical_label": "UtD",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260424160919.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260424160919.fit",
+              "first_lap": 70,
+              "last_lap": 71,
+              "csv_file": "UtD_G1/260424160919__laps_070-071.csv",
+              "start_timestamp": "2026-04-24T14:56:17+00:00",
+              "end_timestamp": "2026-04-24T14:57:06+00:00",
+              "empirical_label": "UtD",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260424160919.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260424160919.fit",
+              "first_lap": 72,
+              "last_lap": 73,
+              "csv_file": "Ambigui_G1/260424160919__laps_072-073.csv",
+              "start_timestamp": "2026-04-24T14:57:06+00:00",
+              "end_timestamp": "2026-04-24T14:57:56+00:00",
+              "empirical_label": "Ambiguo",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260424160919.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260424160919.fit",
+              "first_lap": 74,
+              "last_lap": 75,
+              "csv_file": "UtD_G1/260424160919__laps_074-075.csv",
+              "start_timestamp": "2026-04-24T14:57:55+00:00",
+              "end_timestamp": "2026-04-24T14:58:44+00:00",
+              "empirical_label": "UtD",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260424160919.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260424160919.fit",
+              "first_lap": 76,
+              "last_lap": 77,
+              "csv_file": "UtD_G1/260424160919__laps_076-077.csv",
+              "start_timestamp": "2026-04-24T14:58:43+00:00",
+              "end_timestamp": "2026-04-24T14:59:32+00:00",
+              "empirical_label": "UtD",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260424160919.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260424160919.fit",
+              "first_lap": 78,
+              "last_lap": 79,
+              "csv_file": "Ambigui_G1/260424160919__laps_078-079.csv",
+              "start_timestamp": "2026-04-24T14:59:31+00:00",
+              "end_timestamp": "2026-04-24T15:00:24+00:00",
+              "empirical_label": "Ambiguo",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260424160919.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260424160919.fit",
+              "first_lap": 80,
+              "last_lap": 81,
+              "csv_file": "Ambigui_G1/260424160919__laps_080-081.csv",
+              "start_timestamp": "2026-04-24T15:00:23+00:00",
+              "end_timestamp": "2026-04-24T15:01:11+00:00",
+              "empirical_label": "Ambiguo",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260424160919.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260424160919.fit",
+              "first_lap": 82,
+              "last_lap": 83,
+              "csv_file": "Ambigui_G1/260424160919__laps_082-083.csv",
+              "start_timestamp": "2026-04-24T15:01:10+00:00",
+              "end_timestamp": "2026-04-24T15:01:57+00:00",
+              "empirical_label": "Ambiguo",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260424160919.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260424160919.fit",
+              "first_lap": 84,
+              "last_lap": 85,
+              "csv_file": "UtD_G1/260424160919__laps_084-085.csv",
+              "start_timestamp": "2026-04-24T15:01:57+00:00",
+              "end_timestamp": "2026-04-24T15:02:44+00:00",
+              "empirical_label": "UtD",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260424160919.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260424160919.fit",
+              "first_lap": 86,
+              "last_lap": 87,
+              "csv_file": "UtD_G1/260424160919__laps_086-087.csv",
+              "start_timestamp": "2026-04-24T15:02:43+00:00",
+              "end_timestamp": "2026-04-24T15:04:05+00:00",
+              "empirical_label": "UtD",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260427170343.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260427170343.fit",
+              "first_lap": 4,
+              "last_lap": 5,
+              "csv_file": "Ambigui_G1/260427170343__laps_004-005.csv",
+              "start_timestamp": "2026-04-27T15:17:52+00:00",
+              "end_timestamp": "2026-04-27T15:18:40+00:00",
+              "empirical_label": "Ambiguo",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260427170343.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260427170343.fit",
+              "first_lap": 6,
+              "last_lap": 7,
+              "csv_file": "UtD_G1/260427170343__laps_006-007.csv",
+              "start_timestamp": "2026-04-27T15:18:40+00:00",
+              "end_timestamp": "2026-04-27T15:19:28+00:00",
+              "empirical_label": "UtD",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260427170343.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260427170343.fit",
+              "first_lap": 8,
+              "last_lap": 9,
+              "csv_file": "UtD_G1/260427170343__laps_008-009.csv",
+              "start_timestamp": "2026-04-27T15:19:27+00:00",
+              "end_timestamp": "2026-04-27T15:20:21+00:00",
+              "empirical_label": "UtD",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260427170343.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260427170343.fit",
+              "first_lap": 10,
+              "last_lap": 11,
+              "csv_file": "UtD_G1/260427170343__laps_010-011.csv",
+              "start_timestamp": "2026-04-27T15:20:21+00:00",
+              "end_timestamp": "2026-04-27T15:21:05+00:00",
+              "empirical_label": "UtD",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260427170343.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260427170343.fit",
+              "first_lap": 12,
+              "last_lap": 13,
+              "csv_file": "Ambigui_G1/260427170343__laps_012-013.csv",
+              "start_timestamp": "2026-04-27T15:21:06+00:00",
+              "end_timestamp": "2026-04-27T15:21:57+00:00",
+              "empirical_label": "Ambiguo",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260427170343.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260427170343.fit",
+              "first_lap": 14,
+              "last_lap": 15,
+              "csv_file": "Ambigui_G1/260427170343__laps_014-015.csv",
+              "start_timestamp": "2026-04-27T15:21:57+00:00",
+              "end_timestamp": "2026-04-27T15:22:43+00:00",
+              "empirical_label": "Ambiguo",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260427170343.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260427170343.fit",
+              "first_lap": 16,
+              "last_lap": 17,
+              "csv_file": "UtD_G1/260427170343__laps_016-017.csv",
+              "start_timestamp": "2026-04-27T15:22:43+00:00",
+              "end_timestamp": "2026-04-27T15:23:29+00:00",
+              "empirical_label": "UtD",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260427170343.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260427170343.fit",
+              "first_lap": 18,
+              "last_lap": 19,
+              "csv_file": "UtD_G1/260427170343__laps_018-019.csv",
+              "start_timestamp": "2026-04-27T15:23:29+00:00",
+              "end_timestamp": "2026-04-27T15:24:16+00:00",
+              "empirical_label": "UtD",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260427170343.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260427170343.fit",
+              "first_lap": 20,
+              "last_lap": 21,
+              "csv_file": "UtD_G1/260427170343__laps_020-021.csv",
+              "start_timestamp": "2026-04-27T15:24:16+00:00",
+              "end_timestamp": "2026-04-27T15:25:06+00:00",
+              "empirical_label": "UtD",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260427170343.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260427170343.fit",
+              "first_lap": 22,
+              "last_lap": 23,
+              "csv_file": "UtD_G1/260427170343__laps_022-023.csv",
+              "start_timestamp": "2026-04-27T15:25:06+00:00",
+              "end_timestamp": "2026-04-27T15:26:00+00:00",
+              "empirical_label": "UtD",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260427170343.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260427170343.fit",
+              "first_lap": 24,
+              "last_lap": 25,
+              "csv_file": "Ambigui_G1/260427170343__laps_024-025.csv",
+              "start_timestamp": "2026-04-27T15:26:00+00:00",
+              "end_timestamp": "2026-04-27T15:26:45+00:00",
+              "empirical_label": "Ambiguo",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260427170343.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260427170343.fit",
+              "first_lap": 26,
+              "last_lap": 27,
+              "csv_file": "Ambigui_G1/260427170343__laps_026-027.csv",
+              "start_timestamp": "2026-04-27T15:26:46+00:00",
+              "end_timestamp": "2026-04-27T15:27:33+00:00",
+              "empirical_label": "Ambiguo",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260427170343.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260427170343.fit",
+              "first_lap": 28,
+              "last_lap": 29,
+              "csv_file": "UtD_G1/260427170343__laps_028-029.csv",
+              "start_timestamp": "2026-04-27T15:27:33+00:00",
+              "end_timestamp": "2026-04-27T15:28:26+00:00",
+              "empirical_label": "UtD",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260427170343.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260427170343.fit",
+              "first_lap": 31,
+              "last_lap": 32,
+              "csv_file": "Ambigui_G1/260427170343__laps_031-032.csv",
+              "start_timestamp": "2026-04-27T15:33:06+00:00",
+              "end_timestamp": "2026-04-27T15:33:54+00:00",
+              "empirical_label": "Ambiguo",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260427170343.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260427170343.fit",
+              "first_lap": 33,
+              "last_lap": 34,
+              "csv_file": "Ambigui_G1/260427170343__laps_033-034.csv",
+              "start_timestamp": "2026-04-27T15:33:54+00:00",
+              "end_timestamp": "2026-04-27T15:34:44+00:00",
+              "empirical_label": "Ambiguo",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260427170343.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260427170343.fit",
+              "first_lap": 35,
+              "last_lap": 36,
+              "csv_file": "UtD_G1/260427170343__laps_035-036.csv",
+              "start_timestamp": "2026-04-27T15:34:44+00:00",
+              "end_timestamp": "2026-04-27T15:35:35+00:00",
+              "empirical_label": "UtD",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260427170343.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260427170343.fit",
+              "first_lap": 37,
+              "last_lap": 38,
+              "csv_file": "Ambigui_G1/260427170343__laps_037-038.csv",
+              "start_timestamp": "2026-04-27T15:35:35+00:00",
+              "end_timestamp": "2026-04-27T15:36:21+00:00",
+              "empirical_label": "Ambiguo",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260427170343.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260427170343.fit",
+              "first_lap": 39,
+              "last_lap": 40,
+              "csv_file": "UtD_G1/260427170343__laps_039-040.csv",
+              "start_timestamp": "2026-04-27T15:36:21+00:00",
+              "end_timestamp": "2026-04-27T15:37:11+00:00",
+              "empirical_label": "UtD",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260427170343.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260427170343.fit",
+              "first_lap": 41,
+              "last_lap": 42,
+              "csv_file": "UtD_G1/260427170343__laps_041-042.csv",
+              "start_timestamp": "2026-04-27T15:37:11+00:00",
+              "end_timestamp": "2026-04-27T15:37:59+00:00",
+              "empirical_label": "UtD",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260427170343.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260427170343.fit",
+              "first_lap": 43,
+              "last_lap": 44,
+              "csv_file": "UtD_G1/260427170343__laps_043-044.csv",
+              "start_timestamp": "2026-04-27T15:37:58+00:00",
+              "end_timestamp": "2026-04-27T15:39:07+00:00",
+              "empirical_label": "UtD",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260427170343.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260427170343.fit",
+              "first_lap": 45,
+              "last_lap": 46,
+              "csv_file": "Ambigui_G1/260427170343__laps_045-046.csv",
+              "start_timestamp": "2026-04-27T15:39:07+00:00",
+              "end_timestamp": "2026-04-27T15:39:55+00:00",
+              "empirical_label": "Ambiguo",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260427170343.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260427170343.fit",
+              "first_lap": 47,
+              "last_lap": 48,
+              "csv_file": "UtD_G1/260427170343__laps_047-048.csv",
+              "start_timestamp": "2026-04-27T15:39:55+00:00",
+              "end_timestamp": "2026-04-27T15:40:43+00:00",
+              "empirical_label": "UtD",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260427170343.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260427170343.fit",
+              "first_lap": 49,
+              "last_lap": 50,
+              "csv_file": "Ambigui_G1/260427170343__laps_049-050.csv",
+              "start_timestamp": "2026-04-27T15:40:43+00:00",
+              "end_timestamp": "2026-04-27T15:41:30+00:00",
+              "empirical_label": "Ambiguo",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260427170343.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260427170343.fit",
+              "first_lap": 51,
+              "last_lap": 52,
+              "csv_file": "UtD_G1/260427170343__laps_051-052.csv",
+              "start_timestamp": "2026-04-27T15:41:30+00:00",
+              "end_timestamp": "2026-04-27T15:42:19+00:00",
+              "empirical_label": "UtD",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260427170343.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260427170343.fit",
+              "first_lap": 53,
+              "last_lap": 54,
+              "csv_file": "Ambigui_G1/260427170343__laps_053-054.csv",
+              "start_timestamp": "2026-04-27T15:42:18+00:00",
+              "end_timestamp": "2026-04-27T15:43:05+00:00",
+              "empirical_label": "Ambiguo",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260427170343.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260427170343.fit",
+              "first_lap": 55,
+              "last_lap": 56,
+              "csv_file": "UtD_G1/260427170343__laps_055-056.csv",
+              "start_timestamp": "2026-04-27T15:43:05+00:00",
+              "end_timestamp": "2026-04-27T15:43:52+00:00",
+              "empirical_label": "UtD",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260427170343.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260427170343.fit",
+              "first_lap": 58,
+              "last_lap": 59,
+              "csv_file": "UtD_G1/260427170343__laps_058-059.csv",
+              "start_timestamp": "2026-04-27T15:46:51+00:00",
+              "end_timestamp": "2026-04-27T15:47:49+00:00",
+              "empirical_label": "UtD",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260427170343.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260427170343.fit",
+              "first_lap": 60,
+              "last_lap": 61,
+              "csv_file": "Ambigui_G1/260427170343__laps_060-061.csv",
+              "start_timestamp": "2026-04-27T15:47:49+00:00",
+              "end_timestamp": "2026-04-27T15:48:36+00:00",
+              "empirical_label": "Ambiguo",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260427170343.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260427170343.fit",
+              "first_lap": 62,
+              "last_lap": 63,
+              "csv_file": "Ambigui_G1/260427170343__laps_062-063.csv",
+              "start_timestamp": "2026-04-27T15:48:36+00:00",
+              "end_timestamp": "2026-04-27T15:49:22+00:00",
+              "empirical_label": "Ambiguo",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260427170343.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260427170343.fit",
+              "first_lap": 64,
+              "last_lap": 65,
+              "csv_file": "UtD_G1/260427170343__laps_064-065.csv",
+              "start_timestamp": "2026-04-27T15:49:22+00:00",
+              "end_timestamp": "2026-04-27T15:50:13+00:00",
+              "empirical_label": "UtD",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260427170343.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260427170343.fit",
+              "first_lap": 66,
+              "last_lap": 67,
+              "csv_file": "Ambigui_G1/260427170343__laps_066-067.csv",
+              "start_timestamp": "2026-04-27T15:50:14+00:00",
+              "end_timestamp": "2026-04-27T15:51:00+00:00",
+              "empirical_label": "Ambiguo",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260427170343.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260427170343.fit",
+              "first_lap": 68,
+              "last_lap": 69,
+              "csv_file": "Ambigui_G1/260427170343__laps_068-069.csv",
+              "start_timestamp": "2026-04-27T15:51:01+00:00",
+              "end_timestamp": "2026-04-27T15:51:49+00:00",
+              "empirical_label": "Ambiguo",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260427170343.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260427170343.fit",
+              "first_lap": 70,
+              "last_lap": 71,
+              "csv_file": "Ambigui_G1/260427170343__laps_070-071.csv",
+              "start_timestamp": "2026-04-27T15:51:49+00:00",
+              "end_timestamp": "2026-04-27T15:52:39+00:00",
+              "empirical_label": "Ambiguo",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260427170343.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260427170343.fit",
+              "first_lap": 72,
+              "last_lap": 73,
+              "csv_file": "UtD_G1/260427170343__laps_072-073.csv",
+              "start_timestamp": "2026-04-27T15:52:39+00:00",
+              "end_timestamp": "2026-04-27T15:54:19+00:00",
+              "empirical_label": "UtD",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260427170343.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260427170343.fit",
+              "first_lap": 74,
+              "last_lap": 75,
+              "csv_file": "Ambigui_G1/260427170343__laps_074-075.csv",
+              "start_timestamp": "2026-04-27T15:54:19+00:00",
+              "end_timestamp": "2026-04-27T15:55:07+00:00",
+              "empirical_label": "Ambiguo",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260427170343.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260427170343.fit",
+              "first_lap": 76,
+              "last_lap": 77,
+              "csv_file": "Ambigui_G1/260427170343__laps_076-077.csv",
+              "start_timestamp": "2026-04-27T15:55:07+00:00",
+              "end_timestamp": "2026-04-27T15:56:56+00:00",
+              "empirical_label": "Ambiguo",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260427170343.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260427170343.fit",
+              "first_lap": 78,
+              "last_lap": 79,
+              "csv_file": "Ambigui_G1/260427170343__laps_078-079.csv",
+              "start_timestamp": "2026-04-27T15:56:57+00:00",
+              "end_timestamp": "2026-04-27T15:57:42+00:00",
+              "empirical_label": "Ambiguo",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260427170343.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260427170343.fit",
+              "first_lap": 80,
+              "last_lap": 81,
+              "csv_file": "Ambigui_G1/260427170343__laps_080-081.csv",
+              "start_timestamp": "2026-04-27T15:57:43+00:00",
+              "end_timestamp": "2026-04-27T15:58:29+00:00",
+              "empirical_label": "Ambiguo",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260427170343.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260427170343.fit",
+              "first_lap": 82,
+              "last_lap": 83,
+              "csv_file": "Ambigui_G1/260427170343__laps_082-083.csv",
+              "start_timestamp": "2026-04-27T15:58:29+00:00",
+              "end_timestamp": "2026-04-27T15:59:17+00:00",
+              "empirical_label": "Ambiguo",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260427170343.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260427170343.fit",
+              "first_lap": 84,
+              "last_lap": 85,
+              "csv_file": "Ambigui_G1/260427170343__laps_084-085.csv",
+              "start_timestamp": "2026-04-27T15:59:17+00:00",
+              "end_timestamp": "2026-04-27T16:00:05+00:00",
+              "empirical_label": "Ambiguo",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260427170343.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260427170343.fit",
+              "first_lap": 86,
+              "last_lap": 87,
+              "csv_file": "Ambigui_G1/260427170343__laps_086-087.csv",
+              "start_timestamp": "2026-04-27T16:00:05+00:00",
+              "end_timestamp": "2026-04-27T16:00:53+00:00",
+              "empirical_label": "Ambiguo",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260427170343.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260427170343.fit",
+              "first_lap": 88,
+              "last_lap": 89,
+              "csv_file": "DtU_G1/260427170343__laps_088-089.csv",
+              "start_timestamp": "2026-04-27T16:00:53+00:00",
+              "end_timestamp": "2026-04-27T16:01:40+00:00",
+              "empirical_label": "DtU",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260427170343.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260427170343.fit",
+              "first_lap": 89,
+              "last_lap": 90,
+              "csv_file": "UtD_G1/260427170343__laps_089-090.csv",
+              "start_timestamp": "2026-04-27T16:01:09+00:00",
+              "end_timestamp": "2026-04-27T16:02:17+00:00",
+              "empirical_label": "UtD",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260428165622.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260428165622.fit",
+              "first_lap": 2,
+              "last_lap": 2,
+              "csv_file": "Ambigui_G2/260428165622__laps_002-002.csv",
+              "start_timestamp": "2026-04-28T15:12:59+00:00",
+              "end_timestamp": "2026-04-28T15:16:00+00:00",
+              "empirical_label": "Ambiguo",
+              "duration_group": 2
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260428165622.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260428165622.fit",
+              "first_lap": 4,
+              "last_lap": 4,
+              "csv_file": "Ambigui_G2/260428165622__laps_004-004.csv",
+              "start_timestamp": "2026-04-28T15:26:07+00:00",
+              "end_timestamp": "2026-04-28T15:29:07+00:00",
+              "empirical_label": "Ambiguo",
+              "duration_group": 2
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260428165622.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260428165622.fit",
+              "first_lap": 7,
+              "last_lap": 7,
+              "csv_file": "Ambigui_G2/260428165622__laps_007-007.csv",
+              "start_timestamp": "2026-04-28T15:40:39+00:00",
+              "end_timestamp": "2026-04-28T15:43:39+00:00",
+              "empirical_label": "Ambiguo",
+              "duration_group": 2
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260428165622.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260428165622.fit",
+              "first_lap": 9,
+              "last_lap": 9,
+              "csv_file": "Ambigui_G2/260428165622__laps_009-009.csv",
+              "start_timestamp": "2026-04-28T15:53:40+00:00",
+              "end_timestamp": "2026-04-28T15:56:41+00:00",
+              "empirical_label": "Ambiguo",
+              "duration_group": 2
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260501094312.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260501094312.fit",
+              "first_lap": 2,
+              "last_lap": 3,
+              "csv_file": "UtD_G2/260501094312__laps_002-003.csv",
+              "start_timestamp": "2026-05-01T08:03:50+00:00",
+              "end_timestamp": "2026-05-01T08:07:51+00:00",
+              "empirical_label": "UtD",
+              "duration_group": 2
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260501094312.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260501094312.fit",
+              "first_lap": 4,
+              "last_lap": 5,
+              "csv_file": "UtD_G2/260501094312__laps_004-005.csv",
+              "start_timestamp": "2026-05-01T08:07:51+00:00",
+              "end_timestamp": "2026-05-01T08:11:53+00:00",
+              "empirical_label": "UtD",
+              "duration_group": 2
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260501094312.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260501094312.fit",
+              "first_lap": 6,
+              "last_lap": 7,
+              "csv_file": "UtD_G2/260501094312__laps_006-007.csv",
+              "start_timestamp": "2026-05-01T08:11:53+00:00",
+              "end_timestamp": "2026-05-01T08:16:15+00:00",
+              "empirical_label": "UtD",
+              "duration_group": 2
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260501094312.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260501094312.fit",
+              "first_lap": 8,
+              "last_lap": 10,
+              "csv_file": "UtD_G2/260501094312__laps_008-010.csv",
+              "start_timestamp": "2026-05-01T08:16:15+00:00",
+              "end_timestamp": "2026-05-01T08:22:01+00:00",
+              "empirical_label": "UtD",
+              "duration_group": 2
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260501094312.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260501094312.fit",
+              "first_lap": 12,
+              "last_lap": 13,
+              "csv_file": "UtD_G2/260501094312__laps_012-013.csv",
+              "start_timestamp": "2026-05-01T08:28:08+00:00",
+              "end_timestamp": "2026-05-01T08:31:47+00:00",
+              "empirical_label": "UtD",
+              "duration_group": 2
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260501094312.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260501094312.fit",
+              "first_lap": 14,
+              "last_lap": 15,
+              "csv_file": "UtD_G2/260501094312__laps_014-015.csv",
+              "start_timestamp": "2026-05-01T08:31:46+00:00",
+              "end_timestamp": "2026-05-01T08:36:03+00:00",
+              "empirical_label": "UtD",
+              "duration_group": 2
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260501094312.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260501094312.fit",
+              "first_lap": 16,
+              "last_lap": 17,
+              "csv_file": "UtD_G1/260501094312__laps_016-017.csv",
+              "start_timestamp": "2026-05-01T08:36:03+00:00",
+              "end_timestamp": "2026-05-01T08:37:29+00:00",
+              "empirical_label": "UtD",
+              "duration_group": 1
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260523080618.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260523080618.fit",
+              "first_lap": 2,
+              "last_lap": 3,
+              "csv_file": "UtD_G2/260523080618__laps_002-003.csv",
+              "start_timestamp": "2026-05-23T06:26:00+00:00",
+              "end_timestamp": "2026-05-23T06:30:25+00:00",
+              "empirical_label": "UtD",
+              "duration_group": 2
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260523080618.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260523080618.fit",
+              "first_lap": 4,
+              "last_lap": 5,
+              "csv_file": "UtD_G2/260523080618__laps_004-005.csv",
+              "start_timestamp": "2026-05-23T06:30:25+00:00",
+              "end_timestamp": "2026-05-23T06:36:28+00:00",
+              "empirical_label": "UtD",
+              "duration_group": 2
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260523080618.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260523080618.fit",
+              "first_lap": 8,
+              "last_lap": 9,
+              "csv_file": "UtD_G2/260523080618__laps_008-009.csv",
+              "start_timestamp": "2026-05-23T06:48:47+00:00",
+              "end_timestamp": "2026-05-23T06:52:05+00:00",
+              "empirical_label": "UtD",
+              "duration_group": 2
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260523080618.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260523080618.fit",
+              "first_lap": 10,
+              "last_lap": 11,
+              "csv_file": "UtD_G2/260523080618__laps_010-011.csv",
+              "start_timestamp": "2026-05-23T06:52:06+00:00",
+              "end_timestamp": "2026-05-23T06:55:24+00:00",
+              "empirical_label": "UtD",
+              "duration_group": 2
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260716153012.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260716153012.fit",
+              "first_lap": 4,
+              "last_lap": 5,
+              "csv_file": "UtD_G2/260716153012__laps_004-005.csv",
+              "start_timestamp": "2026-07-16T13:44:49+00:00",
+              "end_timestamp": "2026-07-16T13:53:05+00:00",
+              "empirical_label": "UtD",
+              "duration_group": 2
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260716153012.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260716153012.fit",
+              "first_lap": 6,
+              "last_lap": 7,
+              "csv_file": "UtD_G2/260716153012__laps_006-007.csv",
+              "start_timestamp": "2026-07-16T13:53:04+00:00",
+              "end_timestamp": "2026-07-16T14:01:20+00:00",
+              "empirical_label": "UtD",
+              "duration_group": 2
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260716153012.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260716153012.fit",
+              "first_lap": 8,
+              "last_lap": 9,
+              "csv_file": "UtD_G2/260716153012__laps_008-009.csv",
+              "start_timestamp": "2026-07-16T14:01:20+00:00",
+              "end_timestamp": "2026-07-16T14:09:22+00:00",
+              "empirical_label": "UtD",
+              "duration_group": 2
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260716153012.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260716153012.fit",
+              "first_lap": 9,
+              "last_lap": 9,
+              "csv_file": "Ambigui_G2/260716153012__laps_009-009.csv",
+              "start_timestamp": "2026-07-16T14:04:21+00:00",
+              "end_timestamp": "2026-07-16T14:09:22+00:00",
+              "empirical_label": "Ambiguo",
+              "duration_group": 2
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260716153012.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260716153012.fit",
+              "first_lap": 10,
+              "last_lap": 11,
+              "csv_file": "UtD_G2/260716153012__laps_010-011.csv",
+              "start_timestamp": "2026-07-16T14:09:22+00:00",
+              "end_timestamp": "2026-07-16T14:19:23+00:00",
+              "empirical_label": "UtD",
+              "duration_group": 2
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260904062108.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260904062108.fit",
+              "first_lap": 2,
+              "last_lap": 3,
+              "csv_file": "UtD_G2/260904062108__laps_002-003.csv",
+              "start_timestamp": "2026-09-04T04:36:08+00:00",
+              "end_timestamp": "2026-09-04T04:40:08+00:00",
+              "empirical_label": "UtD",
+              "duration_group": 2
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260904062108.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260904062108.fit",
+              "first_lap": 4,
+              "last_lap": 5,
+              "csv_file": "UtD_G2/260904062108__laps_004-005.csv",
+              "start_timestamp": "2026-09-04T04:40:09+00:00",
+              "end_timestamp": "2026-09-04T04:44:15+00:00",
+              "empirical_label": "UtD",
+              "duration_group": 2
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260904062108.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260904062108.fit",
+              "first_lap": 5,
+              "last_lap": 5,
+              "csv_file": "Ambigui_G2/260904062108__laps_005-005.csv",
+              "start_timestamp": "2026-09-04T04:41:09+00:00",
+              "end_timestamp": "2026-09-04T04:44:15+00:00",
+              "empirical_label": "Ambiguo",
+              "duration_group": 2
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260904062108.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260904062108.fit",
+              "first_lap": 6,
+              "last_lap": 7,
+              "csv_file": "UtD_G2/260904062108__laps_006-007.csv",
+              "start_timestamp": "2026-09-04T04:44:15+00:00",
+              "end_timestamp": "2026-09-04T04:48:20+00:00",
+              "empirical_label": "UtD",
+              "duration_group": 2
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260904062108.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260904062108.fit",
+              "first_lap": 10,
+              "last_lap": 11,
+              "csv_file": "UtD_G2/260904062108__laps_010-011.csv",
+              "start_timestamp": "2026-09-04T04:59:59+00:00",
+              "end_timestamp": "2026-09-04T05:04:15+00:00",
+              "empirical_label": "UtD",
+              "duration_group": 2
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260904062108.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260904062108.fit",
+              "first_lap": 12,
+              "last_lap": 13,
+              "csv_file": "UtD_G2/260904062108__laps_012-013.csv",
+              "start_timestamp": "2026-09-04T05:04:15+00:00",
+              "end_timestamp": "2026-09-04T05:08:50+00:00",
+              "empirical_label": "UtD",
+              "duration_group": 2
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260904062108.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260904062108.fit",
+              "first_lap": 14,
+              "last_lap": 15,
+              "csv_file": "UtD_G2/260904062108__laps_014-015.csv",
+              "start_timestamp": "2026-09-04T05:08:50+00:00",
+              "end_timestamp": "2026-09-04T05:13:48+00:00",
+              "empirical_label": "UtD",
+              "duration_group": 2
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260919065417.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260919065417.fit",
+              "first_lap": 2,
+              "last_lap": 3,
+              "csv_file": "UtD_G2/260919065417__laps_002-003.csv",
+              "start_timestamp": "2026-09-19T05:09:40+00:00",
+              "end_timestamp": "2026-09-19T05:14:41+00:00",
+              "empirical_label": "UtD",
+              "duration_group": 2
+            },
+            {
+              "activity_id": "cleaned/only_road_activities/260919065417.fit",
+              "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260919065417.fit",
+              "first_lap": 4,
+              "last_lap": 5,
+              "csv_file": "UtD_G2/260919065417__laps_004-005.csv",
+              "start_timestamp": "2026-09-19T05:14:42+00:00",
+              "end_timestamp": "2026-09-19T05:19:52+00:00",
+              "empirical_label": "UtD",
+              "duration_group": 2
+            }
+          ],
+          "selection_metadata": "metadata/selection.json",
+          "grouping_note": "Empirical labels, not independently validated certainty; G1/G2 only"
+        }
+      }
+    ],
+    "segments": [
+      {
+        "id": "758b1b0c5fc1a12311aa8767",
+        "filename": "dataset_segments_G1_G2.zip::UtD_G1/250708171459__laps_017-018.csv",
+        "sha256": "887db80edbbd3398c17f7939a97afe6f32a4905e2700311156eb380fa1e24d31",
+        "activity_id": "cleaned/only_road_activities/250708171459.fit",
+        "group": "1",
+        "label": "UtD",
+        "duration_seconds": 62.0,
+        "samples": 63,
+        "start_timestamp": "2025-07-08T16:26:33+00:00",
+        "end_timestamp": "2025-07-08T16:27:35+00:00",
+        "first_lap": 17,
+        "last_lap": 18,
+        "signals": [
+          "raw"
+        ],
+        "warnings": [],
+        "source_metadata": {
+          "activity_id": "cleaned/only_road_activities/250708171459.fit",
+          "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\250708171459.fit",
+          "first_lap": 17,
+          "last_lap": 18,
+          "csv_file": "UtD_G1/250708171459__laps_017-018.csv",
+          "start_timestamp": "2025-07-08T16:26:33+00:00",
+          "end_timestamp": "2025-07-08T16:27:35+00:00",
+          "empirical_label": "UtD",
+          "duration_group": 1
+        }
+      },
+      {
+        "id": "44a31788dea899da4237d4fc",
+        "filename": "dataset_segments_G1_G2.zip::UtD_G1/250708171459__laps_019-020.csv",
+        "sha256": "c621d0109c1ed967226655862bb173f7abc753740031d538fbfbab6d009fa4a3",
+        "activity_id": "cleaned/only_road_activities/250708171459.fit",
+        "group": "1",
+        "label": "UtD",
+        "duration_seconds": 72.0,
+        "samples": 73,
+        "start_timestamp": "2025-07-08T16:27:35+00:00",
+        "end_timestamp": "2025-07-08T16:28:47+00:00",
+        "first_lap": 19,
+        "last_lap": 20,
+        "signals": [
+          "raw"
+        ],
+        "warnings": [],
+        "source_metadata": {
+          "activity_id": "cleaned/only_road_activities/250708171459.fit",
+          "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\250708171459.fit",
+          "first_lap": 19,
+          "last_lap": 20,
+          "csv_file": "UtD_G1/250708171459__laps_019-020.csv",
+          "start_timestamp": "2025-07-08T16:27:35+00:00",
+          "end_timestamp": "2025-07-08T16:28:47+00:00",
+          "empirical_label": "UtD",
+          "duration_group": 1
+        }
+      },
+      {
+        "id": "70c96bf7f8a8e48c90533433",
+        "filename": "dataset_segments_G1_G2.zip::UtD_G1/250708171459__laps_023-024.csv",
+        "sha256": "29cd7042af706ce883d03e639ed573aba1557f9672427e70cf00551aed251417",
+        "activity_id": "cleaned/only_road_activities/250708171459.fit",
+        "group": "1",
+        "label": "UtD",
+        "duration_seconds": 62.0,
+        "samples": 63,
+        "start_timestamp": "2025-07-08T16:29:48+00:00",
+        "end_timestamp": "2025-07-08T16:30:50+00:00",
+        "first_lap": 23,
+        "last_lap": 24,
+        "signals": [
+          "raw"
+        ],
+        "warnings": [],
+        "source_metadata": {
+          "activity_id": "cleaned/only_road_activities/250708171459.fit",
+          "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\250708171459.fit",
+          "first_lap": 23,
+          "last_lap": 24,
+          "csv_file": "UtD_G1/250708171459__laps_023-024.csv",
+          "start_timestamp": "2025-07-08T16:29:48+00:00",
+          "end_timestamp": "2025-07-08T16:30:50+00:00",
+          "empirical_label": "UtD",
+          "duration_group": 1
+        }
+      },
+      {
+        "id": "0e3a9cba9997e3916f669e91",
+        "filename": "dataset_segments_G1_G2.zip::UtD_G1/250715165154__laps_011-012.csv",
+        "sha256": "d5bec4b3deeef548f84fbd0c27b37f32964b8c1054c2bb883c4c6b0b2978e6ce",
+        "activity_id": "cleaned/only_road_activities/250715165154.fit",
+        "group": "1",
+        "label": "UtD",
+        "duration_seconds": 60.0,
+        "samples": 61,
+        "start_timestamp": "2025-07-15T16:04:24+00:00",
+        "end_timestamp": "2025-07-15T16:05:24+00:00",
+        "first_lap": 11,
+        "last_lap": 12,
+        "signals": [
+          "raw"
+        ],
+        "warnings": [],
+        "source_metadata": {
+          "activity_id": "cleaned/only_road_activities/250715165154.fit",
+          "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\250715165154.fit",
+          "first_lap": 11,
+          "last_lap": 12,
+          "csv_file": "UtD_G1/250715165154__laps_011-012.csv",
+          "start_timestamp": "2025-07-15T16:04:24+00:00",
+          "end_timestamp": "2025-07-15T16:05:24+00:00",
+          "empirical_label": "UtD",
+          "duration_group": 1
+        }
+      },
+      {
+        "id": "179080a78614b252b95ad22a",
+        "filename": "dataset_segments_G1_G2.zip::UtD_G1/250715165154__laps_013-014.csv",
+        "sha256": "bdd18ff39a3cb7ee4c0f37c0bcfad62a1be8fa27dbc0d0437409a543316dd50e",
+        "activity_id": "cleaned/only_road_activities/250715165154.fit",
+        "group": "1",
+        "label": "UtD",
+        "duration_seconds": 63.0,
+        "samples": 64,
+        "start_timestamp": "2025-07-15T16:05:24+00:00",
+        "end_timestamp": "2025-07-15T16:06:27+00:00",
+        "first_lap": 13,
+        "last_lap": 14,
+        "signals": [
+          "raw"
+        ],
+        "warnings": [],
+        "source_metadata": {
+          "activity_id": "cleaned/only_road_activities/250715165154.fit",
+          "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\250715165154.fit",
+          "first_lap": 13,
+          "last_lap": 14,
+          "csv_file": "UtD_G1/250715165154__laps_013-014.csv",
+          "start_timestamp": "2025-07-15T16:05:24+00:00",
+          "end_timestamp": "2025-07-15T16:06:27+00:00",
+          "empirical_label": "UtD",
+          "duration_group": 1
+        }
+      },
+      {
+        "id": "bc317e16d25d9597d28527e6",
+        "filename": "dataset_segments_G1_G2.zip::UtD_G1/250715165154__laps_015-016.csv",
+        "sha256": "b213e0f1fcde445489bec1fc7a9691f7dc8e731894ae549b81dd283af96c6ebd",
+        "activity_id": "cleaned/only_road_activities/250715165154.fit",
+        "group": "1",
+        "label": "UtD",
+        "duration_seconds": 61.0,
+        "samples": 62,
+        "start_timestamp": "2025-07-15T16:06:27+00:00",
+        "end_timestamp": "2025-07-15T16:07:28+00:00",
+        "first_lap": 15,
+        "last_lap": 16,
+        "signals": [
+          "raw"
+        ],
+        "warnings": [],
+        "source_metadata": {
+          "activity_id": "cleaned/only_road_activities/250715165154.fit",
+          "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\250715165154.fit",
+          "first_lap": 15,
+          "last_lap": 16,
+          "csv_file": "UtD_G1/250715165154__laps_015-016.csv",
+          "start_timestamp": "2025-07-15T16:06:27+00:00",
+          "end_timestamp": "2025-07-15T16:07:28+00:00",
+          "empirical_label": "UtD",
+          "duration_group": 1
+        }
+      },
+      {
+        "id": "5c5b733bc86530e6f9096b1a",
+        "filename": "dataset_segments_G1_G2.zip::UtD_G1/250715165154__laps_017-018.csv",
+        "sha256": "6ea77491f7b84f05e83e8d0ca058be37a515edc0ee1d10ad92912517a366209c",
+        "activity_id": "cleaned/only_road_activities/250715165154.fit",
+        "group": "1",
+        "label": "UtD",
+        "duration_seconds": 61.0,
+        "samples": 62,
+        "start_timestamp": "2025-07-15T16:07:28+00:00",
+        "end_timestamp": "2025-07-15T16:08:29+00:00",
+        "first_lap": 17,
+        "last_lap": 18,
+        "signals": [
+          "raw"
+        ],
+        "warnings": [],
+        "source_metadata": {
+          "activity_id": "cleaned/only_road_activities/250715165154.fit",
+          "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\250715165154.fit",
+          "first_lap": 17,
+          "last_lap": 18,
+          "csv_file": "UtD_G1/250715165154__laps_017-018.csv",
+          "start_timestamp": "2025-07-15T16:07:28+00:00",
+          "end_timestamp": "2025-07-15T16:08:29+00:00",
+          "empirical_label": "UtD",
+          "duration_group": 1
+        }
+      },
+      {
+        "id": "b86074ef6406f07a17a16510",
+        "filename": "dataset_segments_G1_G2.zip::UtD_G1/250715165154__laps_019-020.csv",
+        "sha256": "ebf12343d61132f0ee1db64d423e4b1eb8eb5f95c7f3ad5e5c42bb3a429dfc5d",
+        "activity_id": "cleaned/only_road_activities/250715165154.fit",
+        "group": "1",
+        "label": "UtD",
+        "duration_seconds": 62.0,
+        "samples": 63,
+        "start_timestamp": "2025-07-15T16:08:29+00:00",
+        "end_timestamp": "2025-07-15T16:09:31+00:00",
+        "first_lap": 19,
+        "last_lap": 20,
+        "signals": [
+          "raw"
+        ],
+        "warnings": [],
+        "source_metadata": {
+          "activity_id": "cleaned/only_road_activities/250715165154.fit",
+          "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\250715165154.fit",
+          "first_lap": 19,
+          "last_lap": 20,
+          "csv_file": "UtD_G1/250715165154__laps_019-020.csv",
+          "start_timestamp": "2025-07-15T16:08:29+00:00",
+          "end_timestamp": "2025-07-15T16:09:31+00:00",
+          "empirical_label": "UtD",
+          "duration_group": 1
+        }
+      },
+      {
+        "id": "ad4396643f0227ce0bea97ac",
+        "filename": "dataset_segments_G1_G2.zip::UtD_G1/250715165154__laps_021-023.csv",
+        "sha256": "dccba14d074a984bfc86472e4c2c0d18f48150b2ccf95b664d78ef8510f25cd7",
+        "activity_id": "cleaned/only_road_activities/250715165154.fit",
+        "group": "1",
+        "label": "UtD",
+        "duration_seconds": 90.0,
+        "samples": 84,
+        "start_timestamp": "2025-07-15T16:09:31+00:00",
+        "end_timestamp": "2025-07-15T16:11:01+00:00",
+        "first_lap": 21,
+        "last_lap": 23,
+        "signals": [
+          "raw"
+        ],
+        "warnings": [],
+        "source_metadata": {
+          "activity_id": "cleaned/only_road_activities/250715165154.fit",
+          "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\250715165154.fit",
+          "first_lap": 21,
+          "last_lap": 23,
+          "csv_file": "UtD_G1/250715165154__laps_021-023.csv",
+          "start_timestamp": "2025-07-15T16:09:31+00:00",
+          "end_timestamp": "2025-07-15T16:11:01+00:00",
+          "empirical_label": "UtD",
+          "duration_group": 1
+        }
+      },
+      {
+        "id": "3e22715c5aef1590a48f1073",
+        "filename": "dataset_segments_G1_G2.zip::UtD_G1/250715165154__laps_024-025.csv",
+        "sha256": "99c34e8d8e86ecf0d7510eb8675d1e7e326b4fde884999d0fa0a7b89c240f745",
+        "activity_id": "cleaned/only_road_activities/250715165154.fit",
+        "group": "1",
+        "label": "UtD",
+        "duration_seconds": 62.0,
+        "samples": 63,
+        "start_timestamp": "2025-07-15T16:11:02+00:00",
+        "end_timestamp": "2025-07-15T16:12:04+00:00",
+        "first_lap": 24,
+        "last_lap": 25,
+        "signals": [
+          "raw"
+        ],
+        "warnings": [],
+        "source_metadata": {
+          "activity_id": "cleaned/only_road_activities/250715165154.fit",
+          "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\250715165154.fit",
+          "first_lap": 24,
+          "last_lap": 25,
+          "csv_file": "UtD_G1/250715165154__laps_024-025.csv",
+          "start_timestamp": "2025-07-15T16:11:02+00:00",
+          "end_timestamp": "2025-07-15T16:12:04+00:00",
+          "empirical_label": "UtD",
+          "duration_group": 1
+        }
+      },
+      {
+        "id": "27392b64bfefe0f1c44c5c40",
+        "filename": "dataset_segments_G1_G2.zip::UtD_G1/250729173622__laps_002-003.csv",
+        "sha256": "e639f737bc5fed6e70565dc493dceac1c0cb120b6901747882119d87b7b16fc0",
+        "activity_id": "cleaned/only_road_activities/250729173622.fit",
+        "group": "1",
+        "label": "UtD",
+        "duration_seconds": 61.0,
+        "samples": 62,
+        "start_timestamp": "2025-07-29T15:46:31+00:00",
+        "end_timestamp": "2025-07-29T15:47:32+00:00",
+        "first_lap": 2,
+        "last_lap": 3,
+        "signals": [
+          "raw"
+        ],
+        "warnings": [],
+        "source_metadata": {
+          "activity_id": "cleaned/only_road_activities/250729173622.fit",
+          "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\250729173622.fit",
+          "first_lap": 2,
+          "last_lap": 3,
+          "csv_file": "UtD_G1/250729173622__laps_002-003.csv",
+          "start_timestamp": "2025-07-29T15:46:31+00:00",
+          "end_timestamp": "2025-07-29T15:47:32+00:00",
+          "empirical_label": "UtD",
+          "duration_group": 1
+        }
+      },
+      {
+        "id": "b4f68fe02d640f0521cf8013",
+        "filename": "dataset_segments_G1_G2.zip::UtD_G1/250729173622__laps_004-005.csv",
+        "sha256": "a77293afb1a3c2cdbf428ae6c3fbf7929f3af2d66b76b2c573321a78b7819e03",
+        "activity_id": "cleaned/only_road_activities/250729173622.fit",
+        "group": "1",
+        "label": "UtD",
+        "duration_seconds": 60.0,
+        "samples": 61,
+        "start_timestamp": "2025-07-29T15:47:32+00:00",
+        "end_timestamp": "2025-07-29T15:48:32+00:00",
+        "first_lap": 4,
+        "last_lap": 5,
+        "signals": [
+          "raw"
+        ],
+        "warnings": [],
+        "source_metadata": {
+          "activity_id": "cleaned/only_road_activities/250729173622.fit",
+          "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\250729173622.fit",
+          "first_lap": 4,
+          "last_lap": 5,
+          "csv_file": "UtD_G1/250729173622__laps_004-005.csv",
+          "start_timestamp": "2025-07-29T15:47:32+00:00",
+          "end_timestamp": "2025-07-29T15:48:32+00:00",
+          "empirical_label": "UtD",
+          "duration_group": 1
+        }
+      },
+      {
+        "id": "3eeaafe7dbea9da718f1c67a",
+        "filename": "dataset_segments_G1_G2.zip::UtD_G1/250729173622__laps_006-007.csv",
+        "sha256": "af7e77df9962dcca4aaa925d9ffd9447fd3603229150b414761c9fccf96a03bb",
+        "activity_id": "cleaned/only_road_activities/250729173622.fit",
+        "group": "1",
+        "label": "UtD",
+        "duration_seconds": 73.0,
+        "samples": 74,
+        "start_timestamp": "2025-07-29T15:48:32+00:00",
+        "end_timestamp": "2025-07-29T15:49:45+00:00",
+        "first_lap": 6,
+        "last_lap": 7,
+        "signals": [
+          "raw"
+        ],
+        "warnings": [],
+        "source_metadata": {
+          "activity_id": "cleaned/only_road_activities/250729173622.fit",
+          "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\250729173622.fit",
+          "first_lap": 6,
+          "last_lap": 7,
+          "csv_file": "UtD_G1/250729173622__laps_006-007.csv",
+          "start_timestamp": "2025-07-29T15:48:32+00:00",
+          "end_timestamp": "2025-07-29T15:49:45+00:00",
+          "empirical_label": "UtD",
+          "duration_group": 1
+        }
+      },
+      {
+        "id": "af60cd71712b0f50d535ae24",
+        "filename": "dataset_segments_G1_G2.zip::UtD_G1/250729173622__laps_008-009.csv",
+        "sha256": "174ad5ce6ee8f7988df5dbf579052f9818b031ad0cecebf256465bbad1682a5d",
+        "activity_id": "cleaned/only_road_activities/250729173622.fit",
+        "group": "1",
+        "label": "UtD",
+        "duration_seconds": 61.0,
+        "samples": 62,
+        "start_timestamp": "2025-07-29T15:49:46+00:00",
+        "end_timestamp": "2025-07-29T15:50:47+00:00",
+        "first_lap": 8,
+        "last_lap": 9,
+        "signals": [
+          "raw"
+        ],
+        "warnings": [],
+        "source_metadata": {
+          "activity_id": "cleaned/only_road_activities/250729173622.fit",
+          "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\250729173622.fit",
+          "first_lap": 8,
+          "last_lap": 9,
+          "csv_file": "UtD_G1/250729173622__laps_008-009.csv",
+          "start_timestamp": "2025-07-29T15:49:46+00:00",
+          "end_timestamp": "2025-07-29T15:50:47+00:00",
+          "empirical_label": "UtD",
+          "duration_group": 1
+        }
+      },
+      {
+        "id": "3ede49e966c35e8699f8108d",
+        "filename": "dataset_segments_G1_G2.zip::UtD_G1/250729173622__laps_020-021.csv",
+        "sha256": "1b8b6e4e8d1840e41d1892af11b4a2be1c131ce5ff3b4b12adb70f850d61a107",
+        "activity_id": "cleaned/only_road_activities/250729173622.fit",
+        "group": "1",
+        "label": "UtD",
+        "duration_seconds": 60.0,
+        "samples": 61,
+        "start_timestamp": "2025-07-29T16:37:33+00:00",
+        "end_timestamp": "2025-07-29T16:38:33+00:00",
+        "first_lap": 20,
+        "last_lap": 21,
+        "signals": [
+          "raw"
+        ],
+        "warnings": [],
+        "source_metadata": {
+          "activity_id": "cleaned/only_road_activities/250729173622.fit",
+          "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\250729173622.fit",
+          "first_lap": 20,
+          "last_lap": 21,
+          "csv_file": "UtD_G1/250729173622__laps_020-021.csv",
+          "start_timestamp": "2025-07-29T16:37:33+00:00",
+          "end_timestamp": "2025-07-29T16:38:33+00:00",
+          "empirical_label": "UtD",
+          "duration_group": 1
+        }
+      },
+      {
+        "id": "b2ec6405ffe5a44c560b3c57",
+        "filename": "dataset_segments_G1_G2.zip::UtD_G1/250729173622__laps_022-023.csv",
+        "sha256": "a5ceaf71ead89c78dc84bebf23fecacc0659fd555bcbd3baae64ca313f736cf7",
+        "activity_id": "cleaned/only_road_activities/250729173622.fit",
+        "group": "1",
+        "label": "UtD",
+        "duration_seconds": 61.0,
+        "samples": 62,
+        "start_timestamp": "2025-07-29T16:38:33+00:00",
+        "end_timestamp": "2025-07-29T16:39:34+00:00",
+        "first_lap": 22,
+        "last_lap": 23,
+        "signals": [
+          "raw"
+        ],
+        "warnings": [],
+        "source_metadata": {
+          "activity_id": "cleaned/only_road_activities/250729173622.fit",
+          "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\250729173622.fit",
+          "first_lap": 22,
+          "last_lap": 23,
+          "csv_file": "UtD_G1/250729173622__laps_022-023.csv",
+          "start_timestamp": "2025-07-29T16:38:33+00:00",
+          "end_timestamp": "2025-07-29T16:39:34+00:00",
+          "empirical_label": "UtD",
+          "duration_group": 1
+        }
+      },
+      {
+        "id": "b46e28750587e4ed8e1d1171",
+        "filename": "dataset_segments_G1_G2.zip::UtD_G1/250729173622__laps_024-025.csv",
+        "sha256": "9e6e16b2cfe28fb056fae8642017ebe12c61cddf80d7b41b99de4c365ad3c1cb",
+        "activity_id": "cleaned/only_road_activities/250729173622.fit",
+        "group": "1",
+        "label": "UtD",
+        "duration_seconds": 60.0,
+        "samples": 61,
+        "start_timestamp": "2025-07-29T16:39:33+00:00",
+        "end_timestamp": "2025-07-29T16:40:33+00:00",
+        "first_lap": 24,
+        "last_lap": 25,
+        "signals": [
+          "raw"
+        ],
+        "warnings": [],
+        "source_metadata": {
+          "activity_id": "cleaned/only_road_activities/250729173622.fit",
+          "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\250729173622.fit",
+          "first_lap": 24,
+          "last_lap": 25,
+          "csv_file": "UtD_G1/250729173622__laps_024-025.csv",
+          "start_timestamp": "2025-07-29T16:39:33+00:00",
+          "end_timestamp": "2025-07-29T16:40:33+00:00",
+          "empirical_label": "UtD",
+          "duration_group": 1
+        }
+      },
+      {
+        "id": "8b23fd95d4771e4802050d49",
+        "filename": "dataset_segments_G1_G2.zip::UtD_G1/250729173622__laps_026-027.csv",
+        "sha256": "2e65aee3e6a111ad085c86a4fdcff8a9b1cd035db42b9a04898af989ef35ffef",
+        "activity_id": "cleaned/only_road_activities/250729173622.fit",
+        "group": "1",
+        "label": "UtD",
+        "duration_seconds": 61.0,
+        "samples": 62,
+        "start_timestamp": "2025-07-29T16:40:33+00:00",
+        "end_timestamp": "2025-07-29T16:41:34+00:00",
+        "first_lap": 26,
+        "last_lap": 27,
+        "signals": [
+          "raw"
+        ],
+        "warnings": [],
+        "source_metadata": {
+          "activity_id": "cleaned/only_road_activities/250729173622.fit",
+          "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\250729173622.fit",
+          "first_lap": 26,
+          "last_lap": 27,
+          "csv_file": "UtD_G1/250729173622__laps_026-027.csv",
+          "start_timestamp": "2025-07-29T16:40:33+00:00",
+          "end_timestamp": "2025-07-29T16:41:34+00:00",
+          "empirical_label": "UtD",
+          "duration_group": 1
+        }
+      },
+      {
+        "id": "bfd3899e037bd0f014bfa589",
+        "filename": "dataset_segments_G1_G2.zip::UtD_G1/250729173622__laps_028-029.csv",
+        "sha256": "fe70806d9f10f4127fb4f8134014d46873754e6deba00d82f7fd8eaa5b5a9107",
+        "activity_id": "cleaned/only_road_activities/250729173622.fit",
+        "group": "1",
+        "label": "UtD",
+        "duration_seconds": 62.0,
+        "samples": 63,
+        "start_timestamp": "2025-07-29T16:41:34+00:00",
+        "end_timestamp": "2025-07-29T16:42:36+00:00",
+        "first_lap": 28,
+        "last_lap": 29,
+        "signals": [
+          "raw"
+        ],
+        "warnings": [],
+        "source_metadata": {
+          "activity_id": "cleaned/only_road_activities/250729173622.fit",
+          "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\250729173622.fit",
+          "first_lap": 28,
+          "last_lap": 29,
+          "csv_file": "UtD_G1/250729173622__laps_028-029.csv",
+          "start_timestamp": "2025-07-29T16:41:34+00:00",
+          "end_timestamp": "2025-07-29T16:42:36+00:00",
+          "empirical_label": "UtD",
+          "duration_group": 1
+        }
+      },
+      {
+        "id": "b9fa287bb1c45cc14b7d0305",
+        "filename": "dataset_segments_G1_G2.zip::UtD_G1/260407082440__laps_057-058.csv",
+        "sha256": "c45ad3232630d8aecfa6507a9ee20c2c8c7eeebc8783cfdd2a4e4a31137a6a89",
+        "activity_id": "cleaned/only_road_activities/260407082440.fit",
+        "group": "1",
+        "label": "UtD",
+        "duration_seconds": 51.0,
+        "samples": 52,
+        "start_timestamp": "2026-04-07T06:58:27+00:00",
+        "end_timestamp": "2026-04-07T06:59:18+00:00",
+        "first_lap": 57,
+        "last_lap": 58,
+        "signals": [
+          "raw"
+        ],
+        "warnings": [],
+        "source_metadata": {
+          "activity_id": "cleaned/only_road_activities/260407082440.fit",
+          "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260407082440.fit",
+          "first_lap": 57,
+          "last_lap": 58,
+          "csv_file": "UtD_G1/260407082440__laps_057-058.csv",
+          "start_timestamp": "2026-04-07T06:58:27+00:00",
+          "end_timestamp": "2026-04-07T06:59:18+00:00",
+          "empirical_label": "UtD",
+          "duration_group": 1
+        }
+      },
+      {
+        "id": "301ca304954b94d24d3028c1",
+        "filename": "dataset_segments_G1_G2.zip::UtD_G1/260407082440__laps_076-077.csv",
+        "sha256": "aa0baf3b249eab2d103640b3e51b65730bfe2e8d52f27f0ebc42dc9327e45089",
+        "activity_id": "cleaned/only_road_activities/260407082440.fit",
+        "group": "1",
+        "label": "UtD",
+        "duration_seconds": 46.0,
+        "samples": 47,
+        "start_timestamp": "2026-04-07T07:08:48+00:00",
+        "end_timestamp": "2026-04-07T07:09:34+00:00",
+        "first_lap": 76,
+        "last_lap": 77,
+        "signals": [
+          "raw"
+        ],
+        "warnings": [],
+        "source_metadata": {
+          "activity_id": "cleaned/only_road_activities/260407082440.fit",
+          "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260407082440.fit",
+          "first_lap": 76,
+          "last_lap": 77,
+          "csv_file": "UtD_G1/260407082440__laps_076-077.csv",
+          "start_timestamp": "2026-04-07T07:08:48+00:00",
+          "end_timestamp": "2026-04-07T07:09:34+00:00",
+          "empirical_label": "UtD",
+          "duration_group": 1
+        }
+      },
+      {
+        "id": "0740f71b8bc225fe09d4da56",
+        "filename": "dataset_segments_G1_G2.zip::UtD_G1/260424160919__laps_006-007.csv",
+        "sha256": "4fd17c3d81c873103df44ea60e8c3c57eb035f0a822e41d9be1cae9c0bf3b973",
+        "activity_id": "cleaned/only_road_activities/260424160919.fit",
+        "group": "1",
+        "label": "UtD",
+        "duration_seconds": 48.0,
+        "samples": 49,
+        "start_timestamp": "2026-04-24T14:25:12+00:00",
+        "end_timestamp": "2026-04-24T14:26:00+00:00",
+        "first_lap": 6,
+        "last_lap": 7,
+        "signals": [
+          "raw"
+        ],
+        "warnings": [],
+        "source_metadata": {
+          "activity_id": "cleaned/only_road_activities/260424160919.fit",
+          "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260424160919.fit",
+          "first_lap": 6,
+          "last_lap": 7,
+          "csv_file": "UtD_G1/260424160919__laps_006-007.csv",
+          "start_timestamp": "2026-04-24T14:25:12+00:00",
+          "end_timestamp": "2026-04-24T14:26:00+00:00",
+          "empirical_label": "UtD",
+          "duration_group": 1
+        }
+      },
+      {
+        "id": "19e001cb8986f779b5a7a3ea",
+        "filename": "dataset_segments_G1_G2.zip::UtD_G1/260424160919__laps_010-011.csv",
+        "sha256": "3138ba193190a1bd1a5d8ab1647ad71c7dedf73513c48ecf2925d53eb4dbeae5",
+        "activity_id": "cleaned/only_road_activities/260424160919.fit",
+        "group": "1",
+        "label": "UtD",
+        "duration_seconds": 46.0,
+        "samples": 47,
+        "start_timestamp": "2026-04-24T14:26:47+00:00",
+        "end_timestamp": "2026-04-24T14:27:33+00:00",
+        "first_lap": 10,
+        "last_lap": 11,
+        "signals": [
+          "raw"
+        ],
+        "warnings": [],
+        "source_metadata": {
+          "activity_id": "cleaned/only_road_activities/260424160919.fit",
+          "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260424160919.fit",
+          "first_lap": 10,
+          "last_lap": 11,
+          "csv_file": "UtD_G1/260424160919__laps_010-011.csv",
+          "start_timestamp": "2026-04-24T14:26:47+00:00",
+          "end_timestamp": "2026-04-24T14:27:33+00:00",
+          "empirical_label": "UtD",
+          "duration_group": 1
+        }
+      },
+      {
+        "id": "51bae7ee2dbb8a23d31be5a8",
+        "filename": "dataset_segments_G1_G2.zip::UtD_G1/260424160919__laps_014-015.csv",
+        "sha256": "7bb9d85a28da5ed8a40da441dfe502ec5248a26e29680200a1651d1d6072928d",
+        "activity_id": "cleaned/only_road_activities/260424160919.fit",
+        "group": "1",
+        "label": "UtD",
+        "duration_seconds": 46.0,
+        "samples": 47,
+        "start_timestamp": "2026-04-24T14:28:21+00:00",
+        "end_timestamp": "2026-04-24T14:29:07+00:00",
+        "first_lap": 14,
+        "last_lap": 15,
+        "signals": [
+          "raw"
+        ],
+        "warnings": [],
+        "source_metadata": {
+          "activity_id": "cleaned/only_road_activities/260424160919.fit",
+          "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260424160919.fit",
+          "first_lap": 14,
+          "last_lap": 15,
+          "csv_file": "UtD_G1/260424160919__laps_014-015.csv",
+          "start_timestamp": "2026-04-24T14:28:21+00:00",
+          "end_timestamp": "2026-04-24T14:29:07+00:00",
+          "empirical_label": "UtD",
+          "duration_group": 1
+        }
+      },
+      {
+        "id": "28aabaeddbc46de54319c4e5",
+        "filename": "dataset_segments_G1_G2.zip::UtD_G1/260424160919__laps_022-023.csv",
+        "sha256": "11129446fab56493380ee08b6e4879d286c3b7c617be43aa3f1c2b778ed5d755",
+        "activity_id": "cleaned/only_road_activities/260424160919.fit",
+        "group": "1",
+        "label": "UtD",
+        "duration_seconds": 45.0,
+        "samples": 46,
+        "start_timestamp": "2026-04-24T14:31:27+00:00",
+        "end_timestamp": "2026-04-24T14:32:12+00:00",
+        "first_lap": 22,
+        "last_lap": 23,
+        "signals": [
+          "raw"
+        ],
+        "warnings": [],
+        "source_metadata": {
+          "activity_id": "cleaned/only_road_activities/260424160919.fit",
+          "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260424160919.fit",
+          "first_lap": 22,
+          "last_lap": 23,
+          "csv_file": "UtD_G1/260424160919__laps_022-023.csv",
+          "start_timestamp": "2026-04-24T14:31:27+00:00",
+          "end_timestamp": "2026-04-24T14:32:12+00:00",
+          "empirical_label": "UtD",
+          "duration_group": 1
+        }
+      },
+      {
+        "id": "2792539d5c3bcce12a8ba628",
+        "filename": "dataset_segments_G1_G2.zip::UtD_G1/260424160919__laps_026-027.csv",
+        "sha256": "02316ab179f500bde8700e641c9fd6ad6b7dc179fd27895bf78960bb373274ee",
+        "activity_id": "cleaned/only_road_activities/260424160919.fit",
+        "group": "1",
+        "label": "UtD",
+        "duration_seconds": 45.0,
+        "samples": 46,
+        "start_timestamp": "2026-04-24T14:32:59+00:00",
+        "end_timestamp": "2026-04-24T14:33:44+00:00",
+        "first_lap": 26,
+        "last_lap": 27,
+        "signals": [
+          "raw"
+        ],
+        "warnings": [],
+        "source_metadata": {
+          "activity_id": "cleaned/only_road_activities/260424160919.fit",
+          "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260424160919.fit",
+          "first_lap": 26,
+          "last_lap": 27,
+          "csv_file": "UtD_G1/260424160919__laps_026-027.csv",
+          "start_timestamp": "2026-04-24T14:32:59+00:00",
+          "end_timestamp": "2026-04-24T14:33:44+00:00",
+          "empirical_label": "UtD",
+          "duration_group": 1
+        }
+      },
+      {
+        "id": "76bfabcecd3b38597f4ac401",
+        "filename": "dataset_segments_G1_G2.zip::UtD_G1/260424160919__laps_028-029.csv",
+        "sha256": "3794b939adc9b47a95845ce93ea02bf03309e44d0f00632ddfbbb4b526a38bfb",
+        "activity_id": "cleaned/only_road_activities/260424160919.fit",
+        "group": "1",
+        "label": "UtD",
+        "duration_seconds": 47.0,
+        "samples": 48,
+        "start_timestamp": "2026-04-24T14:33:45+00:00",
+        "end_timestamp": "2026-04-24T14:34:32+00:00",
+        "first_lap": 28,
+        "last_lap": 29,
+        "signals": [
+          "raw"
+        ],
+        "warnings": [],
+        "source_metadata": {
+          "activity_id": "cleaned/only_road_activities/260424160919.fit",
+          "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260424160919.fit",
+          "first_lap": 28,
+          "last_lap": 29,
+          "csv_file": "UtD_G1/260424160919__laps_028-029.csv",
+          "start_timestamp": "2026-04-24T14:33:45+00:00",
+          "end_timestamp": "2026-04-24T14:34:32+00:00",
+          "empirical_label": "UtD",
+          "duration_group": 1
+        }
+      },
+      {
+        "id": "66315c73f6af774675ce5911",
+        "filename": "dataset_segments_G1_G2.zip::UtD_G1/260424160919__laps_035-036.csv",
+        "sha256": "d1cdf307b36f359483e83ca70a94799d617b352f2e038400d9891155fa0c45d1",
+        "activity_id": "cleaned/only_road_activities/260424160919.fit",
+        "group": "1",
+        "label": "UtD",
+        "duration_seconds": 44.0,
+        "samples": 45,
+        "start_timestamp": "2026-04-24T14:39:08+00:00",
+        "end_timestamp": "2026-04-24T14:39:52+00:00",
+        "first_lap": 35,
+        "last_lap": 36,
+        "signals": [
+          "raw"
+        ],
+        "warnings": [],
+        "source_metadata": {
+          "activity_id": "cleaned/only_road_activities/260424160919.fit",
+          "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260424160919.fit",
+          "first_lap": 35,
+          "last_lap": 36,
+          "csv_file": "UtD_G1/260424160919__laps_035-036.csv",
+          "start_timestamp": "2026-04-24T14:39:08+00:00",
+          "end_timestamp": "2026-04-24T14:39:52+00:00",
+          "empirical_label": "UtD",
+          "duration_group": 1
+        }
+      },
+      {
+        "id": "0a1ac3e4f02d355c0d7992ea",
+        "filename": "dataset_segments_G1_G2.zip::UtD_G1/260424160919__laps_062-063.csv",
+        "sha256": "eadc9b8e0a90aed59b77d3be1b751fceb38c3dccc6f0e4acb264dd612bb0cbf3",
+        "activity_id": "cleaned/only_road_activities/260424160919.fit",
+        "group": "1",
+        "label": "UtD",
+        "duration_seconds": 51.0,
+        "samples": 52,
+        "start_timestamp": "2026-04-24T14:53:02+00:00",
+        "end_timestamp": "2026-04-24T14:53:53+00:00",
+        "first_lap": 62,
+        "last_lap": 63,
+        "signals": [
+          "raw"
+        ],
+        "warnings": [],
+        "source_metadata": {
+          "activity_id": "cleaned/only_road_activities/260424160919.fit",
+          "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260424160919.fit",
+          "first_lap": 62,
+          "last_lap": 63,
+          "csv_file": "UtD_G1/260424160919__laps_062-063.csv",
+          "start_timestamp": "2026-04-24T14:53:02+00:00",
+          "end_timestamp": "2026-04-24T14:53:53+00:00",
+          "empirical_label": "UtD",
+          "duration_group": 1
+        }
+      },
+      {
+        "id": "f4a9c8abd5b86bc533ba4e0c",
+        "filename": "dataset_segments_G1_G2.zip::UtD_G1/260424160919__laps_066-067.csv",
+        "sha256": "70712ff0d9e8874212f613b91ddb78e17bdeb109d437f7552456c8ac453260f2",
+        "activity_id": "cleaned/only_road_activities/260424160919.fit",
+        "group": "1",
+        "label": "UtD",
+        "duration_seconds": 48.0,
+        "samples": 49,
+        "start_timestamp": "2026-04-24T14:54:40+00:00",
+        "end_timestamp": "2026-04-24T14:55:28+00:00",
+        "first_lap": 66,
+        "last_lap": 67,
+        "signals": [
+          "raw"
+        ],
+        "warnings": [],
+        "source_metadata": {
+          "activity_id": "cleaned/only_road_activities/260424160919.fit",
+          "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260424160919.fit",
+          "first_lap": 66,
+          "last_lap": 67,
+          "csv_file": "UtD_G1/260424160919__laps_066-067.csv",
+          "start_timestamp": "2026-04-24T14:54:40+00:00",
+          "end_timestamp": "2026-04-24T14:55:28+00:00",
+          "empirical_label": "UtD",
+          "duration_group": 1
+        }
+      },
+      {
+        "id": "30d723fb944bd3ab7ea9b615",
+        "filename": "dataset_segments_G1_G2.zip::UtD_G1/260424160919__laps_068-069.csv",
+        "sha256": "d935b113db03129b5a8bf92f3a8dcedca079d1fcf87582b8f39b5c68e2f99c4e",
+        "activity_id": "cleaned/only_road_activities/260424160919.fit",
+        "group": "1",
+        "label": "UtD",
+        "duration_seconds": 49.0,
+        "samples": 50,
+        "start_timestamp": "2026-04-24T14:55:28+00:00",
+        "end_timestamp": "2026-04-24T14:56:17+00:00",
+        "first_lap": 68,
+        "last_lap": 69,
+        "signals": [
+          "raw"
+        ],
+        "warnings": [],
+        "source_metadata": {
+          "activity_id": "cleaned/only_road_activities/260424160919.fit",
+          "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260424160919.fit",
+          "first_lap": 68,
+          "last_lap": 69,
+          "csv_file": "UtD_G1/260424160919__laps_068-069.csv",
+          "start_timestamp": "2026-04-24T14:55:28+00:00",
+          "end_timestamp": "2026-04-24T14:56:17+00:00",
+          "empirical_label": "UtD",
+          "duration_group": 1
+        }
+      },
+      {
+        "id": "c762be06adcac09c8409a276",
+        "filename": "dataset_segments_G1_G2.zip::UtD_G1/260424160919__laps_070-071.csv",
+        "sha256": "2f471c3df90de9fe3caea220f67f0c8fe7632368849b6193054cfb8be961bbe6",
+        "activity_id": "cleaned/only_road_activities/260424160919.fit",
+        "group": "1",
+        "label": "UtD",
+        "duration_seconds": 49.0,
+        "samples": 50,
+        "start_timestamp": "2026-04-24T14:56:17+00:00",
+        "end_timestamp": "2026-04-24T14:57:06+00:00",
+        "first_lap": 70,
+        "last_lap": 71,
+        "signals": [
+          "raw"
+        ],
+        "warnings": [],
+        "source_metadata": {
+          "activity_id": "cleaned/only_road_activities/260424160919.fit",
+          "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260424160919.fit",
+          "first_lap": 70,
+          "last_lap": 71,
+          "csv_file": "UtD_G1/260424160919__laps_070-071.csv",
+          "start_timestamp": "2026-04-24T14:56:17+00:00",
+          "end_timestamp": "2026-04-24T14:57:06+00:00",
+          "empirical_label": "UtD",
+          "duration_group": 1
+        }
+      },
+      {
+        "id": "30e06bcbd399cb3f59196dcc",
+        "filename": "dataset_segments_G1_G2.zip::UtD_G1/260424160919__laps_074-075.csv",
+        "sha256": "59686b77a9a00e684f37cadc8c9fa38d9e5f82d39f572eb3195605624c0ed36e",
+        "activity_id": "cleaned/only_road_activities/260424160919.fit",
+        "group": "1",
+        "label": "UtD",
+        "duration_seconds": 49.0,
+        "samples": 50,
+        "start_timestamp": "2026-04-24T14:57:55+00:00",
+        "end_timestamp": "2026-04-24T14:58:44+00:00",
+        "first_lap": 74,
+        "last_lap": 75,
+        "signals": [
+          "raw"
+        ],
+        "warnings": [],
+        "source_metadata": {
+          "activity_id": "cleaned/only_road_activities/260424160919.fit",
+          "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260424160919.fit",
+          "first_lap": 74,
+          "last_lap": 75,
+          "csv_file": "UtD_G1/260424160919__laps_074-075.csv",
+          "start_timestamp": "2026-04-24T14:57:55+00:00",
+          "end_timestamp": "2026-04-24T14:58:44+00:00",
+          "empirical_label": "UtD",
+          "duration_group": 1
+        }
+      },
+      {
+        "id": "d8cc9b80bc56c20a87939ada",
+        "filename": "dataset_segments_G1_G2.zip::UtD_G1/260424160919__laps_076-077.csv",
+        "sha256": "cab204213c00e528dfa5d775025b614ceac33902594aaa4874887391d5b509ab",
+        "activity_id": "cleaned/only_road_activities/260424160919.fit",
+        "group": "1",
+        "label": "UtD",
+        "duration_seconds": 49.0,
+        "samples": 50,
+        "start_timestamp": "2026-04-24T14:58:43+00:00",
+        "end_timestamp": "2026-04-24T14:59:32+00:00",
+        "first_lap": 76,
+        "last_lap": 77,
+        "signals": [
+          "raw"
+        ],
+        "warnings": [],
+        "source_metadata": {
+          "activity_id": "cleaned/only_road_activities/260424160919.fit",
+          "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260424160919.fit",
+          "first_lap": 76,
+          "last_lap": 77,
+          "csv_file": "UtD_G1/260424160919__laps_076-077.csv",
+          "start_timestamp": "2026-04-24T14:58:43+00:00",
+          "end_timestamp": "2026-04-24T14:59:32+00:00",
+          "empirical_label": "UtD",
+          "duration_group": 1
+        }
+      },
+      {
+        "id": "1c7a975eaa1b9b7e685b287e",
+        "filename": "dataset_segments_G1_G2.zip::UtD_G1/260424160919__laps_084-085.csv",
+        "sha256": "7acd2cef352a5426aa5100923f126d3a41ec69ab85d6ff7f9e57e61206552cbd",
+        "activity_id": "cleaned/only_road_activities/260424160919.fit",
+        "group": "1",
+        "label": "UtD",
+        "duration_seconds": 47.0,
+        "samples": 48,
+        "start_timestamp": "2026-04-24T15:01:57+00:00",
+        "end_timestamp": "2026-04-24T15:02:44+00:00",
+        "first_lap": 84,
+        "last_lap": 85,
+        "signals": [
+          "raw"
+        ],
+        "warnings": [],
+        "source_metadata": {
+          "activity_id": "cleaned/only_road_activities/260424160919.fit",
+          "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260424160919.fit",
+          "first_lap": 84,
+          "last_lap": 85,
+          "csv_file": "UtD_G1/260424160919__laps_084-085.csv",
+          "start_timestamp": "2026-04-24T15:01:57+00:00",
+          "end_timestamp": "2026-04-24T15:02:44+00:00",
+          "empirical_label": "UtD",
+          "duration_group": 1
+        }
+      },
+      {
+        "id": "5abf5e9550ce48a903709d69",
+        "filename": "dataset_segments_G1_G2.zip::UtD_G1/260424160919__laps_086-087.csv",
+        "sha256": "18d3793150ebd76226d46377121b653ee740e5556e2b3356fd8565f9ef3c995c",
+        "activity_id": "cleaned/only_road_activities/260424160919.fit",
+        "group": "1",
+        "label": "UtD",
+        "duration_seconds": 82.0,
+        "samples": 83,
+        "start_timestamp": "2026-04-24T15:02:43+00:00",
+        "end_timestamp": "2026-04-24T15:04:05+00:00",
+        "first_lap": 86,
+        "last_lap": 87,
+        "signals": [
+          "raw"
+        ],
+        "warnings": [],
+        "source_metadata": {
+          "activity_id": "cleaned/only_road_activities/260424160919.fit",
+          "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260424160919.fit",
+          "first_lap": 86,
+          "last_lap": 87,
+          "csv_file": "UtD_G1/260424160919__laps_086-087.csv",
+          "start_timestamp": "2026-04-24T15:02:43+00:00",
+          "end_timestamp": "2026-04-24T15:04:05+00:00",
+          "empirical_label": "UtD",
+          "duration_group": 1
+        }
+      },
+      {
+        "id": "77fda405e42ff1d9c68ce60e",
+        "filename": "dataset_segments_G1_G2.zip::UtD_G1/260427170343__laps_006-007.csv",
+        "sha256": "888a0c66510ea83d151c6b9c49e0fc5f67117a9e85b660526a4c303e909ac226",
+        "activity_id": "cleaned/only_road_activities/260427170343.fit",
+        "group": "1",
+        "label": "UtD",
+        "duration_seconds": 48.0,
+        "samples": 49,
+        "start_timestamp": "2026-04-27T15:18:40+00:00",
+        "end_timestamp": "2026-04-27T15:19:28+00:00",
+        "first_lap": 6,
+        "last_lap": 7,
+        "signals": [
+          "raw"
+        ],
+        "warnings": [],
+        "source_metadata": {
+          "activity_id": "cleaned/only_road_activities/260427170343.fit",
+          "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260427170343.fit",
+          "first_lap": 6,
+          "last_lap": 7,
+          "csv_file": "UtD_G1/260427170343__laps_006-007.csv",
+          "start_timestamp": "2026-04-27T15:18:40+00:00",
+          "end_timestamp": "2026-04-27T15:19:28+00:00",
+          "empirical_label": "UtD",
+          "duration_group": 1
+        }
+      },
+      {
+        "id": "d40fcbb856adf0840e51a68b",
+        "filename": "dataset_segments_G1_G2.zip::UtD_G1/260427170343__laps_008-009.csv",
+        "sha256": "2743e663a20357e99e80a2f9531f41b947a353257a1c8c86b6e4e367f5d5294d",
+        "activity_id": "cleaned/only_road_activities/260427170343.fit",
+        "group": "1",
+        "label": "UtD",
+        "duration_seconds": 54.0,
+        "samples": 55,
+        "start_timestamp": "2026-04-27T15:19:27+00:00",
+        "end_timestamp": "2026-04-27T15:20:21+00:00",
+        "first_lap": 8,
+        "last_lap": 9,
+        "signals": [
+          "raw"
+        ],
+        "warnings": [],
+        "source_metadata": {
+          "activity_id": "cleaned/only_road_activities/260427170343.fit",
+          "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260427170343.fit",
+          "first_lap": 8,
+          "last_lap": 9,
+          "csv_file": "UtD_G1/260427170343__laps_008-009.csv",
+          "start_timestamp": "2026-04-27T15:19:27+00:00",
+          "end_timestamp": "2026-04-27T15:20:21+00:00",
+          "empirical_label": "UtD",
+          "duration_group": 1
+        }
+      },
+      {
+        "id": "dded52dd3df05f5ebb34febe",
+        "filename": "dataset_segments_G1_G2.zip::UtD_G1/260427170343__laps_010-011.csv",
+        "sha256": "c35f48c6584da911a090cb70d68eaadb2105081eb354623b9eaa8eb30689bd77",
+        "activity_id": "cleaned/only_road_activities/260427170343.fit",
+        "group": "1",
+        "label": "UtD",
+        "duration_seconds": 44.0,
+        "samples": 45,
+        "start_timestamp": "2026-04-27T15:20:21+00:00",
+        "end_timestamp": "2026-04-27T15:21:05+00:00",
+        "first_lap": 10,
+        "last_lap": 11,
+        "signals": [
+          "raw"
+        ],
+        "warnings": [],
+        "source_metadata": {
+          "activity_id": "cleaned/only_road_activities/260427170343.fit",
+          "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260427170343.fit",
+          "first_lap": 10,
+          "last_lap": 11,
+          "csv_file": "UtD_G1/260427170343__laps_010-011.csv",
+          "start_timestamp": "2026-04-27T15:20:21+00:00",
+          "end_timestamp": "2026-04-27T15:21:05+00:00",
+          "empirical_label": "UtD",
+          "duration_group": 1
+        }
+      },
+      {
+        "id": "58282e69d0a260bcad97036e",
+        "filename": "dataset_segments_G1_G2.zip::UtD_G1/260427170343__laps_016-017.csv",
+        "sha256": "765f7bac4d7f475e738b1287f073f2094fca88183ade5b012041f2ea7fcdf985",
+        "activity_id": "cleaned/only_road_activities/260427170343.fit",
+        "group": "1",
+        "label": "UtD",
+        "duration_seconds": 46.0,
+        "samples": 47,
+        "start_timestamp": "2026-04-27T15:22:43+00:00",
+        "end_timestamp": "2026-04-27T15:23:29+00:00",
+        "first_lap": 16,
+        "last_lap": 17,
+        "signals": [
+          "raw"
+        ],
+        "warnings": [],
+        "source_metadata": {
+          "activity_id": "cleaned/only_road_activities/260427170343.fit",
+          "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260427170343.fit",
+          "first_lap": 16,
+          "last_lap": 17,
+          "csv_file": "UtD_G1/260427170343__laps_016-017.csv",
+          "start_timestamp": "2026-04-27T15:22:43+00:00",
+          "end_timestamp": "2026-04-27T15:23:29+00:00",
+          "empirical_label": "UtD",
+          "duration_group": 1
+        }
+      },
+      {
+        "id": "31d957bbbf5eec000925500e",
+        "filename": "dataset_segments_G1_G2.zip::UtD_G1/260427170343__laps_018-019.csv",
+        "sha256": "d350ac4f11613cffeee0d87cb042e5373b5961849e15ac0d119bb27881dccbfe",
+        "activity_id": "cleaned/only_road_activities/260427170343.fit",
+        "group": "1",
+        "label": "UtD",
+        "duration_seconds": 47.0,
+        "samples": 48,
+        "start_timestamp": "2026-04-27T15:23:29+00:00",
+        "end_timestamp": "2026-04-27T15:24:16+00:00",
+        "first_lap": 18,
+        "last_lap": 19,
+        "signals": [
+          "raw"
+        ],
+        "warnings": [],
+        "source_metadata": {
+          "activity_id": "cleaned/only_road_activities/260427170343.fit",
+          "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260427170343.fit",
+          "first_lap": 18,
+          "last_lap": 19,
+          "csv_file": "UtD_G1/260427170343__laps_018-019.csv",
+          "start_timestamp": "2026-04-27T15:23:29+00:00",
+          "end_timestamp": "2026-04-27T15:24:16+00:00",
+          "empirical_label": "UtD",
+          "duration_group": 1
+        }
+      },
+      {
+        "id": "894afbe780f8a2523ecb6abe",
+        "filename": "dataset_segments_G1_G2.zip::UtD_G1/260427170343__laps_020-021.csv",
+        "sha256": "8a606eec9e0c6f93d97c02d438bc154a0509c867b229e92cc38b406eff5a8fa9",
+        "activity_id": "cleaned/only_road_activities/260427170343.fit",
+        "group": "1",
+        "label": "UtD",
+        "duration_seconds": 50.0,
+        "samples": 51,
+        "start_timestamp": "2026-04-27T15:24:16+00:00",
+        "end_timestamp": "2026-04-27T15:25:06+00:00",
+        "first_lap": 20,
+        "last_lap": 21,
+        "signals": [
+          "raw"
+        ],
+        "warnings": [],
+        "source_metadata": {
+          "activity_id": "cleaned/only_road_activities/260427170343.fit",
+          "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260427170343.fit",
+          "first_lap": 20,
+          "last_lap": 21,
+          "csv_file": "UtD_G1/260427170343__laps_020-021.csv",
+          "start_timestamp": "2026-04-27T15:24:16+00:00",
+          "end_timestamp": "2026-04-27T15:25:06+00:00",
+          "empirical_label": "UtD",
+          "duration_group": 1
+        }
+      },
+      {
+        "id": "e211fd67f9200574395f2df9",
+        "filename": "dataset_segments_G1_G2.zip::UtD_G1/260427170343__laps_022-023.csv",
+        "sha256": "fd096680cbd28a59a00ec159fb2229ae69199f9ac3790abf9cb651af42397434",
+        "activity_id": "cleaned/only_road_activities/260427170343.fit",
+        "group": "1",
+        "label": "UtD",
+        "duration_seconds": 54.0,
+        "samples": 55,
+        "start_timestamp": "2026-04-27T15:25:06+00:00",
+        "end_timestamp": "2026-04-27T15:26:00+00:00",
+        "first_lap": 22,
+        "last_lap": 23,
+        "signals": [
+          "raw"
+        ],
+        "warnings": [],
+        "source_metadata": {
+          "activity_id": "cleaned/only_road_activities/260427170343.fit",
+          "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260427170343.fit",
+          "first_lap": 22,
+          "last_lap": 23,
+          "csv_file": "UtD_G1/260427170343__laps_022-023.csv",
+          "start_timestamp": "2026-04-27T15:25:06+00:00",
+          "end_timestamp": "2026-04-27T15:26:00+00:00",
+          "empirical_label": "UtD",
+          "duration_group": 1
+        }
+      },
+      {
+        "id": "fcb98e78ec992818e7ca14c1",
+        "filename": "dataset_segments_G1_G2.zip::UtD_G1/260427170343__laps_028-029.csv",
+        "sha256": "f2c28beb9adeb233b0211feb1914c089f5a3c00fa3fc62bc94b9944398e45800",
+        "activity_id": "cleaned/only_road_activities/260427170343.fit",
+        "group": "1",
+        "label": "UtD",
+        "duration_seconds": 53.0,
+        "samples": 54,
+        "start_timestamp": "2026-04-27T15:27:33+00:00",
+        "end_timestamp": "2026-04-27T15:28:26+00:00",
+        "first_lap": 28,
+        "last_lap": 29,
+        "signals": [
+          "raw"
+        ],
+        "warnings": [],
+        "source_metadata": {
+          "activity_id": "cleaned/only_road_activities/260427170343.fit",
+          "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260427170343.fit",
+          "first_lap": 28,
+          "last_lap": 29,
+          "csv_file": "UtD_G1/260427170343__laps_028-029.csv",
+          "start_timestamp": "2026-04-27T15:27:33+00:00",
+          "end_timestamp": "2026-04-27T15:28:26+00:00",
+          "empirical_label": "UtD",
+          "duration_group": 1
+        }
+      },
+      {
+        "id": "d519fb9f314680bb34060fc3",
+        "filename": "dataset_segments_G1_G2.zip::UtD_G1/260427170343__laps_035-036.csv",
+        "sha256": "43ec150a5e3d92c89976a95e545e7fe74732adfd70da10ef4e6a2fc563443661",
+        "activity_id": "cleaned/only_road_activities/260427170343.fit",
+        "group": "1",
+        "label": "UtD",
+        "duration_seconds": 51.0,
+        "samples": 52,
+        "start_timestamp": "2026-04-27T15:34:44+00:00",
+        "end_timestamp": "2026-04-27T15:35:35+00:00",
+        "first_lap": 35,
+        "last_lap": 36,
+        "signals": [
+          "raw"
+        ],
+        "warnings": [],
+        "source_metadata": {
+          "activity_id": "cleaned/only_road_activities/260427170343.fit",
+          "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260427170343.fit",
+          "first_lap": 35,
+          "last_lap": 36,
+          "csv_file": "UtD_G1/260427170343__laps_035-036.csv",
+          "start_timestamp": "2026-04-27T15:34:44+00:00",
+          "end_timestamp": "2026-04-27T15:35:35+00:00",
+          "empirical_label": "UtD",
+          "duration_group": 1
+        }
+      },
+      {
+        "id": "f51fd5b6dfbf0356a12e453b",
+        "filename": "dataset_segments_G1_G2.zip::UtD_G1/260427170343__laps_039-040.csv",
+        "sha256": "747feb5b6a3691605be20d1a34ed90a353b03e8ea9678e85159545b66fe49c1f",
+        "activity_id": "cleaned/only_road_activities/260427170343.fit",
+        "group": "1",
+        "label": "UtD",
+        "duration_seconds": 50.0,
+        "samples": 51,
+        "start_timestamp": "2026-04-27T15:36:21+00:00",
+        "end_timestamp": "2026-04-27T15:37:11+00:00",
+        "first_lap": 39,
+        "last_lap": 40,
+        "signals": [
+          "raw"
+        ],
+        "warnings": [],
+        "source_metadata": {
+          "activity_id": "cleaned/only_road_activities/260427170343.fit",
+          "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260427170343.fit",
+          "first_lap": 39,
+          "last_lap": 40,
+          "csv_file": "UtD_G1/260427170343__laps_039-040.csv",
+          "start_timestamp": "2026-04-27T15:36:21+00:00",
+          "end_timestamp": "2026-04-27T15:37:11+00:00",
+          "empirical_label": "UtD",
+          "duration_group": 1
+        }
+      },
+      {
+        "id": "7ec604baa2dfe9266d8441d6",
+        "filename": "dataset_segments_G1_G2.zip::UtD_G1/260427170343__laps_041-042.csv",
+        "sha256": "d99de668307c69d7f687f260c5ab9f858f802e802c81d3afd4b02ec9e59fde92",
+        "activity_id": "cleaned/only_road_activities/260427170343.fit",
+        "group": "1",
+        "label": "UtD",
+        "duration_seconds": 48.0,
+        "samples": 49,
+        "start_timestamp": "2026-04-27T15:37:11+00:00",
+        "end_timestamp": "2026-04-27T15:37:59+00:00",
+        "first_lap": 41,
+        "last_lap": 42,
+        "signals": [
+          "raw"
+        ],
+        "warnings": [],
+        "source_metadata": {
+          "activity_id": "cleaned/only_road_activities/260427170343.fit",
+          "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260427170343.fit",
+          "first_lap": 41,
+          "last_lap": 42,
+          "csv_file": "UtD_G1/260427170343__laps_041-042.csv",
+          "start_timestamp": "2026-04-27T15:37:11+00:00",
+          "end_timestamp": "2026-04-27T15:37:59+00:00",
+          "empirical_label": "UtD",
+          "duration_group": 1
+        }
+      },
+      {
+        "id": "0432d47975dda0612677d17f",
+        "filename": "dataset_segments_G1_G2.zip::UtD_G1/260427170343__laps_043-044.csv",
+        "sha256": "5763facb9c1aae7fd2d2f24a0021971da0528dbf1e2c0ebd85cf30c013019d1b",
+        "activity_id": "cleaned/only_road_activities/260427170343.fit",
+        "group": "1",
+        "label": "UtD",
+        "duration_seconds": 69.0,
+        "samples": 70,
+        "start_timestamp": "2026-04-27T15:37:58+00:00",
+        "end_timestamp": "2026-04-27T15:39:07+00:00",
+        "first_lap": 43,
+        "last_lap": 44,
+        "signals": [
+          "raw"
+        ],
+        "warnings": [],
+        "source_metadata": {
+          "activity_id": "cleaned/only_road_activities/260427170343.fit",
+          "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260427170343.fit",
+          "first_lap": 43,
+          "last_lap": 44,
+          "csv_file": "UtD_G1/260427170343__laps_043-044.csv",
+          "start_timestamp": "2026-04-27T15:37:58+00:00",
+          "end_timestamp": "2026-04-27T15:39:07+00:00",
+          "empirical_label": "UtD",
+          "duration_group": 1
+        }
+      },
+      {
+        "id": "3e61ab3f1c623d56c57337ec",
+        "filename": "dataset_segments_G1_G2.zip::UtD_G1/260427170343__laps_047-048.csv",
+        "sha256": "0c92a06e4d9857f3206065cd56e401bd3130c3f91e4ca339ce793da5d5dc6043",
+        "activity_id": "cleaned/only_road_activities/260427170343.fit",
+        "group": "1",
+        "label": "UtD",
+        "duration_seconds": 48.0,
+        "samples": 49,
+        "start_timestamp": "2026-04-27T15:39:55+00:00",
+        "end_timestamp": "2026-04-27T15:40:43+00:00",
+        "first_lap": 47,
+        "last_lap": 48,
+        "signals": [
+          "raw"
+        ],
+        "warnings": [],
+        "source_metadata": {
+          "activity_id": "cleaned/only_road_activities/260427170343.fit",
+          "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260427170343.fit",
+          "first_lap": 47,
+          "last_lap": 48,
+          "csv_file": "UtD_G1/260427170343__laps_047-048.csv",
+          "start_timestamp": "2026-04-27T15:39:55+00:00",
+          "end_timestamp": "2026-04-27T15:40:43+00:00",
+          "empirical_label": "UtD",
+          "duration_group": 1
+        }
+      },
+      {
+        "id": "fbc387dd16cbb5f9f076d6a5",
+        "filename": "dataset_segments_G1_G2.zip::UtD_G1/260427170343__laps_051-052.csv",
+        "sha256": "f236436eeddca71bcfcd6b252053eeb9ae0f69c626f1d190bdffa2f89a2dd1e4",
+        "activity_id": "cleaned/only_road_activities/260427170343.fit",
+        "group": "1",
+        "label": "UtD",
+        "duration_seconds": 49.0,
+        "samples": 50,
+        "start_timestamp": "2026-04-27T15:41:30+00:00",
+        "end_timestamp": "2026-04-27T15:42:19+00:00",
+        "first_lap": 51,
+        "last_lap": 52,
+        "signals": [
+          "raw"
+        ],
+        "warnings": [],
+        "source_metadata": {
+          "activity_id": "cleaned/only_road_activities/260427170343.fit",
+          "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260427170343.fit",
+          "first_lap": 51,
+          "last_lap": 52,
+          "csv_file": "UtD_G1/260427170343__laps_051-052.csv",
+          "start_timestamp": "2026-04-27T15:41:30+00:00",
+          "end_timestamp": "2026-04-27T15:42:19+00:00",
+          "empirical_label": "UtD",
+          "duration_group": 1
+        }
+      },
+      {
+        "id": "7dfd1edd15cd7ea1a006635a",
+        "filename": "dataset_segments_G1_G2.zip::UtD_G1/260427170343__laps_055-056.csv",
+        "sha256": "7b71f4e6ab3b95d3c4e100f1931dc86996260ff9e42af930c8353bca7841e693",
+        "activity_id": "cleaned/only_road_activities/260427170343.fit",
+        "group": "1",
+        "label": "UtD",
+        "duration_seconds": 47.0,
+        "samples": 48,
+        "start_timestamp": "2026-04-27T15:43:05+00:00",
+        "end_timestamp": "2026-04-27T15:43:52+00:00",
+        "first_lap": 55,
+        "last_lap": 56,
+        "signals": [
+          "raw"
+        ],
+        "warnings": [],
+        "source_metadata": {
+          "activity_id": "cleaned/only_road_activities/260427170343.fit",
+          "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260427170343.fit",
+          "first_lap": 55,
+          "last_lap": 56,
+          "csv_file": "UtD_G1/260427170343__laps_055-056.csv",
+          "start_timestamp": "2026-04-27T15:43:05+00:00",
+          "end_timestamp": "2026-04-27T15:43:52+00:00",
+          "empirical_label": "UtD",
+          "duration_group": 1
+        }
+      },
+      {
+        "id": "c5f7de0914e579ce9610802b",
+        "filename": "dataset_segments_G1_G2.zip::UtD_G1/260427170343__laps_058-059.csv",
+        "sha256": "15a0e807dec5d079692bbe890615ffacefae24c4964b52115b7590488212ddeb",
+        "activity_id": "cleaned/only_road_activities/260427170343.fit",
+        "group": "1",
+        "label": "UtD",
+        "duration_seconds": 58.0,
+        "samples": 59,
+        "start_timestamp": "2026-04-27T15:46:51+00:00",
+        "end_timestamp": "2026-04-27T15:47:49+00:00",
+        "first_lap": 58,
+        "last_lap": 59,
+        "signals": [
+          "raw"
+        ],
+        "warnings": [],
+        "source_metadata": {
+          "activity_id": "cleaned/only_road_activities/260427170343.fit",
+          "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260427170343.fit",
+          "first_lap": 58,
+          "last_lap": 59,
+          "csv_file": "UtD_G1/260427170343__laps_058-059.csv",
+          "start_timestamp": "2026-04-27T15:46:51+00:00",
+          "end_timestamp": "2026-04-27T15:47:49+00:00",
+          "empirical_label": "UtD",
+          "duration_group": 1
+        }
+      },
+      {
+        "id": "61f330ab349abfe8a894d146",
+        "filename": "dataset_segments_G1_G2.zip::UtD_G1/260427170343__laps_064-065.csv",
+        "sha256": "5b5ba6dbdb20a38e521ee4d772f092fed0b7aab88425fcee832969d1271ba8de",
+        "activity_id": "cleaned/only_road_activities/260427170343.fit",
+        "group": "1",
+        "label": "UtD",
+        "duration_seconds": 51.0,
+        "samples": 52,
+        "start_timestamp": "2026-04-27T15:49:22+00:00",
+        "end_timestamp": "2026-04-27T15:50:13+00:00",
+        "first_lap": 64,
+        "last_lap": 65,
+        "signals": [
+          "raw"
+        ],
+        "warnings": [],
+        "source_metadata": {
+          "activity_id": "cleaned/only_road_activities/260427170343.fit",
+          "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260427170343.fit",
+          "first_lap": 64,
+          "last_lap": 65,
+          "csv_file": "UtD_G1/260427170343__laps_064-065.csv",
+          "start_timestamp": "2026-04-27T15:49:22+00:00",
+          "end_timestamp": "2026-04-27T15:50:13+00:00",
+          "empirical_label": "UtD",
+          "duration_group": 1
+        }
+      },
+      {
+        "id": "5fd555432da917fc86e819ca",
+        "filename": "dataset_segments_G1_G2.zip::UtD_G1/260427170343__laps_072-073.csv",
+        "sha256": "b2a1d81e5dbbe1aeca3dd2afd9fecf5172e979823f56f6431d15583f6cd4a8f6",
+        "activity_id": "cleaned/only_road_activities/260427170343.fit",
+        "group": "1",
+        "label": "UtD",
+        "duration_seconds": 100.0,
+        "samples": 90,
+        "start_timestamp": "2026-04-27T15:52:39+00:00",
+        "end_timestamp": "2026-04-27T15:54:19+00:00",
+        "first_lap": 72,
+        "last_lap": 73,
+        "signals": [
+          "raw"
+        ],
+        "warnings": [],
+        "source_metadata": {
+          "activity_id": "cleaned/only_road_activities/260427170343.fit",
+          "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260427170343.fit",
+          "first_lap": 72,
+          "last_lap": 73,
+          "csv_file": "UtD_G1/260427170343__laps_072-073.csv",
+          "start_timestamp": "2026-04-27T15:52:39+00:00",
+          "end_timestamp": "2026-04-27T15:54:19+00:00",
+          "empirical_label": "UtD",
+          "duration_group": 1
+        }
+      },
+      {
+        "id": "60dc58f096e449de09ad4c29",
+        "filename": "dataset_segments_G1_G2.zip::UtD_G1/260427170343__laps_089-090.csv",
+        "sha256": "9eb2073fa016bc3ed4f62f786fa0ad4a6cdcdf0bcd18c95aadb53025553de71b",
+        "activity_id": "cleaned/only_road_activities/260427170343.fit",
+        "group": "1",
+        "label": "UtD",
+        "duration_seconds": 68.0,
+        "samples": 69,
+        "start_timestamp": "2026-04-27T16:01:09+00:00",
+        "end_timestamp": "2026-04-27T16:02:17+00:00",
+        "first_lap": 89,
+        "last_lap": 90,
+        "signals": [
+          "raw"
+        ],
+        "warnings": [],
+        "source_metadata": {
+          "activity_id": "cleaned/only_road_activities/260427170343.fit",
+          "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260427170343.fit",
+          "first_lap": 89,
+          "last_lap": 90,
+          "csv_file": "UtD_G1/260427170343__laps_089-090.csv",
+          "start_timestamp": "2026-04-27T16:01:09+00:00",
+          "end_timestamp": "2026-04-27T16:02:17+00:00",
+          "empirical_label": "UtD",
+          "duration_group": 1
+        }
+      },
+      {
+        "id": "e921de16ed0a69aad9e613e7",
+        "filename": "dataset_segments_G1_G2.zip::UtD_G1/260501094312__laps_016-017.csv",
+        "sha256": "bcab08e4e5acfadf3b1ed33a09c05354c86f9b90fc7439757c24eaf33fb2aeb4",
+        "activity_id": "cleaned/only_road_activities/260501094312.fit",
+        "group": "1",
+        "label": "UtD",
+        "duration_seconds": 86.0,
+        "samples": 87,
+        "start_timestamp": "2026-05-01T08:36:03+00:00",
+        "end_timestamp": "2026-05-01T08:37:29+00:00",
+        "first_lap": 16,
+        "last_lap": 17,
+        "signals": [
+          "raw"
+        ],
+        "warnings": [],
+        "source_metadata": {
+          "activity_id": "cleaned/only_road_activities/260501094312.fit",
+          "source_path": "C:\\Users\\corra\\dev\\Data\\fit_raw_road_at_19_09_26\\260501094312.fit",
+          "first_lap": 16,
+          "last_lap": 17,
+          "csv_file": "UtD_G1/260501094312__laps_016-017.csv",
+          "start_timestamp": "2026-05-01T08:36:03+00:00",
+          "end_timestamp": "2026-05-01T08:37:29+00:00",
+          "empirical_label": "UtD",
+          "duration_group": 1
+        }
+      }
+    ],
+    "stats": {
+      "count": 56,
+      "duration_mean": 56.732142857142854,
+      "duration_sd": 12.023448410847518
+    },
+    "filters": {
+      "parent_dataset_id": "af5d467b6dad473190da3f8222442359",
+      "groups": [
+        "1"
+      ],
+      "labels": [
+        "UtD"
+      ]
+    },
+    "split": {
+      "id": "5e7d42886fbd49d38a911b003a96acf0",
+      "unit": "activity",
+      "seed": 42,
+      "percentages": [
+        70.0,
+        10.0,
+        20.0
+      ],
+      "algorithm": "sorted groups; numpy PCG64 shuffle; largest remainder on group counts v1",
+      "assignments": {
+        "train": [
+          "b9fa287bb1c45cc14b7d0305",
+          "301ca304954b94d24d3028c1",
+          "27392b64bfefe0f1c44c5c40",
+          "b4f68fe02d640f0521cf8013",
+          "3eeaafe7dbea9da718f1c67a",
+          "af60cd71712b0f50d535ae24",
+          "3ede49e966c35e8699f8108d",
+          "b2ec6405ffe5a44c560b3c57",
+          "b46e28750587e4ed8e1d1171",
+          "8b23fd95d4771e4802050d49",
+          "bfd3899e037bd0f014bfa589",
+          "e921de16ed0a69aad9e613e7",
+          "0740f71b8bc225fe09d4da56",
+          "19e001cb8986f779b5a7a3ea",
+          "51bae7ee2dbb8a23d31be5a8",
+          "28aabaeddbc46de54319c4e5",
+          "2792539d5c3bcce12a8ba628",
+          "76bfabcecd3b38597f4ac401",
+          "66315c73f6af774675ce5911",
+          "0a1ac3e4f02d355c0d7992ea",
+          "f4a9c8abd5b86bc533ba4e0c",
+          "30d723fb944bd3ab7ea9b615",
+          "c762be06adcac09c8409a276",
+          "30e06bcbd399cb3f59196dcc",
+          "d8cc9b80bc56c20a87939ada",
+          "1c7a975eaa1b9b7e685b287e",
+          "5abf5e9550ce48a903709d69",
+          "0e3a9cba9997e3916f669e91",
+          "179080a78614b252b95ad22a",
+          "bc317e16d25d9597d28527e6",
+          "5c5b733bc86530e6f9096b1a",
+          "b86074ef6406f07a17a16510",
+          "ad4396643f0227ce0bea97ac",
+          "3e22715c5aef1590a48f1073"
+        ],
+        "val": [
+          "77fda405e42ff1d9c68ce60e",
+          "d40fcbb856adf0840e51a68b",
+          "dded52dd3df05f5ebb34febe",
+          "58282e69d0a260bcad97036e",
+          "31d957bbbf5eec000925500e",
+          "894afbe780f8a2523ecb6abe",
+          "e211fd67f9200574395f2df9",
+          "fcb98e78ec992818e7ca14c1",
+          "d519fb9f314680bb34060fc3",
+          "f51fd5b6dfbf0356a12e453b",
+          "7ec604baa2dfe9266d8441d6",
+          "0432d47975dda0612677d17f",
+          "3e61ab3f1c623d56c57337ec",
+          "fbc387dd16cbb5f9f076d6a5",
+          "7dfd1edd15cd7ea1a006635a",
+          "c5f7de0914e579ce9610802b",
+          "61f330ab349abfe8a894d146",
+          "5fd555432da917fc86e819ca",
+          "60dc58f096e449de09ad4c29"
+        ],
+        "test": [
+          "758b1b0c5fc1a12311aa8767",
+          "44a31788dea899da4237d4fc",
+          "70c96bf7f8a8e48c90533433"
+        ]
+      },
+      "group_counts": [
+        5,
+        1,
+        1
+      ],
+      "actual_percentages": [
+        60.714285714285715,
+        33.92857142857143,
+        5.357142857142857
+      ],
+      "warnings": []
+    }
+  },
+  "split": {
+    "id": "5e7d42886fbd49d38a911b003a96acf0",
+    "unit": "activity",
+    "seed": 42,
+    "percentages": [
+      70.0,
+      10.0,
+      20.0
+    ],
+    "algorithm": "sorted groups; numpy PCG64 shuffle; largest remainder on group counts v1",
+    "assignments": {
+      "train": [
+        "b9fa287bb1c45cc14b7d0305",
+        "301ca304954b94d24d3028c1",
+        "27392b64bfefe0f1c44c5c40",
+        "b4f68fe02d640f0521cf8013",
+        "3eeaafe7dbea9da718f1c67a",
+        "af60cd71712b0f50d535ae24",
+        "3ede49e966c35e8699f8108d",
+        "b2ec6405ffe5a44c560b3c57",
+        "b46e28750587e4ed8e1d1171",
+        "8b23fd95d4771e4802050d49",
+        "bfd3899e037bd0f014bfa589",
+        "e921de16ed0a69aad9e613e7",
+        "0740f71b8bc225fe09d4da56",
+        "19e001cb8986f779b5a7a3ea",
+        "51bae7ee2dbb8a23d31be5a8",
+        "28aabaeddbc46de54319c4e5",
+        "2792539d5c3bcce12a8ba628",
+        "76bfabcecd3b38597f4ac401",
+        "66315c73f6af774675ce5911",
+        "0a1ac3e4f02d355c0d7992ea",
+        "f4a9c8abd5b86bc533ba4e0c",
+        "30d723fb944bd3ab7ea9b615",
+        "c762be06adcac09c8409a276",
+        "30e06bcbd399cb3f59196dcc",
+        "d8cc9b80bc56c20a87939ada",
+        "1c7a975eaa1b9b7e685b287e",
+        "5abf5e9550ce48a903709d69",
+        "0e3a9cba9997e3916f669e91",
+        "179080a78614b252b95ad22a",
+        "bc317e16d25d9597d28527e6",
+        "5c5b733bc86530e6f9096b1a",
+        "b86074ef6406f07a17a16510",
+        "ad4396643f0227ce0bea97ac",
+        "3e22715c5aef1590a48f1073"
+      ],
+      "val": [
+        "77fda405e42ff1d9c68ce60e",
+        "d40fcbb856adf0840e51a68b",
+        "dded52dd3df05f5ebb34febe",
+        "58282e69d0a260bcad97036e",
+        "31d957bbbf5eec000925500e",
+        "894afbe780f8a2523ecb6abe",
+        "e211fd67f9200574395f2df9",
+        "fcb98e78ec992818e7ca14c1",
+        "d519fb9f314680bb34060fc3",
+        "f51fd5b6dfbf0356a12e453b",
+        "7ec604baa2dfe9266d8441d6",
+        "0432d47975dda0612677d17f",
+        "3e61ab3f1c623d56c57337ec",
+        "fbc387dd16cbb5f9f076d6a5",
+        "7dfd1edd15cd7ea1a006635a",
+        "c5f7de0914e579ce9610802b",
+        "61f330ab349abfe8a894d146",
+        "5fd555432da917fc86e819ca",
+        "60dc58f096e449de09ad4c29"
+      ],
+      "test": [
+        "758b1b0c5fc1a12311aa8767",
+        "44a31788dea899da4237d4fc",
+        "70c96bf7f8a8e48c90533433"
+      ]
+    },
+    "group_counts": [
+      5,
+      1,
+      1
+    ],
+    "actual_percentages": [
+      60.714285714285715,
+      33.92857142857143,
+      5.357142857142857
+    ],
+    "warnings": []
+  },
+  "model": {
+    "id": "p1d",
+    "version": "1.0.0",
+    "name": "P1D · primo ordine + ritardo",
+    "parameters": [
+      {
+        "key": "K",
+        "unit": "bpm/W"
+      },
+      {
+        "key": "L",
+        "unit": "s"
+      },
+      {
+        "key": "tau",
+        "unit": "s"
+      }
+    ],
+    "equation": "tau dx/dt + x = K (P(t-L)-P0); HRhat = HR0+x",
+    "source": "P1D richiesto nel protocollo utente; nessuna replica bibliografica rivendicata",
+    "initial_conditions": "P0=P(0), HR0=HR(0), x(0)=0; P(t<0)=P0; equilibrio iniziale assunto",
+    "input_reconstruction": "zero-order hold, integrazione esatta; ritardo continuo in secondi",
+    "uncertainty": "SSE/(N-3) inv(J.T J); CI95 Wald non troncati; condizionati a P0 e HR0",
+    "residual_conventions": "e=HR-HRhat; SD ddof=1; ACF1=sum(centered[1:]*centered[:-1])/sum(centered**2); lag in campioni",
+    "multistart_conventions": "PCG64 seed; primo start [0.3,5,45] clipped; altri log-uniformi K/tau e uniformi L nei bounds; selezione SSE minimo"
+  },
+  "signal": "raw",
+  "columns": [
+    "power_w",
+    "heart_rate_bpm"
+  ],
+  "config": {
+    "lower": [
+      1e-06,
+      0,
+      0.01
+    ],
+    "upper": [
+      5,
+      120,
+      1800
+    ],
+    "n_starts": 8,
+    "seed": 42,
+    "max_nfev": 500,
+    "method": "trf",
+    "loss": "linear",
+    "jac": "3-point",
+    "ftol": 1e-08,
+    "xtol": 1e-08,
+    "gtol": 1e-08,
+    "x_scale": "jac"
+  },
+  "environment": {
+    "python": "3.14.5",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "packages": {
+      "Pygments": "2.21.0",
+      "annotated-doc": "0.0.5",
+      "annotated-types": "0.8.0",
+      "anyio": "4.15.1",
+      "certifi": "2026.7.22",
+      "cffi": "2.1.1",
+      "charset-normalizer": "3.5.1",
+      "click": "8.5.0",
+      "colorama": "0.4.6",
+      "contourpy": "1.4.0",
+      "cryptography": "50.0.1",
+      "cycler": "0.12.1",
+      "fastapi": "0.141.1",
+      "fitdecode": "0.11.0",
+      "fonttools": "4.65.0",
+      "h11": "0.16.0",
+      "httpcore": "1.0.9",
+      "httpx": "0.28.1",
+      "idna": "3.20",
+      "iniconfig": "2.3.0",
+      "kiwisolver": "1.5.1",
+      "matplotlib": "3.11.2",
+      "numpy": "2.5.3",
+      "packaging": "26.3",
+      "pandas": "3.0.6",
+      "pdfminer.six": "20260107",
+      "pdfplumber": "0.11.10",
+      "pillow": "12.3.0",
+      "pip": "26.1.1",
+      "pluggy": "1.6.0",
+      "pycparser": "3.0",
+      "pydantic": "2.13.5",
+      "pydantic_core": "2.46.5",
+      "pyparsing": "3.3.2",
+      "pypdf": "6.19.0",
+      "pypdfium2": "5.13.0",
+      "pytest": "9.1.1",
+      "python-dateutil": "2.9.0.post0",
+      "python-multipart": "0.0.32",
+      "reportlab": "5.0.1",
+      "scipy": "1.18.1",
+      "six": "1.17.0",
+      "starlette": "1.7.0",
+      "typing-inspection": "0.4.4",
+      "typing_extensions": "4.16.0",
+      "tzdata": "2026.4",
+      "uvicorn": "0.53.0"
+    },
+    "code_blobs": {
+      "backend/__init__.py": "6f9a7331e63204f590d9e86e8c9e5158733f9f1f6ae871218a1f6fd9a9d6557a",
+      "backend/app.py": "48a5a45fbd2ee6b36388557517e063bc8544952d2c5767555a6596a7fc1d0e7e",
+      "backend/datasets.py": "38a89e859c5c0dc723940757c212f5248a0b535f1012147c0148ad34298e21c8",
+      "backend/models/__init__.py": "ffc9b3288a4f637278178cfdb8d8e7b19a1548607761a1b13cd4dd6cb32c06b1",
+      "backend/models/p1d.py": "3c29549b74bbcaac2cb16457a41cf3b3014df9a888563221b842354350aafc78",
+      "backend/run.py": "4f49f3470b1e6fde246e3ff584c16c468c4dfc8f6c1a841ec92f7b60b6aefe64",
+      "backend/runs.py": "ae1fd68bf4769f7852ba96f124252429620818da15856d5ff1424f5983e2f02b",
+      "backend/storage.py": "cf2834f8532d03368b5a8ee299490b9a7f0de8e208427ef2618a7e8d1659de0c",
+      "package-lock.json": "e23fac5c41f1d6dea12ac3fdf122b5fc70799e55cbc9b52d7d15e63714f1650d",
+      "requirements.txt": "a9d09761f35dcb1790dab96166a52513f42fa466e7aefa738456e5cff83e5fb9",
+      "src/api.ts": "444c5499f1680f5fc21c98e698aa4a7cc56f65d687f5b3966ab48763ee3d3e76",
+      "src/App.vue": "d04a8bd865583558e1a30bc0e75661d205f2e67ad110a26c6e4b316429c0d0f3",
+      "src/components/Chart.vue": "cf2113e1f8d11dacf2c3e3e3ba22daa8b33e297d18a8d3347d2474dccc318bc5",
+      "src/components/ParameterBoxes.vue": "ca4db153a6997d22b940a870ab2750b4167b15327af3e53f1b588284e1fa8f4b",
+      "src/main.ts": "e56ee287be5a2b6cce8e2ff32418b4002d8f6926245edb272f545138869fe0c1",
+      "src/models/charts.test.ts": "bbf71f10a122f2991362e9000a0c40d8d35e2778268624184b2478d8875b41b4",
+      "src/models/charts.ts": "0f9c78899c8397391daf5f9caaacf53d181ca6cee6f255c16fc1da92d0bc67ad",
+      "src/models/P1dFit.vue": "cdd222b24f71d7a6181afdd37d6f2c5143c65a299bf6f2be61881caa304dcec0",
+      "src/models/registry.ts": "0402b4399366dac356cd5d6fcec2bc40874c773ea61f77708e5c15baf609936e",
+      "src/pages/AnalysisPage.vue": "b34efe0c9df7c80c2294621c2f1ab3d283ce4f77a91e5bce14f3fda544332f2b",
+      "src/pages/ComparisonPage.vue": "36a26365ae80887f10a4d05264b25af264ec95f25ec6ef70ed425986cde11852",
+      "src/pages/DatasetPage.vue": "821d8bf7c8326f614d30275e31200b94c18e4b53719a0fbf2c76755289ead362",
+      "src/pages/IdentificationPage.vue": "76a96e8a6fbf94e49a18a35921c0de9f8555ba8ed54fa6cd241b8b54a516e761",
+      "src/pages/workflow.test.ts": "e86a025b27dea9de559d6c73e117ab4bc38860b406ad5d2aa3b0205945ecef30",
+      "src/types.ts": "a40f42223f52153cb62383fcec544a5d50b51724a90ff58e70536a404259f765"
+    },
+    "code_sha256": "acd014d4fd970fa3dce55e7ff280062f5c97e5495fd35eaab9d6e7423a5262a0"
+  },
+  "scope": "train-only in-sample",
+  "progress": {
+    "done": 34,
+    "total": 34,
+    "failed": 0
+  },
+  "replay_of": null,
+  "started_at": "2026-09-26T06:00:33.283383+00:00",
+  "finished_at": "2026-09-26T06:00:38.067380+00:00",
+  "archived_at": "2026-09-28T18:28:31.752627+00:00"
+}

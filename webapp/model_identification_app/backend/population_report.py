@@ -4,6 +4,7 @@ import numpy as np
 from matplotlib.figure import Figure
 from matplotlib.ticker import FuncFormatter
 from .population_review import metric_color, elapsed
+from .population import LOCAL_B_WINDOWS
 
 
 def append_population(a, p, heading, table, plot, page):
@@ -65,7 +66,8 @@ def append_population(a, p, heading, table, plot, page):
     elif mode == 'observed_hr':
         p('B di popolazione; x(0)=HR(0)-B_sub. HR iniziale osservata, nessuna ristima. Metriche da t >= 10 s.')
     else:
-        p('K,L,tau di popolazione; B locale calibrato su HR e potenza in [0,10 s). x(0)=HR(0)-B_locale. Stato propagato senza reset; metriche da t >= 10 s. B ricalibrato per ogni estrazione. Fasce prive di incertezza del rumore di calibrazione.')
+        duration = LOCAL_B_WINDOWS[mode]
+        p(f'K,L,tau di popolazione; B locale calibrato su HR e potenza in [0,{duration} s). x(0)=HR(0)-B_locale. Stato propagato senza reset; metriche da t >= {duration} s. B ricalibrato per ogni estrazione. Fasce prive di incertezza del rumore di calibrazione.')
     p('Fascia 95%: variabilita delle traiettorie campionate congiuntamente dai parametri, condizionata ai bounds. Non include rumore residuo o incertezza della media. Nessuna garanzia di copertura predittiva 95%. Baseline: HR costante uguale al B usato nella previsione.')
     if not a['test']: p('Nessun segmento test disponibile.')
     metric_keys = ('MAE','RMSE','bias','constant_B_RMSE')

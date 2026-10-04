@@ -1,0 +1,28 @@
+{
+  "interpolated_records": [
+    "010_250608073054.csv",
+    "029_250718101116.csv",
+    "055_260110082743.csv",
+    "071_260502130449.csv",
+    "106_260728062911.csv",
+    "121_260830104514.csv"
+  ],
+  "changed_cells": 38,
+  "resolved_missing_events": 20,
+  "remaining_missing_locations": {
+    "inizio (0-10%)": 31,
+    "centrale (10-90%)": 132,
+    "fine (90-100%)": 10
+  },
+  "remaining_blocking_missing_locations": {
+    "inizio (0-10%)": 14,
+    "centrale (10-90%)": 38,
+    "fine (90-100%)": 6
+  },
+  "recording_gap_locations": {
+    "inizio (0-10%)": 6,
+    "centrale (10-90%)": 104,
+    "fine (90-100%)": 19
+  },
+  "verified": "Source hashes unchanged; only logged missing cells changed; output row counts and all other cells identical; all processed signal values finite"
+}

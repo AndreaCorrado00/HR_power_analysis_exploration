@@ -1,0 +1,247 @@
+"""User-specified P1D, conditional on equilibrium at the first observation."""
+from __future__ import annotations
+
+import numpy as np
+from scipy.optimize import least_squares
+from ..context import prepare
+
+KEYS = ('K', 'L', 'tau')
+METADATA = {
+    'id': 'p1d', 'version': '2.0.0', 'name': 'HR-Power · struttura selezionabile',
+    'parameters': [{'key': k, 'unit': u} for k, u in zip(KEYS, ['bpm/W', 's', 's'])],
+    'equation': 'tau dx/dt + x = K (P(t-L)-P0); HRhat = HR0+x',
+    'source': 'P1D richiesto nel protocollo utente; nessuna replica bibliografica rivendicata',
+    'initial_conditions': 'P0=P(0), HR0=HR(0), x(0)=0; P(t<0)=P0; equilibrio iniziale assunto',
+    'input_reconstruction': 'zero-order hold, integrazione esatta; ritardo continuo in secondi',
+    'uncertainty': 'SSE/(N-p) inv(J.T J); p=parametri liberi; CI95 Wald non troncati; condizionati a P0 e HR0',
+    'delay_domain': '0 <= L <= min(Lmax,T); T=t[-1]-t[0]; Lmax=null significa T; Lmax=0 fissa L=0',
+    'identification_validity': 'Convergenza e compatibilità numerica/temporale; non certifica precisione o identificabilità',
+    'residual_conventions': 'e=HR-HRhat; SD ddof=1; ACF1=sum(centered[1:]*centered[:-1])/sum(centered**2); lag in campioni',
+    'multistart_conventions': 'PCG64 seed; primo start [0.3,5,45] clipped; altri log-uniformi K/tau e uniformi L nei bounds; selezione SSE minimo',
+}
+
+
+STRUCTURES = {
+    'p1d_full': {'name': 'P1D full', 'keys': ('K', 'L', 'tau'), 'units': ('bpm/W', 's', 's'),
+                 'lower': [1e-6, 0., .01], 'upper': [5., None, 1800.],
+                 'equation': METADATA['equation']},
+    'short_transient': {'name': 'Short-transient', 'keys': ('gamma', 'L'), 'units': ('bpm/(W s)', 's'),
+                        'lower': [1e-6/1800., 0.], 'upper': [5./.01, None],
+                        'equation': 'dx/dt = gamma (P(t-L)-P0); HRhat = HR0+x'},
+}
+
+
+def metadata(config=None):
+    c = validate_config(config or {})
+    s = STRUCTURES[c['model_structure']]
+    return dict(METADATA, model_structure=c['model_structure'], equation=s['equation'],
+                parameters=[{'key': k, 'unit': u} for k,u in zip(s['keys'],s['units'])],
+                initial_conditions=('P0=mean(Ppre), HR0=mean(HRpre)' if c['use_pre_window'] else 'P0=P(0), HR0=HR(0)') + '; x(0)=0; P(t<0)=P0',
+                residual_conventions='e=HR-HRhat; SD ddof=1; centered ACF denominator=sum(e_centered**2); lag in samples',
+                rho_convention='(T-L)/tau for P1D full; null for short_transient; no exclusion thresholds',
+                multistart_conventions='PCG64; first start nominal; others log-uniform positive parameters and uniform L; select minimum SSE',
+                structures=[dict(id=k, name=v['name'], parameters=[{'key':a,'unit':b} for a,b in zip(v['keys'],v['units'])],
+                                 default_config=default_config(k)) for k,v in STRUCTURES.items()])
+
+
+def default_config(structure='p1d_full'):
+    s = STRUCTURES[structure]
+    return {'model_structure': structure, 'use_pre_window': False, 'pre_window_seconds': 10,
+            'initialization_protocol': 'segment_v2', 'lower': list(s['lower']), 'upper': list(s['upper']),
+            'n_starts': 8, 'seed': 42, 'max_nfev': 500,
+            'method': 'trf', 'loss': 'linear', 'jac': '3-point',
+            'ftol': 1e-8, 'xtol': 1e-8, 'gtol': 1e-8, 'x_scale': 'jac'}
+
+
+def validate_config(config):
+    structure = config.get('model_structure', 'p1d_full')
+    if structure not in STRUCTURES: raise ValueError('Struttura modello sconosciuta')
+    c = default_config(structure)
+    if set(config) - set(c):
+        raise ValueError('Impostazioni modello sconosciute')
+    c.update(config)
+    n = len(STRUCTURES[structure]['keys'])
+    positive = [i for i in range(n) if i != 1]
+    if not isinstance(c['use_pre_window'], bool) or c['pre_window_seconds'] != 10:
+        raise ValueError('Pre-window: scelta booleana e durata 10 s')
+    if c['initialization_protocol'] not in ('segment_v2', 'legacy_v1') or (c['initialization_protocol']=='legacy_v1' and c['use_pre_window']):
+        raise ValueError('Protocollo inizializzazione non valido')
+    lo, hi = np.asarray(c['lower'], float), np.asarray(c['upper'], float)
+    if hi.shape == (n,) and c['upper'][1] is None:
+        hi[1] = 1.  # Automatic segment-specific bound is resolved in fit.
+    if lo.shape != (n,) or hi.shape != (n,) or not np.isfinite([lo,hi]).all():
+        raise ValueError(f'Bounds: servono {n} limiti inferiori e superiori finiti')
+    delay_lower_invalid = lo[1] < 0 or (c['initialization_protocol'] != 'legacy_v1' and lo[1] != 0)
+    if np.any(lo[positive] >= hi[positive]) or np.any(lo[positive] <= 0) or delay_lower_invalid or hi[1] < lo[1]:
+        raise ValueError('Bounds non validi: K>0, tau>0, lower<upper; L minimo=0 e massimo>=0 oppure null (T)')
+    for key, low, high in [('n_starts', 2, 64), ('max_nfev', 10, 10000), ('seed', 0, 2**32-1)]:
+        if not isinstance(c[key], int) or not low <= c[key] <= high:
+            raise ValueError(f'{key}: intero tra {low} e {high}')
+    for key in ['method', 'loss', 'jac', 'x_scale', 'ftol', 'xtol', 'gtol']:
+        if c[key] != default_config()[key]:
+            raise ValueError(f'{key} è fissato dal protocollo P1D v1')
+    return c
+
+
+def bound_diagnostics(theta, lo, hi, keys=KEYS):
+    """At: floating-point tolerance; near: 1e-5 of the effective interval."""
+    at_tol = 32*np.finfo(float).eps*np.maximum(1., np.maximum(abs(lo), abs(hi)))
+    near_tol = np.maximum(at_tol, 1e-5*(hi-lo))
+    distance = np.minimum(abs(theta-lo), abs(hi-theta))
+    return {k: {'at_bound': bool(distance[i] <= at_tol[i]),
+                'near_bound': bool(distance[i] <= near_tol[i]),
+                'at_bound_tolerance': float(at_tol[i]),
+                'near_bound_tolerance': float(near_tol[i]),
+                'distance_to_lower': float(theta[i]-lo[i]),
+                'distance_to_upper': float(hi[i]-theta[i]),
+                'bound_hit': bool(distance[i] <= at_tol[i]),
+                'fixed': bool(lo[i] == hi[i])} for i,k in enumerate(keys)}
+
+
+def simulate(t, power, hr0, theta, p0=None, structure='p1d_full'):
+    """Exact ZOH response at arbitrary observation times, including fractional L."""
+    t, power = np.asarray(t, float), np.asarray(power, float)
+    u = power - (power[0] if p0 is None else p0)
+    if structure == 'short_transient':
+        gamma, L = theta
+        state = np.r_[0., np.cumsum(u[:-1]*np.diff(t))]
+        delayed_t = t-L
+        idx = np.maximum(np.searchsorted(t, delayed_t, side='right')-1, 0)
+        out = state[idx]+u[idx]*np.maximum(delayed_t-t[idx], 0)
+        return hr0 + gamma*np.where(delayed_t < t[0], 0., out)
+    K, L, tau = theta
+    # Solve the undelayed system at input knots, then evaluate at t-L.
+    decay = -np.expm1(-np.diff(t)/tau)
+    state = np.zeros(len(t))
+    for i in range(1, len(t)):
+        state[i] = state[i-1] + (u[i-1] - state[i-1]) * decay[i-1]
+    delayed_t = t - L
+    idx = np.searchsorted(t, delayed_t, side='right') - 1
+    idx_safe = np.maximum(idx, 0)
+    duration = np.maximum(delayed_t - t[idx_safe], 0)
+    out = state[idx_safe] + (u[idx_safe]-state[idx_safe]) * (-np.expm1(-duration/tau))
+    return hr0 + K * np.where(idx < 0, 0., out)
+
+
+def fit(t, power, hr, config):
+    c = validate_config(config)
+    structure = c['model_structure']
+    keys = STRUCTURES[structure]['keys']
+    n = len(keys)
+    t, power, hr, p0, hr0, pre = prepare(t, power, hr, c['use_pre_window'], c['initialization_protocol'])
+    T = float(t[-1])
+    lo, hi = np.asarray(c['lower'], float), np.asarray(c['upper'], float)
+    hi[1] = T if c['upper'][1] is None else min(hi[1], T)
+    if lo[1] > hi[1]: raise ValueError('delay_bounds_outside_segment')
+    free = hi > lo
+    n_parameters = int(free.sum())
+    def expand(theta):
+        full = lo.copy()
+        full[free] = theta
+        return full
+    rng = np.random.default_rng(c['seed'])
+    initial = []
+    for i in range(c['n_starts']):
+        # Interior points: broad log coverage for positive gain/time constant.
+        q = rng.uniform(.05, .95, n)
+        start = lo + q*(hi-lo)
+        for j in [j for j in range(n) if j != 1]:
+            start[j] = np.exp(np.log(lo[j]) + q[j]*np.log(hi[j]/lo[j]))
+        if i == 0:
+            start = np.clip([.3, 5., 45.] if n == 3 else [.3/45., 5.], lo+1e-6*(hi-lo), hi-1e-6*(hi-lo))
+        initial.append(start)
+    solutions, starts = [], []
+    residual = lambda theta: hr - simulate(t, power, hr0, theta, p0, structure)
+    for start in initial:
+        opt = least_squares(lambda theta: residual(expand(theta)), start[free], bounds=(lo[free],hi[free]), **{
+            key: c[key] for key in ['method','loss','jac','ftol','xtol','gtol','x_scale','max_nfev']})
+        opt.x = expand(opt.x)
+        solutions.append(opt)
+        starts.append({'initial': start.tolist(), 'theta': opt.x.tolist(),
+                       'SSE': float(opt.fun@opt.fun), 'success': bool(opt.success),
+                       'status': int(opt.status), 'nfev': int(opt.nfev)})
+    opt = min(solutions, key=lambda o: float(o.fun@o.fun))
+    failure_reasons = []
+    if not opt.success: failure_reasons.append('optimizer_not_converged')
+    if not np.isfinite(opt.x).all(): failure_reasons.append('nonfinite_parameters')
+    if not 0 <= opt.x[1] <= T: failure_reasons.append('delay_outside_segment')
+    if np.any(opt.x < lo) or np.any(opt.x > hi): failure_reasons.append('parameters_outside_bounds')
+    if not np.isfinite(opt.fun).all(): failure_reasons.append('nonfinite_residuals')
+    validity = {'optimizer_success': bool(opt.success),
+                'identification_valid': not failure_reasons, 'failure_reasons': failure_reasons,
+                'segment_duration_seconds': T,
+                'effective_bounds': {'lower': lo.tolist(), 'upper': hi.tolist()}}
+    if failure_reasons:
+        validity['error'] = '; '.join(failure_reasons)
+    e = residual(opt.x)
+    sse = float(e@e)
+    centered = e - e.mean()
+    denom = float(centered@centered)
+    acf = float(centered[1:]@centered[:-1]/denom) if denom > 1e-20 else None
+    _, singular, vt = np.linalg.svd(opt.jac, full_matrices=False)
+    tolerance = np.finfo(float).eps * max(opt.jac.shape) * singular[0]
+    rank = int(np.sum(singular > tolerance))
+    cond = float(singular[0]/singular[-1]) if rank == n_parameters else None
+    cov = None
+    if rank == n_parameters:
+        cov = np.zeros((n,n))
+        cov[np.ix_(free,free)] = ((vt.T / singular**2) @ vt) * sse/(len(t)-n_parameters)
+    se = np.sqrt(np.maximum(np.diag(cov), 0)) if cov is not None else [None]*n
+    warnings = []
+    if rank < n_parameters: warnings.append('rank_deficient')
+    if cond is not None and cond > 1e8: warnings.append('ill_conditioned')
+    bounds = bound_diagnostics(opt.x, lo, hi, keys)
+    if any(p['at_bound'] for p in bounds.values()): warnings.append('at_bounds')
+    if any(p['near_bound'] and not p['at_bound'] for p in bounds.values()): warnings.append('near_bounds')
+    if not opt.success: warnings.append('optimizer_not_converged')
+    if np.ptp(np.r_[p0,power]) < 1e-10: warnings.append('constant_power')
+    if acf is not None and abs(acf) > .5: warnings.append('autocorrelated_residuals')
+    dt = np.diff(t)
+    if np.max(dt) > 1.5*np.median(dt): warnings.append('recording_gaps')
+    if not np.allclose(dt, np.median(dt), rtol=.01): warnings.append('irregular_sampling')
+    equivalent = [o for o in solutions if float(o.fun@o.fun) <= sse + max(1e-8, sse*.01)]
+    agreement_atol = np.array([1e-6 if k=='gamma' else .01 for k in keys])
+    stable = all(np.allclose(o.x, opt.x, rtol=.05, atol=agreement_atol) for o in equivalent)
+    all_agree = all(o.success and np.allclose(o.x, opt.x, rtol=.05, atol=agreement_atol) for o in solutions)
+    if not stable: warnings.append('equivalent_predictions_different_parameters')
+    if not all_agree: warnings.append('multistart_disagreement')
+    parameters = {}
+    for i, k in enumerate(keys):
+        estimate = float(opt.x[i])
+        err = None if se[i] is None or not free[i] else float(se[i])
+        parameters[k] = {'estimate': estimate, 'se': err,
+                         'ci95': None if err is None else [estimate-1.96*err,estimate+1.96*err],
+                         'rse_pct': None if err is None or abs(estimate) < 1e-8 else 100*err/abs(estimate),
+                         **bounds[k]}
+    sst = float(np.sum((hr-hr.mean())**2))
+    hr_range = float(np.ptp(hr))
+    correlations = {}
+    for i, a in enumerate(keys):
+        for j in range(i+1,n):
+            value = float(cov[i,j]/np.sqrt(cov[i,i]*cov[j,j])) if cov is not None and cov[i,i] > 0 and cov[j,j] > 0 else None
+            correlations[a+'_'+keys[j]] = float(np.clip(value,-1,1)) if value is not None else None
+    rho = float((T-opt.x[1])/opt.x[2]) if structure == 'p1d_full' else None
+    lags = list(range(min(40, len(e)-1)+1))
+    acfs = [float(centered[lag:]@centered[:len(e)-lag]/denom) if denom > 1e-20 else None for lag in lags]
+    return {**validity, 'model_structure': structure, 'pre_window': pre, 'rho': rho,
+            'identifiability': {'rho': rho, 'rho_applicable': structure=='p1d_full', 'correlation_K_tau': correlations.get('K_tau'),
+                                'correlations': correlations, 'Jacobian_rank': rank},
+            'residual_acf': {'lags': lags, 'values': acfs, 'lag_unit': 'samples'},
+            'parameters': parameters, 'metrics': {'RMSE': float(np.sqrt(sse/len(e))),
+            'MAE': float(np.mean(abs(e))), 'bias': float(e.mean()),
+            'R2': 1-sse/sst if sst > 0 else None,
+            'amplitude_ratio': float(np.ptp(hr-e)/hr_range) if hr_range > 0 else None,
+            'SSE': sse, 'residual_mean': float(e.mean()), 'residual_sd': float(e.std(ddof=1)),
+            'residual_autocorrelation_lag1': acf, 'residual_autocorrelation_lag5': acfs[5] if len(acfs)>5 else None},
+            'optimizer': {'success': bool(opt.success), 'status': int(opt.status),
+                          'message': str(opt.message), 'nfev': int(opt.nfev)},
+            'uncertainty': {'rank': rank, 'jacobian_condition': cond,
+                            'covariance': None if cov is None else cov.tolist(),
+                            'sigma2': sse/(len(t)-n_parameters), 'N': len(t), 'p': n_parameters},
+            'initial_conditions': {'P0': p0, 'HR0': hr0, 'x0': 0.,
+                                   'P0_method': 'pre_window_mean' if c['use_pre_window'] else ('first_record_legacy' if c['initialization_protocol']=='legacy_v1' else 'first_segment_sample'),
+                                   'HR0_method': 'pre_window_mean' if c['use_pre_window'] else ('first_record_legacy' if c['initialization_protocol']=='legacy_v1' else 'first_segment_sample')},
+            'starts': starts, 'all_starts_agree': all_agree, 'warnings': warnings,
+            'multistart_tolerances': {'relative': .05, 'absolute': dict(zip(keys,agreement_atol.tolist()))},
+            'series': {'time': t.tolist(), 'power': power.tolist(), 'observed': hr.tolist(),
+                       'predicted': (hr-e).tolist(), 'residual': e.tolist()}}

@@ -13,6 +13,20 @@ const config={max_rse_pct:100,max_correlation:.98,exclude_near_bounds:false,draw
 const saved={id:'analysis',created_at:'2026-09-29',status:'insufficient_data',reason:'Dati insufficienti',config,train_count:4,retained_vectors:3,minimum_vectors:6,parameters:[],warnings:[],distributions:{},screening:[],model:null,test:[]}
 afterEach(()=>{vi.unstubAllGlobals();sessionStorage.clear()})
 describe('parametri atleta',()=>{
+  it('propone 180 s nelle nuove analisi e conserva la scelta storica di 10 s',async()=>{
+    const mock=vi.fn(async(_url:string,_options?:RequestInit)=>({ok:true,json:async()=>null}))
+    vi.stubGlobal('fetch',mock)
+    const options={props:{runs:[run],selected:run.id},global:{stubs:{Chart:true}}}
+    let w=mount(PopulationPage,options);await flushPromises()
+    expect((w.get('select[aria-label="Protocollo predittivo"]').element as HTMLSelectElement).value).toBe('local_B_180s')
+    await w.get('form').trigger('submit');await flushPromises()
+    expect(JSON.parse(mock.mock.calls[1]![1]!.body as string).prediction_mode).toBe('local_B_180s')
+    w.unmount()
+    vi.stubGlobal('fetch',vi.fn(async()=>({ok:true,json:async()=>({...saved,config:{...config,prediction_mode:'local_B_10s'}})})))
+    w=mount(PopulationPage,options);await flushPromises()
+    expect((w.get('select[aria-label="Protocollo predittivo"]').element as HTMLSelectElement).value).toBe('local_B_10s')
+    w.unmount()
+  })
   it('salva e recupera giudizio e note, bloccando export delle modifiche non salvate',async()=>{
     const data={...saved, status:'completed',reviews:{},review_context:{warnings:['B costante nel segmento'],labels:{systematic_overestimate:'Sovrastima sistematica'},verdicts:{unreviewed:'Non valutata',positive:'Positiva',negative:'Negativa'},scales:{},colors:{best:'#c7ead2',worst:'#f4b9b4',neutral:'#edf0f2'},legend:'Qualità relativa'},
       model:{keys:[],mean:[],sd:[],mean_ci95:[],fixed:[],covariance:[],correlation:[],observed_correlation:[]},

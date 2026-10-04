@@ -1,0 +1,182 @@
+{
+  "run_id": "27a1bad774ee41779fdc42cde0110869",
+  "failed_records": 34,
+  "total_samples": 259240,
+  "sampling_intervals_s": [
+    1.0
+  ],
+  "signals": {
+    "Potenza": {
+      "events": 170,
+      "missing_samples": 633,
+      "missing_percent": 0.24417528159234686,
+      "sample_quantiles_p50_p90_p95_p99_max": [
+        2.0,
+        6.099999999999994,
+        9.549999999999983,
+        21.170000000000016,
+        92.0
+      ],
+      "edge_events": 8,
+      "cross_recording_gap_events": 14,
+      "histogram_samples": {
+        "1": 46,
+        "2": 52,
+        "3": 36,
+        "4": 8,
+        "5": 8,
+        "6": 3,
+        "7": 3,
+        "8": 3,
+        "9": 2,
+        "10": 1,
+        "11": 1,
+        "12": 1,
+        "16": 1,
+        "18": 2,
+        "19": 1,
+        "26": 1,
+        "92": 1
+      }
+    },
+    "HR": {
+      "events": 23,
+      "missing_samples": 179,
+      "missing_percent": 0.06904798642184848,
+      "sample_quantiles_p50_p90_p95_p99_max": [
+        7.0,
+        13.8,
+        18.499999999999993,
+        22.120000000000005,
+        23.0
+      ],
+      "edge_events": 1,
+      "cross_recording_gap_events": 1,
+      "histogram_samples": {
+        "1": 2,
+        "2": 6,
+        "5": 1,
+        "6": 2,
+        "7": 2,
+        "9": 1,
+        "10": 2,
+        "12": 3,
+        "13": 1,
+        "14": 1,
+        "19": 1,
+        "23": 1
+      }
+    }
+  },
+  "thresholds": [
+    {
+      "max_missing_s": 1,
+      "signals": {
+        "Potenza": {
+          "events": 32,
+          "samples": 32
+        },
+        "HR": {
+          "events": 2,
+          "samples": 2
+        }
+      },
+      "records_all_missing_eligible": 2
+    },
+    {
+      "max_missing_s": 2,
+      "signals": {
+        "Potenza": {
+          "events": 84,
+          "samples": 136
+        },
+        "HR": {
+          "events": 8,
+          "samples": 14
+        }
+      },
+      "records_all_missing_eligible": 4
+    },
+    {
+      "max_missing_s": 3,
+      "signals": {
+        "Potenza": {
+          "events": 120,
+          "samples": 244
+        },
+        "HR": {
+          "events": 8,
+          "samples": 14
+        }
+      },
+      "records_all_missing_eligible": 6
+    },
+    {
+      "max_missing_s": 5,
+      "signals": {
+        "Potenza": {
+          "events": 135,
+          "samples": 312
+        },
+        "HR": {
+          "events": 8,
+          "samples": 14
+        }
+      },
+      "records_all_missing_eligible": 7
+    },
+    {
+      "max_missing_s": 10,
+      "signals": {
+        "Potenza": {
+          "events": 145,
+          "samples": 387
+        },
+        "HR": {
+          "events": 15,
+          "samples": 69
+        }
+      },
+      "records_all_missing_eligible": 12
+    },
+    {
+      "max_missing_s": 30,
+      "signals": {
+        "Potenza": {
+          "events": 150,
+          "samples": 470
+        },
+        "HR": {
+          "events": 22,
+          "samples": 174
+        }
+      },
+      "records_all_missing_eligible": 17
+    },
+    {
+      "max_missing_s": 60,
+      "signals": {
+        "Potenza": {
+          "events": 150,
+          "samples": 470
+        },
+        "HR": {
+          "events": 22,
+          "samples": 174
+        }
+      },
+      "records_all_missing_eligible": 17
+    }
+  ],
+  "timestamp_gaps": {
+    "events": 129,
+    "records": 23,
+    "interval_quantiles_p50_p90_p95_max": [
+      34.0,
+      207.40000000000003,
+      403.1999999999997,
+      1008.0
+    ],
+    "total_excess_s": 11008.0
+  }
+}

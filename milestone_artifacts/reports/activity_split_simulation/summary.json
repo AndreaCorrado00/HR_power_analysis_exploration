@@ -1,0 +1,295 @@
+{
+  "original_activities": 131,
+  "original_samples": 865127,
+  "split_threshold_s": 10,
+  "segments": 518,
+  "activities_split": 92,
+  "segments_per_activity_quantiles": {
+    "min": 1.0,
+    "median": 3.0,
+    "p90": 7.0,
+    "max": 26.0
+  },
+  "duration_minutes_quantiles": {
+    "min": 0.0,
+    "p25": 3.7,
+    "median": 16.1,
+    "p75": 40.25833333333333,
+    "p90": 74.28500000000001,
+    "p95": 95.74499999999999,
+    "max": 178.85
+  },
+  "duration_bins": [
+    {
+      "min_seconds": 0,
+      "max_seconds": 60,
+      "segments": 72,
+      "samples": 1470,
+      "sample_percent": 0.16991724914376732
+    },
+    {
+      "min_seconds": 60,
+      "max_seconds": 300,
+      "segments": 89,
+      "samples": 15023,
+      "sample_percent": 1.7365080502631405
+    },
+    {
+      "min_seconds": 300,
+      "max_seconds": 600,
+      "segments": 57,
+      "samples": 24474,
+      "sample_percent": 2.82894881329562
+    },
+    {
+      "min_seconds": 600,
+      "max_seconds": 1200,
+      "segments": 70,
+      "samples": 62625,
+      "sample_percent": 7.2388215834207
+    },
+    {
+      "min_seconds": 1200,
+      "max_seconds": 1800,
+      "segments": 57,
+      "samples": 84328,
+      "sample_percent": 9.747470602582048
+    },
+    {
+      "min_seconds": 1800,
+      "max_seconds": 3600,
+      "segments": 94,
+      "samples": 240231,
+      "sample_percent": 27.768292978949912
+    },
+    {
+      "min_seconds": 3600,
+      "max_seconds": null,
+      "segments": 79,
+      "samples": 436976,
+      "sample_percent": 50.51004072234481
+    }
+  ],
+  "retention": [
+    {
+      "split_threshold_s": 10,
+      "min_duration_s": 0,
+      "segments": 518,
+      "activities": 131,
+      "samples": 865127,
+      "sample_percent": 100.0,
+      "missing_power": 726,
+      "missing_hr": 282
+    },
+    {
+      "split_threshold_s": 10,
+      "min_duration_s": 60,
+      "segments": 446,
+      "activities": 131,
+      "samples": 863657,
+      "sample_percent": 99.83008275085623,
+      "missing_power": 680,
+      "missing_hr": 277
+    },
+    {
+      "split_threshold_s": 10,
+      "min_duration_s": 300,
+      "segments": 357,
+      "activities": 130,
+      "samples": 848634,
+      "sample_percent": 98.0935747005931,
+      "missing_power": 674,
+      "missing_hr": 275
+    },
+    {
+      "split_threshold_s": 10,
+      "min_duration_s": 600,
+      "segments": 300,
+      "activities": 127,
+      "samples": 824160,
+      "sample_percent": 95.26462588729747,
+      "missing_power": 668,
+      "missing_hr": 275
+    },
+    {
+      "split_threshold_s": 10,
+      "min_duration_s": 1200,
+      "segments": 230,
+      "activities": 122,
+      "samples": 761535,
+      "sample_percent": 88.02580430387677,
+      "missing_power": 658,
+      "missing_hr": 275
+    },
+    {
+      "split_threshold_s": 10,
+      "min_duration_s": 1800,
+      "segments": 173,
+      "activities": 109,
+      "samples": 677207,
+      "sample_percent": 78.27833370129473,
+      "missing_power": 640,
+      "missing_hr": 275
+    },
+    {
+      "split_threshold_s": 30,
+      "min_duration_s": 0,
+      "segments": 368,
+      "activities": 131,
+      "samples": 865127,
+      "sample_percent": 100.0,
+      "missing_power": 726,
+      "missing_hr": 282
+    },
+    {
+      "split_threshold_s": 30,
+      "min_duration_s": 60,
+      "segments": 332,
+      "activities": 131,
+      "samples": 864356,
+      "sample_percent": 99.91088013667357,
+      "missing_power": 680,
+      "missing_hr": 277
+    },
+    {
+      "split_threshold_s": 30,
+      "min_duration_s": 300,
+      "segments": 283,
+      "activities": 130,
+      "samples": 855425,
+      "sample_percent": 98.87854615565114,
+      "missing_power": 676,
+      "missing_hr": 277
+    },
+    {
+      "split_threshold_s": 30,
+      "min_duration_s": 600,
+      "segments": 257,
+      "activities": 127,
+      "samples": 844133,
+      "sample_percent": 97.57330426631003,
+      "missing_power": 674,
+      "missing_hr": 277
+    },
+    {
+      "split_threshold_s": 30,
+      "min_duration_s": 1200,
+      "segments": 212,
+      "activities": 123,
+      "samples": 803122,
+      "sample_percent": 92.83284419512974,
+      "missing_power": 663,
+      "missing_hr": 275
+    },
+    {
+      "split_threshold_s": 30,
+      "min_duration_s": 1800,
+      "segments": 170,
+      "activities": 114,
+      "samples": 740961,
+      "sample_percent": 85.64765635565645,
+      "missing_power": 641,
+      "missing_hr": 275
+    },
+    {
+      "split_threshold_s": 60,
+      "min_duration_s": 0,
+      "segments": 268,
+      "activities": 131,
+      "samples": 865127,
+      "sample_percent": 100.0,
+      "missing_power": 726,
+      "missing_hr": 282
+    },
+    {
+      "split_threshold_s": 60,
+      "min_duration_s": 60,
+      "segments": 251,
+      "activities": 131,
+      "samples": 864775,
+      "sample_percent": 99.95931233217782,
+      "missing_power": 719,
+      "missing_hr": 277
+    },
+    {
+      "split_threshold_s": 60,
+      "min_duration_s": 300,
+      "segments": 220,
+      "activities": 130,
+      "samples": 859820,
+      "sample_percent": 99.38656405360138,
+      "missing_power": 679,
+      "missing_hr": 277
+    },
+    {
+      "split_threshold_s": 60,
+      "min_duration_s": 600,
+      "segments": 210,
+      "activities": 128,
+      "samples": 855771,
+      "sample_percent": 98.9185402836809,
+      "missing_power": 678,
+      "missing_hr": 277
+    },
+    {
+      "split_threshold_s": 60,
+      "min_duration_s": 1200,
+      "segments": 185,
+      "activities": 125,
+      "samples": 832636,
+      "sample_percent": 96.24436643406112,
+      "missing_power": 666,
+      "missing_hr": 275
+    },
+    {
+      "split_threshold_s": 60,
+      "min_duration_s": 1800,
+      "segments": 163,
+      "activities": 115,
+      "samples": 802093,
+      "sample_percent": 92.7139021207291,
+      "missing_power": 645,
+      "missing_hr": 275
+    }
+  ],
+  "segments_with_missing_signals": 58,
+  "segments_with_remaining_timestamp_gaps": 99,
+  "most_fragmented": [
+    {
+      "filename": "061_260404082403.csv",
+      "segments": 26,
+      "original_samples": 14973,
+      "duration_s": 17802.0,
+      "longest_segment_s": 2629.0
+    },
+    {
+      "filename": "115_260822080018.csv",
+      "segments": 23,
+      "original_samples": 18273,
+      "duration_s": 20955.0,
+      "longest_segment_s": 3324.0
+    },
+    {
+      "filename": "116_260824074938.csv",
+      "segments": 23,
+      "original_samples": 23603,
+      "duration_s": 24911.0,
+      "longest_segment_s": 3597.0
+    },
+    {
+      "filename": "036_250823070906.csv",
+      "segments": 15,
+      "original_samples": 17568,
+      "duration_s": 18769.0,
+      "longest_segment_s": 2456.0
+    },
+    {
+      "filename": "055_260110082743.csv",
+      "segments": 13,
+      "original_samples": 14248,
+      "duration_s": 14622.0,
+      "longest_segment_s": 3702.0
+    }
+  ],
+  "method": "Split before first sample after dt>10s. Duration=last-first timestamp; zero for singleton. Original samples partitioned exactly once. No interpolation, trimming, or model fitting. Percentages of all original recorded samples, including missing P/HR."
+}

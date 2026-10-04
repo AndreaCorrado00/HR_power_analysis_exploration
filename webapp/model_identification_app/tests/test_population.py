@@ -115,7 +115,7 @@ def test_invalid_covariance_and_multistart_failures_are_excluded():
     assert not any(s['included'] for s in a['screening'][:3])
 
 
-@pytest.mark.parametrize('mode', ['legacy_power_only', 'observed_hr', 'local_B_10s'])
+@pytest.mark.parametrize('mode', ['legacy_power_only', 'observed_hr', 'local_B_10s', 'local_B_180s'])
 def test_population_api_persistence_and_export(tmp_path, mode):
     import io
     import zipfile
@@ -128,7 +128,7 @@ def test_population_api_persistence_and_export(tmp_path, mode):
     manifest['config']['use_pre_window'] = False
     with TestClient(create_app(tmp_path)) as c:
         service = c.app.state.runs
-        data = ('elapsed_seconds,power_w,heart_rate_bpm\n'+''.join(f'{i},100,120\n' for i in range(31))).encode()
+        data = ('elapsed_seconds,power_w,heart_rate_bpm\n'+''.join(f'{i},100,120\n' for i in range(201))).encode()
         digest = service.store.blob(data)
         manifest['dataset']['segments'].append({'id':'test','filename':'test.csv','sha256':digest,'activity_id':'unseen'})
         folder = tmp_path/'runs'/manifest['id']; folder.mkdir()
@@ -156,6 +156,10 @@ def test_population_api_persistence_and_export(tmp_path, mode):
         assert exported_review.status_code == 200
         assert exported_review.json()['reviews']['test']['labels'] == ['systematic_overestimate']
         assert exported_review.json()['review_context']['warnings']
+        if mode == 'local_B_180s':
+            assert analysis['test'][0]['evaluation_start_s'] == 180
+            assert analysis['test'][0]['metrics']['N'] == 21
+            assert '180 s' in ' '.join(exported_review.json()['review_context']['warnings'])
         review_pdf = c.post('/api/runs/population-test/population/exports/pdf', json={'analysis_id':analysis['id']})
         assert review_pdf.status_code == 200, review_pdf.text[:100]
         assert review_pdf.content.startswith(b'%PDF')
@@ -241,3 +245,34 @@ def test_local_B_bounds_and_fixed_zero_delay():
     assert result['calibration']['warnings']
     with pytest.raises(ValueError, match='valutazione'):
         predict(manifest, a, t[t<10], np.full(sum(t<10),100.), np.full(sum(t<10),140.))
+
+
+def test_local_180s_calibration_uses_full_prefix_but_never_future_hr():
+    from webapp.model_identification_app.backend.population import analyze, predict
+    manifest, fits = fixture(12)
+    short = analyze(manifest, fits, {'prediction_mode': 'local_B_10s', 'draws': 50})
+    long = analyze(manifest, fits, {'prediction_mode': 'local_B_180s', 'draws': 50})
+    assert long['model'] == short['model']  # Inference window cannot change population K/tau.
+    assert long['screening'] == short['screening']
+    t = np.arange(-10., 301.)
+    power = np.full(len(t), 100.)
+    tau = long['model']['mean'][2]
+    hr = 110 - 50*np.exp(-np.maximum(t, 0)/tau)
+    first = predict(manifest, long, t, power, hr)
+    assert first['equilibrium_B'] == pytest.approx(110)
+    assert first['calibration']['duration_s'] == 180
+    assert first['calibration']['samples'] == 180
+    assert first['evaluation_start_s'] == 180
+    assert first['metrics']['N'] == 121
+    assert first['metrics']['RMSE'] < 1e-8
+    future_changed = hr.copy(); future_changed[t >= 180] += 30
+    second = predict(manifest, long, t, power, future_changed)
+    for key in ('predicted', 'lower', 'upper'):
+        assert first['series'][key] == second['series'][key]
+    assert second['metrics']['bias'] == pytest.approx(30)
+    prefix_changed = hr.copy(); prefix_changed[(t >= 10) & (t < 180)] += 5
+    assert predict(manifest, long, t, power, prefix_changed)['equilibrium_B'] > first['equilibrium_B'] + 1
+    for stop in (10, 179, 180):
+        mask = t < stop
+        with pytest.raises(ValueError, match='valutazione.*180'):
+            predict(manifest, long, t[mask], power[mask], hr[mask])

@@ -1,0 +1,28 @@
+{
+  "segment_id": "651c202b622ee9f3351aea40",
+  "filename": "dataset/road_segments_gt10s_min5min.zip::segments/066_260424160919_segment_001.csv",
+  "status": "failed",
+  "optimizer_success": null,
+  "identification_valid": false,
+  "failure_reasons": [
+    "Servono almeno 4 osservazioni finite nel segmento"
+  ],
+  "pre_window": {
+    "available": false,
+    "used": false,
+    "seconds": 10,
+    "samples": 0,
+    "signals_finite": true,
+    "power_finite": true,
+    "hr_finite": true,
+    "time": [],
+    "power": [],
+    "observed": [],
+    "first_time": null,
+    "last_time": null
+  },
+  "model_structure": "p1d_full",
+  "initialization_mode": "estimated_equilibrium",
+  "rho": null,
+  "error": "Servono almeno 4 osservazioni finite nel segmento"
+}

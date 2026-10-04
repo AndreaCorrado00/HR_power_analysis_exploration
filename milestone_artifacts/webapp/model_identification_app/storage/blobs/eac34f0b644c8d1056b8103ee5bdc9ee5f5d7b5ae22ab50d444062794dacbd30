@@ -1,0 +1,8 @@
+# Runtime pinned to the versions used for validation; install inside repository .venv.
+numpy==2.5.3
+scipy==1.18.1
+fastapi==0.141.1
+uvicorn==0.53.0
+python-multipart==0.0.32
+reportlab==5.0.1
+matplotlib==3.11.2

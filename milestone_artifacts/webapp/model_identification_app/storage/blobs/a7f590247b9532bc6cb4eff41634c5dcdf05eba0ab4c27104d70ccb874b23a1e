@@ -1,0 +1,303 @@
+"""Two-stage Gaussian random effects on train fits; power-only test prediction.
+
+Protocol, assumptions and limitations: ../POPULATION_PROTOCOL.md.
+"""
+from __future__ import annotations
+
+import numpy as np
+from scipy.optimize import minimize
+from scipy.stats import norm
+
+from .models.p1d import simulate
+
+VERSION = '2.1.0'
+LOCAL_B_WINDOWS = {'local_B_10s': 10, 'local_B_180s': 180}
+DEFAULTS = {'max_rse_pct': 100., 'max_correlation': .98,
+            'exclude_near_bounds': False, 'draws': 200, 'seed': 42, 'prediction_mode': 'legacy_power_only'}
+
+
+def configuration(value=None):
+    value = value or {}
+    if set(value)-set(DEFAULTS): raise ValueError('Configurazione popolazione sconosciuta')
+    c = dict(DEFAULTS, **value)
+    if not np.isfinite(c['max_rse_pct']) or not 0 < c['max_rse_pct'] <= 10000:
+        raise ValueError('RSE massimo: maggiore di zero e non oltre 10000%')
+    if not np.isfinite(c['max_correlation']) or not .5 <= c['max_correlation'] <= 1:
+        raise ValueError('Correlazione massima tra 0.5 e 1')
+    if not isinstance(c['exclude_near_bounds'], bool): raise ValueError('exclude_near_bounds deve essere booleano')
+    if isinstance(c['draws'], bool) or not isinstance(c['draws'], int) or not 50 <= c['draws'] <= 1000:
+        raise ValueError('Simulazioni: intero tra 50 e 1000')
+    if isinstance(c['seed'], bool) or not isinstance(c['seed'], int) or not 0 <= c['seed'] < 2**32:
+        raise ValueError('Seed: intero tra 0 e 2^32-1')
+    if c['prediction_mode'] not in ('legacy_power_only', 'observed_hr', *LOCAL_B_WINDOWS):
+        raise ValueError('Modalita predittiva sconosciuta')
+    return c
+
+
+def correlation(cov):
+    cov = np.asarray(cov, float)
+    scale = np.sqrt(np.maximum(np.diag(cov), 0))
+    denom = np.outer(scale, scale)
+    return [[float(np.clip(cov[i,j]/denom[i,j], -1, 1)) if denom[i,j] > 0 else None
+             for j in range(len(cov))] for i in range(len(cov))]
+
+
+def fit_reml(values, sampling):
+    """Profile mean, minimize restricted likelihood with PSD Omega = A A'.
+
+    Scaling is numerical only; all returned quantities retain original units.
+    Sampling covariances must be positive definite on the free subspace.
+    """
+    y, sampling = np.asarray(values, float), np.asarray(sampling, float)
+    n, p = y.shape
+    origin = y.mean(axis=0)
+    scale = np.maximum(y.std(axis=0, ddof=1), np.sqrt(np.mean(np.diagonal(sampling, axis1=1, axis2=2), axis=0)))
+    scale = np.maximum(scale, 1e-12)
+    z = (y-origin)/scale
+    s = sampling/np.outer(scale, scale)
+    indices = np.tril_indices(p)
+
+    def evaluate(a, details=False, gradient=False):
+        invalid = (1e100, np.zeros_like(a)) if gradient else 1e100
+        lower = np.zeros((p,p)); lower[indices] = a
+        omega = lower@lower.T
+        v = s+omega
+        try:
+            signs, logdets = np.linalg.slogdet(v)
+            if np.any(signs <= 0) or not np.isfinite(logdets).all(): return invalid
+            w = np.linalg.inv(v)
+            precision = w.sum(axis=0)
+            mean = np.linalg.solve(precision, np.einsum('nij,nj->i', w, z))
+            e = z-mean
+            objective = .5*(logdets.sum()+np.linalg.slogdet(precision)[1]+np.einsum('ni,nij,nj->', e, w, e))
+            mean_cov = np.linalg.inv(precision)
+            if details: return mean, omega, mean_cov, float(objective)
+            if gradient:
+                we = np.einsum('nij,nj->ni', w, e)
+                derivative = .5*(precision-np.einsum('nij,jk,nkl->il',w,mean_cov,w)-we.T@we)
+                return float(objective), (2*derivative@lower)[indices]
+            return float(objective)
+        except np.linalg.LinAlgError:
+            return invalid
+
+    bounds = [(0, None) if i == j else (None, None) for i,j in zip(*indices)]
+    attempts = [minimize(lambda a: evaluate(a, gradient=True), (np.eye(p)*v)[indices], jac=True, method='L-BFGS-B', bounds=bounds,
+                         options={'maxiter': 1500, 'ftol': 1e-11, 'gtol': 1e-6}) for v in (.1, 1.)]
+    good = [a for a in attempts if a.success and np.isfinite(a.fun) and a.fun < 1e90]
+    if not good: raise ValueError('Stima REML non convergente: nessun modello pubblicabile')
+    best = min(good, key=lambda a: a.fun)
+    zero = np.zeros(len(indices[0]))
+    solution = zero if evaluate(zero) < best.fun else best.x
+    mean, omega, mean_cov, objective = evaluate(solution, True)
+    return {'mean': (origin+mean*scale).tolist(), 'covariance': (omega*np.outer(scale,scale)).tolist(),
+            'mean_covariance': (mean_cov*np.outer(scale,scale)).tolist(),
+            'method': 'multivariate REML, two-stage', 'objective': objective,
+            'converged': True, 'iterations': int(best.nit)}
+
+
+def descriptive(values):
+    a = np.asarray(values, float)
+    return {'n': len(a), 'values': a.tolist(), 'mean': float(a.mean()) if len(a) else None,
+            'median': float(np.median(a)) if len(a) else None,
+            'sd': float(a.std(ddof=1)) if len(a)>1 else None,
+            'qq': {'theoretical': norm.ppf((np.arange(len(a))+.5)/len(a)).tolist() if len(a) else [],
+                   'observed': np.sort(a).tolist()}}
+
+
+def analyze(manifest, results, config=None):
+    c = configuration(config)
+    params = manifest['model']['parameters']; keys = [p['key'] for p in params]
+    train = set(manifest['split']['assignments']['train'])
+    fits = {r['segment_id']: r for r in results if r['segment_id'] in train}
+    out = {'version': VERSION, 'config': c, 'run_id': manifest['id'], 'status': 'insufficient_data',
+           'parameters': params, 'screening': [], 'distributions': {}, 'model': None,
+           'retained_vectors': 0, 'train_count': len(train), 'warnings': [], 'test': []}
+    if manifest['config'].get('initialization_mode') != 'estimated_equilibrium' or 'B' not in keys or manifest.get('model_structure') != 'p1d_full':
+        out.update(status='incompatible', reason='Richiesta una run P1D con B stimato (estimated_equilibrium). Nessun uso di HR test come fallback.')
+        return out
+    if manifest['config'].get('initialization_protocol') == 'legacy_v1':
+        out.update(status='incompatible', reason='Protocollo storico non compatibile: creare una run segment_v2 con B stimato.')
+        return out
+    original_keys = keys[:]
+    indices = [i for i,k in enumerate(keys) if c['prediction_mode'] not in LOCAL_B_WINDOWS or k != 'B']
+    params = [params[i] for i in indices]; keys = [p['key'] for p in params]
+    out['parameters'] = params
+    raw = {k: [] for k in keys}; retained = {k: [] for k in keys}
+    vectors, covariances, ids, all_vectors = [], [], [], []
+    # Only explicitly fixed bounds identify a fixed coordinate.
+    limits = manifest['parameter_bounds']
+    fixed = np.array([a is not None and b is not None and a == b for a,b in zip(limits['lower'],limits['upper'])])
+    original_p = int((~fixed).sum())
+    fixed = fixed[indices]
+    limits = {name: [limits[name][i] for i in indices] for name in ('lower', 'upper')}
+    free = ~fixed; p = int(free.sum())
+    for sid in manifest['split']['assignments']['train']:
+        r = fits.get(sid, {})
+        estimates = r.get('parameters', {})
+        values = [estimates.get(k,{}).get('estimate') for k in keys]
+        if r.get('status') == 'fitted' and all(v is not None and np.isfinite(v) for v in values):
+            all_vectors.append(values)
+        reasons = {k: [] for k in keys}
+        global_reasons = []
+        if r.get('status') != 'fitted': global_reasons.append('fit_failed_or_missing')
+        unc = r.get('uncertainty', {})
+        if unc.get('rank') != original_p: global_reasons.append('rank_deficient_or_missing')
+        if 'equivalent_predictions_different_parameters' in r.get('warnings', []):
+            global_reasons.append('equivalent_predictions_different_parameters')
+        cov = np.asarray(unc.get('covariance'), float)
+        if cov.shape == (len(original_keys), len(original_keys)):
+            cov = cov[np.ix_(indices, indices)]
+        valid_cov = cov.shape == (len(keys),len(keys)) and np.isfinite(cov).all()
+        if valid_cov:
+            try:
+                if not np.allclose(cov, cov.T): raise np.linalg.LinAlgError()
+                np.linalg.cholesky(cov[np.ix_(free,free)])
+            except np.linalg.LinAlgError: valid_cov = False
+        if not valid_cov: global_reasons.append('invalid_sampling_covariance')
+        for i,k in enumerate(keys):
+            e = estimates.get(k, {}); value = e.get('estimate')
+            reasons[k].extend(global_reasons)
+            if value is None or not np.isfinite(value): reasons[k].append('missing_estimate')
+            else: raw[k].append(value)
+            if fixed[i]:
+                if value != limits['lower'][i]: reasons[k].append('inconsistent_fixed_parameter')
+                continue
+            if e.get('at_bound'): reasons[k].append('at_bound')
+            if c['exclude_near_bounds'] and e.get('near_bound'): reasons[k].append('near_bound')
+            se = e.get('se')
+            if se is None or not np.isfinite(se) or se <= 0: reasons[k].append('invalid_se')
+            if value is not None and np.isfinite(value) and se is not None and np.isfinite(se):
+                if abs(value) > 1e-12 and 100*se/abs(value) > c['max_rse_pct']: reasons[k].append('high_rse')
+            if valid_cov:
+                for j in np.flatnonzero(free):
+                    if i != j and abs(cov[i,j]/np.sqrt(cov[i,i]*cov[j,j])) > c['max_correlation']:
+                        reasons[k].append('high_sampling_correlation'); break
+        for k in keys:
+            if not reasons[k]: retained[k].append(estimates[k]['estimate'])
+        keep = not any(reasons.values())
+        out['screening'].append({'segment_id': sid, 'included': keep, 'parameters': reasons,
+                                 'fit_warnings': r.get('warnings', [])})
+        if keep:
+            ids.append(sid); vectors.append([estimates[k]['estimate'] for k in keys]); covariances.append(cov)
+    out['retained_vectors'] = len(vectors)
+    out['fit_correlations'] = {label: {'n': len(v), 'matrix': correlation(np.atleast_2d(np.cov(v,rowvar=False))) if len(v)>1 else None}
+                               for label,v in [('all',all_vectors),('retained',vectors)]}
+    out['distributions'] = {k: {'all': descriptive(raw[k]), 'retained': descriptive(retained[k])} for k in keys}
+    out['minimum_vectors'] = max(5, p+2)
+    out['warnings'].append('Covarianze locali di Wald approssimate; autocorrelazione e selezione dei fit possono distorcere la stima della variabilita.')
+    activities = [s.get('activity_id') for s in manifest['dataset']['segments'] if s['id'] in ids]
+    if any(a is None for a in activities) or len(set(activities)) < len(activities):
+        out['warnings'].append('Segmenti della stessa attivita o attivita ignota: REML assume indipendenza tra segmenti; incertezza della media potenzialmente ottimistica.')
+    if manifest['split'].get('unit') != 'activity':
+        out['warnings'].append('Holdout per segmento: non dimostra generalizzazione a intere attivita non osservate.')
+    if len(vectors) < out['minimum_vectors']:
+        out['reason'] = 'Vettori completi affidabili insufficienti per stimare media e covarianza. Nessun parametro sostituito arbitrariamente.'
+        return out
+    y, s = np.asarray(vectors), np.asarray(covariances)
+    try: model = fit_reml(y[:,free], s[:,free][:,:,free])
+    except ValueError as exc:
+        out.update(status='estimation_failed', reason=str(exc)); return out
+    mean = y.mean(axis=0); mean[free] = model['mean']
+    omega = np.zeros((len(keys),len(keys))); omega[np.ix_(free,free)] = model['covariance']
+    mean_cov = np.zeros_like(omega); mean_cov[np.ix_(free,free)] = model['mean_covariance']
+    se = np.sqrt(np.diag(mean_cov))
+    out['model'] = dict(model, keys=keys, mean=mean.tolist(), covariance=omega.tolist(),
+                        mean_covariance=mean_cov.tolist(), mean_ci95=np.column_stack([mean-1.96*se,mean+1.96*se]).tolist(),
+                        sd=np.sqrt(np.diag(omega)).tolist(), correlation=correlation(omega),
+                        observed_correlation=correlation(np.atleast_2d(np.cov(y,rowvar=False))),
+                        included_segments=ids, fixed=fixed.tolist())
+    out['status'] = 'estimated'
+    return out
+
+
+def predict(manifest, analysis, time, power, observed):
+    """Saved protocol controls HR conditioning; scoring never feeds prediction."""
+    if analysis['model'] is None: raise ValueError('Modello di popolazione non disponibile')
+    t, u, hr = (np.asarray(a, float) for a in (time, power, observed))
+    if t.ndim != 1 or u.shape != t.shape or hr.shape != t.shape or not len(t): raise ValueError('Dimensioni non coerenti')
+    if not np.isfinite(t).all() or np.any(np.diff(t) <= 0): raise ValueError('Tempi non validi')
+    pre = (t >= -10)&(t < 0)
+    mask = t >= 0
+    if not mask.any() or (np.any(t < 0) and t[mask][0] != 0): raise ValueError('Inizio segmento mancante')
+    if manifest['config'].get('use_pre_window'):
+        if not pre.any() or not np.isfinite(u[pre]).all(): raise ValueError('Pre-window di potenza assente o non finita')
+        p0 = float(u[pre].mean())
+    else: p0 = float(u[mask][0])
+    t, u, hr = t[mask], u[mask], hr[mask]; t = t-t[0]
+    if len(t) < 2 or not np.isfinite(u).all(): raise ValueError('Potenza non finita o segmento troppo corto')
+    model = analysis['model']; mean = np.asarray(model['mean'])
+    mode = analysis['config'].get('prediction_mode', 'legacy_power_only')
+    local = mode in LOCAL_B_WINDOWS
+    calibration_s = LOCAL_B_WINDOWS.get(mode, 10)
+    legacy = mode == 'legacy_power_only'
+    if not legacy and not np.isfinite(hr[0]):
+        raise ValueError('HR iniziale mancante o non finita')
+    if not legacy and not np.any(t >= calibration_s):
+        raise ValueError(f'Segmento senza tratto di valutazione dopo {calibration_s} s')
+    bounds = manifest['parameter_bounds']
+    source_keys = bounds['keys']
+    selected = [source_keys.index(k) for k in model['keys']]
+    lo_full = np.array([-np.inf if v is None else v for v in bounds['lower']])
+    hi_full = np.array([np.inf if v is None else v for v in bounds['upper']])
+    lo, hi = lo_full[selected], hi_full[selected]
+    b_index = source_keys.index('B')
+    calibration_mask = (t < calibration_s) & np.isfinite(hr)
+    if local and calibration_mask.sum() < 3:
+        raise ValueError(f'HR insufficienti nei primi {calibration_s} s per calibrare B')
+
+    def trajectory(theta, details=False):
+        if local:
+            # With fixed K,L,tau and observed HR(0), output is affine in B.
+            base = simulate(t, u, hr[0], [*theta, 0.], p0, 'p1d_full', 'estimated_equilibrium')
+            weight = -np.expm1(-t/theta[model['keys'].index('tau')])
+            w = weight[calibration_mask]
+            information = float(w@w)
+            if information <= 1e-12: raise ValueError(f'B non identificabile nella finestra di {calibration_s} s')
+            estimate = float(w@(hr[calibration_mask]-base[calibration_mask])/information)
+            equilibrium = float(np.clip(estimate, lo_full[b_index], hi_full[b_index]))
+            result = base + weight*equilibrium
+            errors = hr[calibration_mask]-result[calibration_mask]
+            se = float(np.sqrt(errors@errors/(len(errors)-1)/information))
+            warnings = []
+            at_bound = bool(equilibrium == lo_full[b_index] or equilibrium == hi_full[b_index])
+            if at_bound: warnings.append('B locale al limite ammesso')
+            if weight[calibration_mask].max() < .5:
+                warnings.append('Finestra breve rispetto a tau: sensibilita a B debole')
+            if 1.96*se > abs(equilibrium): warnings.append('Incertezza locale di B elevata')
+            diagnostic = {'duration_s': calibration_s, 'samples': int(calibration_mask.sum()),
+                          'B_se_conditional': se, 'at_bound': at_bound, 'warnings': warnings}
+        else:
+            equilibrium = float(theta[model['keys'].index('B')])
+            result = simulate(t, u, equilibrium if legacy else hr[0], theta, p0,
+                              'p1d_full', 'estimated_equilibrium')
+            diagnostic = None
+        return (result, equilibrium, diagnostic) if details else result
+
+    if np.any(mean < lo) or np.any(mean > hi): raise ValueError('Media REML fuori dal dominio del modello')
+    central, equilibrium, calibration = trajectory(mean, True)
+    c = analysis['config']; rng = np.random.default_rng(c['seed'])
+    samples = rng.multivariate_normal(mean, model['covariance'], size=c['draws']*20, check_valid='raise')
+    admissible = np.all((samples >= lo)&(samples <= hi), axis=1)
+    accepted = samples[admissible][:c['draws']]
+    band = None
+    if len(accepted) == c['draws']:
+        trajectories = np.array([trajectory(a) for a in accepted])
+        band = np.quantile(trajectories,[.025,.975],axis=0)
+    valid = np.isfinite(hr) & (True if legacy else t >= calibration_s)
+    residual = hr-central
+    metrics = None
+    if valid.any():
+        e = residual[valid]
+        metrics = {'N': int(valid.sum()), 'MAE': float(np.mean(abs(e))), 'RMSE': float(np.sqrt(np.mean(e**2))),
+                   'bias': float(e.mean()), 'residual_sd': float(e.std(ddof=1)) if len(e)>1 else None,
+                   'constant_B_RMSE': float(np.sqrt(np.mean((hr[valid]-equilibrium)**2))),
+                   'band_coverage': float(np.mean((hr[valid]>=band[0,valid])&(hr[valid]<=band[1,valid]))) if band is not None else None}
+    clean = lambda a: [float(v) if np.isfinite(v) else None for v in a]
+    return {'status': 'predicted', 'P0': p0, 'initial_HR': float(central[0]), 'equilibrium_B': equilibrium,
+            'prediction_mode': mode, 'evaluation_start_s': 0 if legacy else calibration_s,
+            'calibration': calibration, 'metrics': metrics,
+            'missing_hr': int((~np.isfinite(hr)).sum()), 'gaussian_domain_acceptance': float(admissible.mean()),
+            'band_draws': len(accepted), 'band_available': band is not None,
+            'series': {'time': t.tolist(), 'power': u.tolist(), 'observed': clean(hr), 'predicted': central.tolist(),
+                       'residual': clean(residual), 'lower': band[0].tolist() if band is not None else [],
+                       'upper': band[1].tolist() if band is not None else []}}

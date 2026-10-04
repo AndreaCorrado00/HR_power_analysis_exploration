@@ -10,7 +10,8 @@ from scipy.stats import norm
 
 from .models.p1d import simulate
 
-VERSION = '2.0.0'
+VERSION = '2.1.0'
+LOCAL_B_WINDOWS = {'local_B_10s': 10, 'local_B_180s': 180}
 DEFAULTS = {'max_rse_pct': 100., 'max_correlation': .98,
             'exclude_near_bounds': False, 'draws': 200, 'seed': 42, 'prediction_mode': 'legacy_power_only'}
 
@@ -28,7 +29,7 @@ def configuration(value=None):
         raise ValueError('Simulazioni: intero tra 50 e 1000')
     if isinstance(c['seed'], bool) or not isinstance(c['seed'], int) or not 0 <= c['seed'] < 2**32:
         raise ValueError('Seed: intero tra 0 e 2^32-1')
-    if c['prediction_mode'] not in ('legacy_power_only', 'observed_hr', 'local_B_10s'):
+    if c['prediction_mode'] not in ('legacy_power_only', 'observed_hr', *LOCAL_B_WINDOWS):
         raise ValueError('Modalita predittiva sconosciuta')
     return c
 
@@ -118,7 +119,7 @@ def analyze(manifest, results, config=None):
         out.update(status='incompatible', reason='Protocollo storico non compatibile: creare una run segment_v2 con B stimato.')
         return out
     original_keys = keys[:]
-    indices = [i for i,k in enumerate(keys) if c['prediction_mode'] != 'local_B_10s' or k != 'B']
+    indices = [i for i,k in enumerate(keys) if c['prediction_mode'] not in LOCAL_B_WINDOWS or k != 'B']
     params = [params[i] for i in indices]; keys = [p['key'] for p in params]
     out['parameters'] = params
     raw = {k: [] for k in keys}; retained = {k: [] for k in keys}
@@ -226,12 +227,13 @@ def predict(manifest, analysis, time, power, observed):
     if len(t) < 2 or not np.isfinite(u).all(): raise ValueError('Potenza non finita o segmento troppo corto')
     model = analysis['model']; mean = np.asarray(model['mean'])
     mode = analysis['config'].get('prediction_mode', 'legacy_power_only')
-    local = mode == 'local_B_10s'
+    local = mode in LOCAL_B_WINDOWS
+    calibration_s = LOCAL_B_WINDOWS.get(mode, 10)
     legacy = mode == 'legacy_power_only'
     if not legacy and not np.isfinite(hr[0]):
         raise ValueError('HR iniziale mancante o non finita')
-    if not legacy and not np.any(t >= 10):
-        raise ValueError('Segmento senza tratto di valutazione dopo 10 s')
+    if not legacy and not np.any(t >= calibration_s):
+        raise ValueError(f'Segmento senza tratto di valutazione dopo {calibration_s} s')
     bounds = manifest['parameter_bounds']
     source_keys = bounds['keys']
     selected = [source_keys.index(k) for k in model['keys']]
@@ -239,9 +241,9 @@ def predict(manifest, analysis, time, power, observed):
     hi_full = np.array([np.inf if v is None else v for v in bounds['upper']])
     lo, hi = lo_full[selected], hi_full[selected]
     b_index = source_keys.index('B')
-    calibration_mask = (t < 10) & np.isfinite(hr)
+    calibration_mask = (t < calibration_s) & np.isfinite(hr)
     if local and calibration_mask.sum() < 3:
-        raise ValueError('HR insufficienti nei primi 10 s per calibrare B')
+        raise ValueError(f'HR insufficienti nei primi {calibration_s} s per calibrare B')
 
     def trajectory(theta, details=False):
         if local:
@@ -250,7 +252,7 @@ def predict(manifest, analysis, time, power, observed):
             weight = -np.expm1(-t/theta[model['keys'].index('tau')])
             w = weight[calibration_mask]
             information = float(w@w)
-            if information <= 1e-12: raise ValueError('B non identificabile nella finestra di 10 s')
+            if information <= 1e-12: raise ValueError(f'B non identificabile nella finestra di {calibration_s} s')
             estimate = float(w@(hr[calibration_mask]-base[calibration_mask])/information)
             equilibrium = float(np.clip(estimate, lo_full[b_index], hi_full[b_index]))
             result = base + weight*equilibrium
@@ -262,7 +264,7 @@ def predict(manifest, analysis, time, power, observed):
             if weight[calibration_mask].max() < .5:
                 warnings.append('Finestra breve rispetto a tau: sensibilita a B debole')
             if 1.96*se > abs(equilibrium): warnings.append('Incertezza locale di B elevata')
-            diagnostic = {'duration_s': 10, 'samples': int(calibration_mask.sum()),
+            diagnostic = {'duration_s': calibration_s, 'samples': int(calibration_mask.sum()),
                           'B_se_conditional': se, 'at_bound': at_bound, 'warnings': warnings}
         else:
             equilibrium = float(theta[model['keys'].index('B')])
@@ -281,7 +283,7 @@ def predict(manifest, analysis, time, power, observed):
     if len(accepted) == c['draws']:
         trajectories = np.array([trajectory(a) for a in accepted])
         band = np.quantile(trajectories,[.025,.975],axis=0)
-    valid = np.isfinite(hr) & (True if legacy else t >= 10)
+    valid = np.isfinite(hr) & (True if legacy else t >= calibration_s)
     residual = hr-central
     metrics = None
     if valid.any():
@@ -292,7 +294,7 @@ def predict(manifest, analysis, time, power, observed):
                    'band_coverage': float(np.mean((hr[valid]>=band[0,valid])&(hr[valid]<=band[1,valid]))) if band is not None else None}
     clean = lambda a: [float(v) if np.isfinite(v) else None for v in a]
     return {'status': 'predicted', 'P0': p0, 'initial_HR': float(central[0]), 'equilibrium_B': equilibrium,
-            'prediction_mode': mode, 'evaluation_start_s': 0 if legacy else 10,
+            'prediction_mode': mode, 'evaluation_start_s': 0 if legacy else calibration_s,
             'calibration': calibration, 'metrics': metrics,
             'missing_hr': int((~np.isfinite(hr)).sum()), 'gaussian_domain_acceptance': float(admissible.mean()),
             'band_draws': len(accepted), 'band_available': band is not None,

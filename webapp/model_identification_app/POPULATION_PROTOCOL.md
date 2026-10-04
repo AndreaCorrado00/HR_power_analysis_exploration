@@ -176,3 +176,37 @@ e convenzioni; il PDF comprende solo analisi dei parametri e predizioni,
 con etichette, note e tracce HR/potenza/residui. Nessun refit all'esportazione.
 Gli assi temporali mostrano durate hh:mm:ss, anche oltre 24 ore; i valori
 numerici delle serie JSON rimangono in secondi.
+
+## Protocollo v2.1 - scelta della calibrazione in inferenza (1 ottobre 2026)
+
+Decisione approvata: l'identificazione train resta invariata, con K, L, tau e B
+identificati sull'intero segmento disponibile. La scelta 10/180 secondi riguarda
+soltanto B locale in inferenza, dopo aver stimato i parametri di popolazione.
+Non si modifica il fitting train, lo split o i dati sorgente.
+
+La pagina Popolazione offre `local_B_10s` e `local_B_180s`; per nuove analisi
+senza risultati salvati propone 180 s. Le analisi gia salvate mantengono la loro
+modalita. L'assenza di prediction_mode continua a significare legacy_power_only
+per compatibilita con le analisi e i client storici.
+
+Con T pari a 10 o 180 s si applica la medesima calibrazione analitica del
+protocollo v2 usando soltanto i campioni HR finiti in [0,T), con K,L,tau fissi,
+HR(0) osservata e bounds B della run. B resta costante per il resto del segmento;
+nessun reset dello stato a T e nessun utilizzo della HR successiva nella previsione.
+Le estrazioni per le fasce ricalibrano B sulla stessa finestra T. Un segmento
+senza campioni a t>=T viene segnalato come fallito, senza accorciare la finestra
+automaticamente. Restano necessari almeno tre campioni HR finiti nella finestra,
+HR(0) finita e sensibilita non nulla; non si introducono interpolazioni.
+
+Metriche e fascia di calibrazione dei grafici iniziano rispettivamente a T e
+in [0,T); durata e campioni di calibrazione sono salvati insieme alle predizioni.
+JSON, revisione e PDF dichiarano la durata selezionata. observed_hr conserva il
+protocollo precedente, con valutazione da 10 s. Per confrontare finestre diverse
+occorre ricalcolare le metriche su una coda comune (per esempio t>=180 s): i
+riepiloghi standard delle due modalita usano tratti diversi e non sono direttamente
+un confronto a parita di campioni.
+
+La scelta di 180 s deriva dal confronto esplorativo documentato in
+`reports/P1D_first_full_dataset_run/B_calibration_comparison/README.md`, non da
+una nuova fonte bibliografica o da una garanzia di robustezza su altri dati.
+Le assunzioni e i limiti della calibrazione e delle fasce restano quelli di v2.
