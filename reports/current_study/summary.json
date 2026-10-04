@@ -1,0 +1,93 @@
+{
+  "milestone_date": "2026-10-04",
+  "run_id": "b4ac2e8208374c9fbf18a4009dc0e2fc",
+  "analysis_id": "827971e56c0d43f1af835ee5265e0334",
+  "sources": [
+    {
+      "path": "webapp/model_identification_app/storage/runs/20261002T045628Z__sataset_identificazione_full_run_seed_52__p1d__raw__70-10-20__s52__n8-f42__b4ac2e82.json",
+      "sha256": "aec453714f5aba370353c48fb3ff83a1c08819a272f8510ed68466a36a9885a2"
+    },
+    {
+      "path": "webapp/model_identification_app/storage/runs/b4ac2e8208374c9fbf18a4009dc0e2fc/population/analysis.json",
+      "sha256": "a8d8e9ccc2cbff9c8a3f306220a0309ecece6813d6251eadb62b0fe23336313d"
+    },
+    {
+      "path": "webapp/model_identification_app/storage/runs/20261004T054917Z__sataset_identificazione_full_run_seed_60__p1d__raw__70-10-20__s60__n8-f42__8dc6d46a.json",
+      "sha256": "403fa8f9a30837046493a9275d0f8da16faab447506d5d817e6563bd7992e45c"
+    }
+  ],
+  "split_unit": "activity",
+  "split_seed": 52,
+  "split_counts": {
+    "train": 250,
+    "val": 42,
+    "test": 65
+  },
+  "dataset_summary": {
+    "source_activities": 131,
+    "represented_activities": 130,
+    "segments": 357,
+    "rows": 848634,
+    "retained_sample_percent": 98.0935747005931,
+    "missing_power": 674,
+    "missing_hr": 275,
+    "discarded_segments": 161
+  },
+  "run_status": "completed_with_errors",
+  "repeat_run": {
+    "id": "8dc6d46a06e6496aab0ba80040ba56ad",
+    "split_seed": 60,
+    "status": "completed_with_errors",
+    "progress": {
+      "done": 239,
+      "total": 239,
+      "failed": 28
+    },
+    "finished_at": "2026-10-04T06:32:15.248265+00:00",
+    "note": "Running in archived snapshot; latest persisted identification status here. No comparison inferred."
+  },
+  "fit_counts": {
+    "fitted": 219,
+    "failed": 31
+  },
+  "retained_vectors": 218,
+  "prediction_config": {
+    "max_rse_pct": 150.0,
+    "max_correlation": 0.99,
+    "exclude_near_bounds": false,
+    "draws": 200,
+    "seed": 42,
+    "prediction_mode": "local_B_180s"
+  },
+  "population_mean": {
+    "K": 0.2955237031211266,
+    "L": 0.0,
+    "tau": 52.36705305028645
+  },
+  "population_units": {
+    "K": "bpm/W",
+    "L": "s",
+    "tau": "s"
+  },
+  "delay_fixed_s": 0,
+  "test_total": 65,
+  "test_predicted": 57,
+  "test_failed": 8,
+  "predicted_activity_count": 24,
+  "evaluation_start_s": 180,
+  "aggregation": "Unweighted median across successfully predicted test segments; errors in bpm",
+  "median_metrics": {
+    "RMSE": 7.23639710640287,
+    "MAE": 5.990989743778934,
+    "bias": -2.6220535744989797,
+    "residual_sd": 4.766522923805018,
+    "constant_B_RMSE": 42.76588122425565
+  },
+  "better_than_constant_B": 56,
+  "limitations": [
+    "Calibration uses observed HR in [0,180 s).",
+    "Test inspected during protocol development; exploratory evidence.",
+    "Constant B baseline is not a static power-HR regression.",
+    "Seed 60 uses the same source dataset, not new independent data."
+  ]
+}

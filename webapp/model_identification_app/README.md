@@ -1,9 +1,12 @@
 # Identificazione HR–Power
 
 SPA Vue locale per importare segmenti, creare split riproducibili e identificare
-un modello P1D full o short-transient indipendente su ogni segmento **train**. Validation e test vengono
-riservati, ma non sono utilizzati. Non viene misurata capacità predittiva fuori
-campione, né si attribuisce significato fisiologico ai parametri.
+un modello P1D full o short-transient indipendente su ogni segmento **train**.
+La pagina **Parametri atleta** stima parametri condivisi dal train e valuta le
+predizioni sul test, con inizializzazione o calibrazione esplicita. La validation
+resta riservata. Non si attribuisce significato fisiologico ai parametri.
+Per il percorso operativo completo e le run della milestone vedere il
+[README principale](../../README.md) e il [protocollo di previsione](POPULATION_PROTOCOL.md).
 
 ## Avvio e riavvio (Windows)
 
@@ -116,7 +119,8 @@ dataset misti FIT/CSV viene bloccato: importare attività e segmenti in dataset
 separati, per evitare sovrapposizioni non riconoscibili tra train e test.
 Le attività iniziano a t=0 e non hanno pre-window: lasciare disattivata tale
 opzione. Il protocollo di fitting e i modelli restano invariati; validation/test
-sono riservati e non valutati dalla versione attuale dell'app.
+sono riservati durante il fitting; il test può essere valutato separatamente
+nella pagina **Parametri atleta** per le run compatibili.
 
 Il limite cumulativo dei FIT risolti o contenuti negli ZIP è 256 MiB, oltre
 ai limiti ZIP e upload indicati sotto. Importazioni errate non creano dataset;

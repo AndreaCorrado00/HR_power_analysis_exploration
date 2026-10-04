@@ -207,6 +207,7 @@ riepiloghi standard delle due modalita usano tratti diversi e non sono direttame
 un confronto a parita di campioni.
 
 La scelta di 180 s deriva dal confronto esplorativo documentato in
-`reports/P1D_first_full_dataset_run/B_calibration_comparison/README.md`, non da
+`milestone_artifacts/reports/P1D_first_full_dataset_run/B_calibration_comparison/README.md`
+nella branch `milestone/2026-10-04-hr-power` (commit `c95496e`), non da
 una nuova fonte bibliografica o da una garanzia di robustezza su altri dati.
 Le assunzioni e i limiti della calibrazione e delle fasce restano quelli di v2.

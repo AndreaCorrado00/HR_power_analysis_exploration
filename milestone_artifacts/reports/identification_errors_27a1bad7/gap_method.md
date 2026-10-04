@@ -1,5 +1,0 @@
-Diagnostica descrittiva sui 34 record falliti del run 27a1bad774ee41779fdc42cde0110869.
-Un buco e una sequenza massimale di righe consecutive con valore non finito, separatamente per segnale. Zeri validi non sono mancanti. Nessun ricampionamento, filtro, interpolazione o fitting.
-Lunghezza nominale = numero righe mancanti x mediana dt. Durata tra ancore = timestamp valido successivo meno precedente; tempo non osservato riportato = durata tra ancore meno dt nominale. Buchi agli estremi non hanno due ancore.
-Salti di registrazione: dt > 1.5 x mediana dt. Le soglie di recuperabilita sono scenari descrittivi, non un protocollo approvato: richiedono due ancore e nessun salto di registrazione nel tratto. Un record recuperabile in tabella ha tutti i valori mancanti ammissibili secondo la soglia; puo comunque contenere altri salti nei timestamp. Nessuna garanzia di convergenza o accuratezza dopo interpolazione.
-Riproduzione: .venv/Scripts/python.exe reports/identification_errors_27a1bad7/analyze_gaps.py dalla radice repository.
