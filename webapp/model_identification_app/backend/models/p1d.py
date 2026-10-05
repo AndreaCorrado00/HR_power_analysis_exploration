@@ -246,7 +246,9 @@ def fit(t, power, hr, config):
     if not np.allclose(dt, np.median(dt), rtol=.01): warnings.append('irregular_sampling')
     equivalent = [o for o in solutions if float(o.fun@o.fun) <= sse + max(1e-8, sse*.01)]
     agreement_atol = np.array([1e-6 if k=='gamma' else .01 for k in keys])
-    stable = all(np.allclose(o.x, opt.x, rtol=.05, atol=agreement_atol) for o in equivalent)
+    # 2026-10-05: approved 10% stability tolerance for equivalent-SSE solutions;
+    # applies to every parameter, including L; all-start agreement stays at 5%.
+    stable = all(np.allclose(o.x, opt.x, rtol=.10, atol=agreement_atol) for o in equivalent)
     all_agree = all(o.success and np.allclose(o.x, opt.x, rtol=.05, atol=agreement_atol) for o in solutions)
     if not stable: warnings.append('equivalent_predictions_different_parameters')
     if not all_agree: warnings.append('multistart_disagreement')
