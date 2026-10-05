@@ -82,6 +82,17 @@ def test_invalid_zip_is_reported():
     assert c.post('/api/processing/import', content=b'bad zip').status_code == 422
 
 
+def test_processed_export_is_saved_in_selected_destination(tmp_path, monkeypatch):
+    monkeypatch.setenv('HR_POWER_EXPORTS', str(tmp_path))
+    c = TestClient(create_app())
+    data = load(c)
+    response = c.post('/api/processing/export', json=request(data))
+    assert response.status_code == 200
+    files = list(tmp_path.glob('dataset_segments_processed_*.zip'))
+    assert len(files) == 1
+    assert files[0].read_bytes() == response.content
+
+
 def test_even_window_is_ten_samples_and_shared_by_signals():
     c = TestClient(create_app()); data = load(c, archive(tuple(range(30)), tuple(range(30))))
     p = c.post('/api/processing/preview', json=request(data, windowSeconds=10)).json()['segments'][0]['points'][15]

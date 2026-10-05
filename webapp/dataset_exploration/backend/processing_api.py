@@ -8,6 +8,7 @@ from pydantic import BaseModel, ConfigDict, Field
 
 from .normalization import NormalizationRequest
 from .processing_service import MAX_ARCHIVE, read_archive, inventory, process, export_archive
+from webapp.workspace import export_headers
 
 
 class Camel(BaseModel):
@@ -31,7 +32,7 @@ class ProcessingRequest(Camel):
     normalization: Normalization = Field(default_factory=Normalization)
 
 
-def processing_router() -> APIRouter:
+def processing_router(destination=None) -> APIRouter:
     router = APIRouter(prefix='/api/processing')
     current = {}  # One imported dataset per local application, independent of FIT state.
 
@@ -72,7 +73,7 @@ def processing_router() -> APIRouter:
     def export(req: ProcessingRequest):
         dataset, norm, frames = run(req)
         blob = export_archive(dataset, frames, req.window_seconds, norm)
-        return Response(blob, media_type='application/zip', headers={
-            'Content-Disposition': 'attachment; filename="dataset_segments_processed.zip"'})
+        return Response(blob, media_type='application/zip',
+                        headers=export_headers(blob, 'dataset_segments_processed.zip', destination))
 
     return router

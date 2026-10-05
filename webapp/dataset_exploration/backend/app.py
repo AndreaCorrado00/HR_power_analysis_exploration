@@ -16,6 +16,7 @@ from .segment_service import activity_series, extract_segment, validate_selectio
 from .normalization import NormalizationRequest, apply_normalizations, NormalizationError
 from .export_service import ExportSegment, build_export_zip, write_or_return_export
 from .processing_api import processing_router
+from webapp.workspace import export_directory, export_headers
 
 class Camel(BaseModel):
     model_config=ConfigDict(alias_generator=lambda s:s.split('_')[0]+''.join(x.title() for x in s.split('_')[1:]),populate_by_name=True)
@@ -46,7 +47,8 @@ def _norm(n): return NormalizationRequest(n.weight_kg,n.hr_max_bpm,n.hr_threshol
 
 def create_app()->FastAPI:
     app=FastAPI(title='Dataset Exploration'); state=State()
-    app.include_router(processing_router())
+    destination = export_directory()
+    app.include_router(processing_router(destination))
     @app.get('/api/health')
     def health(): return {'status':'ok'}
     @app.get('/api/datasets/browse')
@@ -86,10 +88,12 @@ def create_app()->FastAPI:
       try:
        for q in req.segments:
         a,s=get(q.activity_id); laps=validate_selection(s,SegmentSelection(q.activity_id,q.first_lap,q.last_lap)); f=apply_normalizations(extract_segment(a.records,laps),norm); segments.append(ExportSegment(q.activity_id,s.source_path,q.first_lap,q.last_lap,f,norm))
-       blob=build_export_zip(state.root,tuple(segments)); result=write_or_return_export(blob,req.destination)
+       blob=build_export_zip(state.root,tuple(segments))
+       headers=export_headers(blob,'dataset_segments.zip',destination)
+       result=write_or_return_export(blob,req.destination)
       except (SelectionError,NormalizationError) as e: raise HTTPException(422,str(e))
       if result.written_path: return {'writtenPath':result.written_path}
-      return Response(result.download_bytes,media_type='application/zip',headers={'Content-Disposition':'attachment; filename="dataset_segments.zip"'})
+      return Response(result.download_bytes,media_type='application/zip',headers=headers)
     dist=Path(__file__).parents[1]/'dist'
     if dist.exists():
       assets=dist/'assets'

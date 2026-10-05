@@ -1,4 +1,7 @@
 /dataset/
+/exports/
+/.venv/
+/webapp/__pycache__/
 /docs/*
 /exploration/images/
 /exploration/cleaned/images

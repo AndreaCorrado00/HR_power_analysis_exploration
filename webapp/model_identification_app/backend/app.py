@@ -13,6 +13,7 @@ from .datasets import DatasetService, MAX_BYTES
 from .models import REGISTRY
 from .runs import RunService
 from .source_paths import dataset_path
+from webapp.workspace import source_root, export_directory, export_headers
 
 APP_ROOT = Path(__file__).resolve().parents[1]
 REPO_ROOT = APP_ROOT.parents[1]
@@ -38,7 +39,7 @@ class SubsetBody(NameBody):
 
 class SplitBody(Body):
     percentages: list[float] = Field(default_factory=lambda: [70,10,20])
-    seed: int = 42
+    seed: int = 60
     unit: str = 'segment'
 
 
@@ -70,7 +71,9 @@ class PopulationReviewBody(PopulationExportBody):
 
 def create_app(storage=None):
     store = Store(storage or APP_ROOT/'storage')
-    datasets = DatasetService(store, dataset_root=REPO_ROOT/'dataset')
+    source = source_root(REPO_ROOT)
+    destination = export_directory()
+    datasets = DatasetService(store, dataset_root=source)
     runs = RunService(store,datasets)
 
     @asynccontextmanager
@@ -92,22 +95,23 @@ def create_app(storage=None):
     def health(): return {'status':'ok','storage': str(store.root)}
 
     @app.get('/api/models')
-    def models(): return [dict(m.metadata(), default_config=m.default_config()) for m in REGISTRY.values()]
+    def models(): return [dict(m.metadata(), default_config=m.default_config(new_run=True)) for m in REGISTRY.values()]
 
     @app.get('/api/sources')
     def sources():
-        root = REPO_ROOT/'dataset'
-        return [str(p.relative_to(REPO_ROOT)).replace('\\','/') for p in sorted(root.rglob('*'))
+        return [str(p.relative_to(REPO_ROOT)).replace('\\','/') if source == (REPO_ROOT/'dataset').resolve() else str(p)
+                for p in sorted(source.rglob('*'))
                 if p.is_file() and p.suffix.lower() in ('.csv','.zip','.fit')]
 
     @app.post('/api/datasets/import')
     def import_paths(body: ImportBody):
         files, total, local_paths = [], 0, {}
         for name in body.paths:
-            path = dataset_path(REPO_ROOT/name, REPO_ROOT/'dataset')
+            path = dataset_path(REPO_ROOT/name, source)
             total += path.stat().st_size
             if total>MAX_BYTES: raise ValueError('Import oltre 256 MiB')
-            relative = (REPO_ROOT/name).relative_to(REPO_ROOT).as_posix()
+            logical = REPO_ROOT/name
+            relative = logical.relative_to(REPO_ROOT).as_posix() if logical.is_relative_to(REPO_ROOT) else str(logical)
             files.append((relative,path.read_bytes()))
             local_paths[relative] = path
         return datasets.import_files(files,body.name,local_paths=local_paths)
@@ -164,7 +168,7 @@ def create_app(storage=None):
     def export_population(key: str, kind: str, body: PopulationExportBody):
         data, name = runs.export_population(key, kind, body.analysis_id)
         return Response(data, media_type='application/pdf' if kind=='pdf' else 'application/json',
-                        headers={'Content-Disposition':f'attachment; filename="{name}"'})
+                        headers=export_headers(data, name, destination))
 
     @app.get('/api/runs/{key}/segments/{sid}')
     def result(key: str, sid: str):
@@ -183,7 +187,7 @@ def create_app(storage=None):
         if kind not in ('pdf','tables'): raise ValueError('Formato export sconosciuto')
         data, name = runs.export(key,kind)
         return Response(data, media_type='application/pdf' if kind=='pdf' else 'application/zip',
-                        headers={'Content-Disposition': f'attachment; filename="{key}_{name}"'})
+                        headers=export_headers(data, f'{key}_{name}', destination))
 
     @app.get('/api/archives/{key}/manifest')
     def download_archive(key: str):
@@ -193,9 +197,9 @@ def create_app(storage=None):
     def manifest_response(manifest):
         # Serialize the locked snapshot, never stream a concurrently replaced file.
         import json
-        return Response(json.dumps(manifest,ensure_ascii=False,indent=2,allow_nan=False),
-                        media_type='application/json',headers={
-                            'Content-Disposition': f'attachment; filename="{manifest["manifest_filename"]}"'})
+        data = json.dumps(manifest,ensure_ascii=False,indent=2,allow_nan=False).encode('utf-8')
+        return Response(data, media_type='application/json',
+                        headers=export_headers(data, manifest['manifest_filename'], destination))
 
     @app.post('/api/runs/{key}/replay')
     def replay(key: str): return runs.replay(key)

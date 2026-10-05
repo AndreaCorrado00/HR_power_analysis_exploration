@@ -1,0 +1,315 @@
+{
+  "segment_id": "56706faed79a148319eba070",
+  "filename": "a.csv",
+  "status": "fitted",
+  "optimizer_success": true,
+  "identification_valid": true,
+  "failure_reasons": [],
+  "pre_window": {
+    "available": false,
+    "used": false,
+    "seconds": 10,
+    "samples": 0,
+    "signals_finite": true,
+    "power_finite": true,
+    "hr_finite": true,
+    "time": [],
+    "power": [],
+    "observed": [],
+    "first_time": null,
+    "last_time": null,
+    "included_in_objective": false,
+    "power_used": false,
+    "hr_used": false
+  },
+  "model_structure": "p1d_full",
+  "initialization_mode": "equilibrium",
+  "rho": 117.4723860431096,
+  "segment_duration_seconds": 11.0,
+  "effective_bounds": {
+    "lower": [
+      1e-06,
+      0.0,
+      0.01
+    ],
+    "upper": [
+      5.0,
+      11.0,
+      1800.0
+    ]
+  },
+  "search": {
+    "strategy": "multistart",
+    "grid_evaluations": 0,
+    "baseline_SSE": 100.00000004912502,
+    "selected_source": "multistart",
+    "refinements": 0
+  },
+  "identifiability": {
+    "rho": 117.4723860431096,
+    "rho_applicable": true,
+    "correlation_K_tau": 0.4082395202376002,
+    "correlations": {
+      "K_L": -0.4082326261151389,
+      "K_tau": 0.4082395202376002,
+      "L_tau": -0.9999999998003875
+    },
+    "Jacobian_rank": 3
+  },
+  "residual_acf": {
+    "lags": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11
+    ],
+    "values": [
+      1.0,
+      -0.09846436849766069,
+      -0.10606559034946769,
+      -0.11364170456593958,
+      -0.12121781820452616,
+      -0.03788310769848019,
+      -0.04545721826076316,
+      -0.05303132879835384,
+      0.030304454550076475,
+      0.02272834091255736,
+      0.015152227275038238,
+      0.007576113637519119
+    ],
+    "lag_unit": "samples"
+  },
+  "parameters": {
+    "K": {
+      "estimate": 0.1000000983435001,
+      "se": 0.014907119853505815,
+      "ci95": [
+        0.0707821434306287,
+        0.1292180532563715
+      ],
+      "rse_pct": 14.907105193336804,
+      "at_bound": false,
+      "near_bound": false,
+      "at_bound_tolerance": 3.552713678800501e-14,
+      "near_bound_tolerance": 4.999999e-05,
+      "distance_to_lower": 0.0999990983435001,
+      "distance_to_upper": 4.8999999016565,
+      "bound_hit": false,
+      "fixed": false
+    },
+    "L": {
+      "estimate": 6.823345164750127e-13,
+      "se": 73310371.33347033,
+      "ci95": [
+        -143688327.81360185,
+        143688327.81360185
+      ],
+      "rse_pct": null,
+      "at_bound": false,
+      "near_bound": true,
+      "at_bound_tolerance": 7.815970093361102e-14,
+      "near_bound_tolerance": 0.00011,
+      "distance_to_lower": 6.823345164750127e-13,
+      "distance_to_upper": 10.999999999999318,
+      "bound_hit": false,
+      "fixed": false
+    },
+    "tau": {
+      "estimate": 0.09363902760911469,
+      "se": 6864720.400022413,
+      "ci95": [
+        -13454851.8904049,
+        13454852.077682955
+      ],
+      "rse_pct": 7331046226.449932,
+      "at_bound": false,
+      "near_bound": false,
+      "at_bound_tolerance": 1.2789769243681803e-11,
+      "near_bound_tolerance": 0.017999900000000003,
+      "distance_to_lower": 0.0836390276091147,
+      "distance_to_upper": 1799.906360972391,
+      "bound_hit": false,
+      "fixed": false
+    }
+  },
+  "metrics": {
+    "RMSE": 2.8867513466571872,
+    "MAE": 0.8333566108080106,
+    "bias": 0.8333467773409353,
+    "R2": 0.6249999998157811,
+    "amplitude_ratio": 1.000000983435001,
+    "SSE": 100.00000004912502,
+    "residual_mean": 0.8333467773409353,
+    "residual_sd": 2.8867471129199878,
+    "residual_autocorrelation_lag1": -0.09846436849766069,
+    "residual_autocorrelation_lag5": -0.03788310769848019
+  },
+  "optimizer": {
+    "success": true,
+    "status": 2,
+    "message": "`ftol` termination condition is satisfied.",
+    "nfev": 24
+  },
+  "uncertainty": {
+    "rank": 3,
+    "jacobian_condition": 5844266034.7574835,
+    "covariance": [
+      [
+        0.00022222222232678722,
+        -446135.5933588789,
+        41776.46045840476
+      ],
+      [
+        -446135.5933588789,
+        5374410545051308.0,
+        -503255201525636.0
+      ],
+      [
+        41776.46045840476,
+        -503255201525636.0,
+        47124386170483.875
+      ]
+    ],
+    "sigma2": 11.111111116569447,
+    "N": 12,
+    "p": 3
+  },
+  "initial_conditions": {
+    "P0": 100.0,
+    "HR0": 120.0,
+    "B": 120.0,
+    "x0": 0.0,
+    "B_method": "fixed_HR0",
+    "P0_method": "first_segment_sample",
+    "HR0_method": "first_segment_sample"
+  },
+  "starts": [
+    {
+      "source": "multistart",
+      "initial": [
+        0.3,
+        5.0,
+        45.0
+      ],
+      "theta": [
+        0.10000012454205008,
+        3.81388576072934e-09,
+        0.09560068569429073
+      ],
+      "SSE": 100.0000000760602,
+      "success": true,
+      "status": 2,
+      "nfev": 20
+    },
+    {
+      "source": "multistart",
+      "initial": [
+        0.034628306909802765,
+        1.4823557440877302,
+        753.7178718098891
+      ],
+      "theta": [
+        0.1000000983435001,
+        6.823345164750127e-13,
+        0.09363902760911469
+      ],
+      "SSE": 100.00000004912502,
+      "success": true,
+      "status": 2,
+      "nfev": 24
+    }
+  ],
+  "all_starts_agree": true,
+  "warnings": [
+    "ill_conditioned",
+    "near_bounds"
+  ],
+  "multistart_tolerances": {
+    "relative": 0.05,
+    "absolute": {
+      "K": 0.01,
+      "L": 0.01,
+      "tau": 0.01
+    }
+  },
+  "series": {
+    "time": [
+      0.0,
+      1.0,
+      2.0,
+      3.0,
+      4.0,
+      5.0,
+      6.0,
+      7.0,
+      8.0,
+      9.0,
+      10.0,
+      11.0
+    ],
+    "power": [
+      100.0,
+      100.0,
+      100.0,
+      100.0,
+      200.0,
+      200.0,
+      200.0,
+      200.0,
+      200.0,
+      200.0,
+      200.0,
+      200.0
+    ],
+    "observed": [
+      120.0,
+      120.0,
+      120.0,
+      120.0,
+      130.0,
+      130.0,
+      130.0,
+      130.0,
+      130.0,
+      130.0,
+      130.0,
+      130.0
+    ],
+    "predicted": [
+      120.0,
+      120.0,
+      120.0,
+      120.0,
+      120.0,
+      129.99977967110632,
+      130.00000982905252,
+      130.0000098343499,
+      130.00000983435,
+      130.00000983435,
+      130.00000983435,
+      130.00000983435
+    ],
+    "residual": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      10.0,
+      0.00022032889367551434,
+      -9.829052515897274e-06,
+      -9.83434989620946e-06,
+      -9.834350009896298e-06,
+      -9.834350009896298e-06,
+      -9.834350009896298e-06,
+      -9.834350009896298e-06
+    ]
+  }
+}

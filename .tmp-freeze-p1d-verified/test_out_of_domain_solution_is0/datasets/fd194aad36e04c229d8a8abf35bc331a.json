@@ -1,0 +1,81 @@
+{
+  "id": "fd194aad36e04c229d8a8abf35bc331a",
+  "name": "Guard",
+  "created_at": "2026-10-05T16:19:41.311382+00:00",
+  "sources": [
+    {
+      "name": "a.csv",
+      "sha256": "1e6493df651d9fcc9762d37119d69cab16f6885ec8690b91f504ef917cde7769"
+    }
+  ],
+  "source_manifests": [],
+  "segments": [
+    {
+      "id": "0906a6f545a2c5a7d1ee3e03",
+      "filename": "a.csv",
+      "kind": "segment",
+      "quality": null,
+      "sha256": "1e6493df651d9fcc9762d37119d69cab16f6885ec8690b91f504ef917cde7769",
+      "activity_id": "a0",
+      "group": "unknown",
+      "label": "unknown",
+      "duration_seconds": 11.0,
+      "samples": 12,
+      "objective_samples": 12,
+      "pre_window": {
+        "available": false,
+        "samples": 0,
+        "seconds": 10
+      },
+      "start_timestamp": null,
+      "end_timestamp": null,
+      "first_lap": null,
+      "last_lap": null,
+      "signals": [
+        "raw"
+      ],
+      "warnings": [
+        "absolute_timestamps_missing"
+      ],
+      "source_metadata": {}
+    }
+  ],
+  "stats": {
+    "count": 1,
+    "duration_mean": 11.0,
+    "duration_sd": null
+  },
+  "filters": null,
+  "split": {
+    "id": "34d56eb860444a8e80e8dfecb0205a77",
+    "unit": "segment",
+    "seed": 42,
+    "percentages": [
+      100.0,
+      0.0,
+      0.0
+    ],
+    "algorithm": "sorted groups; numpy PCG64 shuffle; largest remainder on group counts v1",
+    "assignments": {
+      "train": [
+        "0906a6f545a2c5a7d1ee3e03"
+      ],
+      "val": [],
+      "test": []
+    },
+    "group_counts": [
+      1,
+      0,
+      0
+    ],
+    "actual_percentages": [
+      100.0,
+      0.0,
+      0.0
+    ],
+    "warnings": [
+      "empty_val",
+      "empty_test"
+    ]
+  }
+}

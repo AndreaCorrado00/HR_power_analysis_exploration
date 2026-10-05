@@ -65,7 +65,7 @@ def test_local_links_are_bounded_and_uploaded_links_rejected(tmp_path):
         service.import_files([('links.zip', data)], 'D')
     outside = tmp_path/'outside.fit'
     outside.write_bytes(fit_bytes())
-    with pytest.raises(ValueError, match='dataset/'):
+    with pytest.raises(ValueError, match='cartella sorgente configurata'):
         service.import_files([('links.zip', archive('a.fit', str(outside), True))], 'D', local_paths=paths)
     with pytest.raises(ValueError, match='non trovato'):
         service.import_files([('links.zip', archive('a.fit', str(root/'missing.fit'), True))], 'D', local_paths=paths)

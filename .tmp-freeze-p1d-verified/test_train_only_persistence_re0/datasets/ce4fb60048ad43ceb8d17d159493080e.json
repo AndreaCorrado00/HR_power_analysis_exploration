@@ -1,0 +1,386 @@
+{
+  "id": "ce4fb60048ad43ceb8d17d159493080e",
+  "name": "Renamed",
+  "created_at": "2026-10-05T16:19:39.086608+00:00",
+  "sources": [
+    {
+      "name": "0.csv",
+      "sha256": "1e6493df651d9fcc9762d37119d69cab16f6885ec8690b91f504ef917cde7769"
+    },
+    {
+      "name": "1.csv",
+      "sha256": "f0cca7e3d71ec58de11ed2ec31bedbeb21db50c72e406cd8e3f4a197d774e585"
+    },
+    {
+      "name": "2.csv",
+      "sha256": "45021166336e0327ece93de7476faca65252a1f275261cd405ec71a229cc0ba0"
+    },
+    {
+      "name": "3.csv",
+      "sha256": "b65ced0909dd981e24bc2e57ab8606b89824f49c9f22146686eb5402a22ce68c"
+    },
+    {
+      "name": "4.csv",
+      "sha256": "3ef0938485e4c113817f11712e82eb2625b93cd4ec5d247d8f7f42a81ec85a23"
+    },
+    {
+      "name": "5.csv",
+      "sha256": "46919b64673054d630ac1e4024f22da8e0645a01b3624b7f08f3a0ccf660cc95"
+    },
+    {
+      "name": "6.csv",
+      "sha256": "b03fac5ed2f13f328a11ec08a9a611b4f1cb7e752c245342483f963f28244571"
+    },
+    {
+      "name": "7.csv",
+      "sha256": "fa7904e008a7c3428da6d34a19f14171a91a0a55a976bfb90e89a4ec98842631"
+    },
+    {
+      "name": "8.csv",
+      "sha256": "5e2cdc71ad3dc876a4b0096a2a0747726e77f98e22e13ae9a6d6da09191365d6"
+    },
+    {
+      "name": "9.csv",
+      "sha256": "b86cdb3bf025240517b43062673050a3ad6bfe4eef6cfb43669dd061dabcd4fb"
+    }
+  ],
+  "source_manifests": [],
+  "segments": [
+    {
+      "id": "475bf0164001c379ea192b02",
+      "filename": "0.csv",
+      "kind": "segment",
+      "quality": null,
+      "sha256": "1e6493df651d9fcc9762d37119d69cab16f6885ec8690b91f504ef917cde7769",
+      "activity_id": "a0",
+      "group": "unknown",
+      "label": "unknown",
+      "duration_seconds": 11.0,
+      "samples": 12,
+      "objective_samples": 12,
+      "pre_window": {
+        "available": false,
+        "samples": 0,
+        "seconds": 10
+      },
+      "start_timestamp": null,
+      "end_timestamp": null,
+      "first_lap": null,
+      "last_lap": null,
+      "signals": [
+        "raw"
+      ],
+      "warnings": [
+        "absolute_timestamps_missing"
+      ],
+      "source_metadata": {}
+    },
+    {
+      "id": "b1572317ef10f2235751cd09",
+      "filename": "1.csv",
+      "kind": "segment",
+      "quality": null,
+      "sha256": "f0cca7e3d71ec58de11ed2ec31bedbeb21db50c72e406cd8e3f4a197d774e585",
+      "activity_id": "a1",
+      "group": "unknown",
+      "label": "unknown",
+      "duration_seconds": 11.0,
+      "samples": 12,
+      "objective_samples": 12,
+      "pre_window": {
+        "available": false,
+        "samples": 0,
+        "seconds": 10
+      },
+      "start_timestamp": null,
+      "end_timestamp": null,
+      "first_lap": null,
+      "last_lap": null,
+      "signals": [
+        "raw"
+      ],
+      "warnings": [
+        "absolute_timestamps_missing"
+      ],
+      "source_metadata": {}
+    },
+    {
+      "id": "b6abe202f8b6644d56481ac3",
+      "filename": "2.csv",
+      "kind": "segment",
+      "quality": null,
+      "sha256": "45021166336e0327ece93de7476faca65252a1f275261cd405ec71a229cc0ba0",
+      "activity_id": "a2",
+      "group": "unknown",
+      "label": "unknown",
+      "duration_seconds": 11.0,
+      "samples": 12,
+      "objective_samples": 12,
+      "pre_window": {
+        "available": false,
+        "samples": 0,
+        "seconds": 10
+      },
+      "start_timestamp": null,
+      "end_timestamp": null,
+      "first_lap": null,
+      "last_lap": null,
+      "signals": [
+        "raw"
+      ],
+      "warnings": [
+        "absolute_timestamps_missing"
+      ],
+      "source_metadata": {}
+    },
+    {
+      "id": "6d3b05a3ce5138f55956f2cd",
+      "filename": "3.csv",
+      "kind": "segment",
+      "quality": null,
+      "sha256": "b65ced0909dd981e24bc2e57ab8606b89824f49c9f22146686eb5402a22ce68c",
+      "activity_id": "a3",
+      "group": "unknown",
+      "label": "unknown",
+      "duration_seconds": 11.0,
+      "samples": 12,
+      "objective_samples": 12,
+      "pre_window": {
+        "available": false,
+        "samples": 0,
+        "seconds": 10
+      },
+      "start_timestamp": null,
+      "end_timestamp": null,
+      "first_lap": null,
+      "last_lap": null,
+      "signals": [
+        "raw"
+      ],
+      "warnings": [
+        "absolute_timestamps_missing"
+      ],
+      "source_metadata": {}
+    },
+    {
+      "id": "8e663d41f11352ec60c2722e",
+      "filename": "4.csv",
+      "kind": "segment",
+      "quality": null,
+      "sha256": "3ef0938485e4c113817f11712e82eb2625b93cd4ec5d247d8f7f42a81ec85a23",
+      "activity_id": "a4",
+      "group": "unknown",
+      "label": "unknown",
+      "duration_seconds": 11.0,
+      "samples": 12,
+      "objective_samples": 12,
+      "pre_window": {
+        "available": false,
+        "samples": 0,
+        "seconds": 10
+      },
+      "start_timestamp": null,
+      "end_timestamp": null,
+      "first_lap": null,
+      "last_lap": null,
+      "signals": [
+        "raw"
+      ],
+      "warnings": [
+        "absolute_timestamps_missing"
+      ],
+      "source_metadata": {}
+    },
+    {
+      "id": "dc567808f3076c5cf5403db9",
+      "filename": "5.csv",
+      "kind": "segment",
+      "quality": null,
+      "sha256": "46919b64673054d630ac1e4024f22da8e0645a01b3624b7f08f3a0ccf660cc95",
+      "activity_id": "a5",
+      "group": "unknown",
+      "label": "unknown",
+      "duration_seconds": 11.0,
+      "samples": 12,
+      "objective_samples": 12,
+      "pre_window": {
+        "available": false,
+        "samples": 0,
+        "seconds": 10
+      },
+      "start_timestamp": null,
+      "end_timestamp": null,
+      "first_lap": null,
+      "last_lap": null,
+      "signals": [
+        "raw"
+      ],
+      "warnings": [
+        "absolute_timestamps_missing"
+      ],
+      "source_metadata": {}
+    },
+    {
+      "id": "03e15260912f7b1df328050b",
+      "filename": "6.csv",
+      "kind": "segment",
+      "quality": null,
+      "sha256": "b03fac5ed2f13f328a11ec08a9a611b4f1cb7e752c245342483f963f28244571",
+      "activity_id": "a6",
+      "group": "unknown",
+      "label": "unknown",
+      "duration_seconds": 11.0,
+      "samples": 12,
+      "objective_samples": 12,
+      "pre_window": {
+        "available": false,
+        "samples": 0,
+        "seconds": 10
+      },
+      "start_timestamp": null,
+      "end_timestamp": null,
+      "first_lap": null,
+      "last_lap": null,
+      "signals": [
+        "raw"
+      ],
+      "warnings": [
+        "absolute_timestamps_missing"
+      ],
+      "source_metadata": {}
+    },
+    {
+      "id": "cf0011e2019715270d18f6d7",
+      "filename": "7.csv",
+      "kind": "segment",
+      "quality": null,
+      "sha256": "fa7904e008a7c3428da6d34a19f14171a91a0a55a976bfb90e89a4ec98842631",
+      "activity_id": "a7",
+      "group": "unknown",
+      "label": "unknown",
+      "duration_seconds": 11.0,
+      "samples": 12,
+      "objective_samples": 12,
+      "pre_window": {
+        "available": false,
+        "samples": 0,
+        "seconds": 10
+      },
+      "start_timestamp": null,
+      "end_timestamp": null,
+      "first_lap": null,
+      "last_lap": null,
+      "signals": [
+        "raw"
+      ],
+      "warnings": [
+        "absolute_timestamps_missing"
+      ],
+      "source_metadata": {}
+    },
+    {
+      "id": "2ba3bc5a839fab528fefaa4c",
+      "filename": "8.csv",
+      "kind": "segment",
+      "quality": null,
+      "sha256": "5e2cdc71ad3dc876a4b0096a2a0747726e77f98e22e13ae9a6d6da09191365d6",
+      "activity_id": "a8",
+      "group": "unknown",
+      "label": "unknown",
+      "duration_seconds": 11.0,
+      "samples": 12,
+      "objective_samples": 12,
+      "pre_window": {
+        "available": false,
+        "samples": 0,
+        "seconds": 10
+      },
+      "start_timestamp": null,
+      "end_timestamp": null,
+      "first_lap": null,
+      "last_lap": null,
+      "signals": [
+        "raw"
+      ],
+      "warnings": [
+        "absolute_timestamps_missing"
+      ],
+      "source_metadata": {}
+    },
+    {
+      "id": "45dddedd649f26db624e2e9f",
+      "filename": "9.csv",
+      "kind": "segment",
+      "quality": null,
+      "sha256": "b86cdb3bf025240517b43062673050a3ad6bfe4eef6cfb43669dd061dabcd4fb",
+      "activity_id": "a9",
+      "group": "unknown",
+      "label": "unknown",
+      "duration_seconds": 11.0,
+      "samples": 12,
+      "objective_samples": 12,
+      "pre_window": {
+        "available": false,
+        "samples": 0,
+        "seconds": 10
+      },
+      "start_timestamp": null,
+      "end_timestamp": null,
+      "first_lap": null,
+      "last_lap": null,
+      "signals": [
+        "raw"
+      ],
+      "warnings": [
+        "absolute_timestamps_missing"
+      ],
+      "source_metadata": {}
+    }
+  ],
+  "stats": {
+    "count": 10,
+    "duration_mean": 11.0,
+    "duration_sd": 0.0
+  },
+  "filters": null,
+  "split": {
+    "id": "9f61cabac8d5480abc5ba6a7f879eb12",
+    "unit": "segment",
+    "seed": 42,
+    "percentages": [
+      70.0,
+      10.0,
+      20.0
+    ],
+    "algorithm": "sorted groups; numpy PCG64 shuffle; largest remainder on group counts v1",
+    "assignments": {
+      "train": [
+        "8e663d41f11352ec60c2722e",
+        "b1572317ef10f2235751cd09",
+        "03e15260912f7b1df328050b",
+        "b6abe202f8b6644d56481ac3",
+        "475bf0164001c379ea192b02",
+        "45dddedd649f26db624e2e9f",
+        "6d3b05a3ce5138f55956f2cd"
+      ],
+      "val": [
+        "dc567808f3076c5cf5403db9"
+      ],
+      "test": [
+        "2ba3bc5a839fab528fefaa4c",
+        "cf0011e2019715270d18f6d7"
+      ]
+    },
+    "group_counts": [
+      7,
+      1,
+      2
+    ],
+    "actual_percentages": [
+      70.0,
+      10.0,
+      20.0
+    ],
+    "warnings": []
+  }
+}

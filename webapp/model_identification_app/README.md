@@ -8,6 +8,26 @@ resta riservata. Non si attribuisce significato fisiologico ai parametri.
 Per il percorso operativo completo e le run della milestone vedere il
 [README principale](../../README.md) e il [protocollo di previsione](POPULATION_PROTOCOL.md).
 
+## Default P1D congelati (5 ottobre 2026)
+
+Preset delle nuove run dalla run `a6c56bc0c679469886964802dfda81b0`
+(`2026-10-05T04:57:50.984075+00:00`): P1D full, segnali raw,
+`estimated_equilibrium`, senza pre-window, protocollo `segment_v2`.
+Bounds: K [1e-6, 5] bpm/W, L [0, min(30, T)] s, tau [0.01, 1800] s.
+I due limiti di B restano vuoti e devono essere dichiarati per ciascun atleta;
+non si trasferiscono i bpm della run di riferimento.
+Ricerca `profile_multistart`: griglia 301 x 141, 8 raffinamenti, 8 start,
+seed fitting 42, massimo 500 valutazioni per start; TRF, loss lineare,
+Jacobiano a 3 punti, ftol/xtol/gtol 1e-8 e x_scale=jac.
+Split iniziale 70/10/20, seed 60; raggruppamento per attività quando disponibile.
+
+Questi sono default operativi modificabili, non una validazione universale del
+framework. B è un parametro matematico, senza interpretazione fisiologica.
+Il manifest sorgente riporta `completed_with_errors`. Le configurazioni salvate
+e i fallback storici di validazione/replay restano invariati; il preset per nuove
+run è esposto da `default_config(new_run=True)` e dall'API `/api/models`.
+La struttura short-transient conserva i propri default.
+
 ## Avvio e riavvio (Windows)
 
 Dalla radice della repository, prima installazione o dopo modifiche al codice:
@@ -59,7 +79,7 @@ corrente. Il servizio ascolta solo su loopback; non è un servizio multiutente.
 3. Selezionare G1/G2 e UtD/DtU/Ambigui, quindi **Crea dataset** per salvare il
    sottoinsieme. I filtri non modificano il dataset originale. Sono disponibili
    anche gruppi diversi o non classificati se presenti nell'import.
-4. Salvare lo split: default **70/10/20**, seed **42**. Le percentuali sono
+4. Salvare lo split: default **70/10/20**, seed **60**. Le percentuali sono
    assegnate a segmenti interi o a gruppi per `activity_id`, con ordinamento
    iniziale stabile, shuffle PCG64 e metodo dei maggiori resti per gli interi.
    Mostriamo le percentuali effettive dei segmenti. Con pochi gruppi uno dei set
@@ -186,11 +206,11 @@ ma assente o con segnali non finiti, il segmento fallisce esplicitamente
 (`pre_window_absent` / `pre_window_nonfinite`). Se non richiesta, eventuali
 valori non finiti nel solo contesto sono salvati come null e non entrano nel fit.
 
-Nella modalità `equilibrium` (default) si assume equilibrio a t=0 e `x(0)=0`. P0 e HR0 restano riferimenti fissi;
+Nella modalità `equilibrium` (default storico) si assume equilibrio a t=0 e `x(0)=0`. P0 e HR0 restano riferimenti fissi;
 HR0 non è la frequenza cardiaca a riposo. Eventuali transitori già presenti
 all'inizio possono distorcere le stime. K è in bpm/W; L e tau in secondi.
 
-La modalità opzionale `estimated_equilibrium`, solo per P1D full, è l'estensione
+La modalità `estimated_equilibrium`, default delle nuove run P1D full, è l'estensione
 concordata con l'utente il 28 settembre 2026, senza rivendicare una replica bibliografica:
 
 ```text

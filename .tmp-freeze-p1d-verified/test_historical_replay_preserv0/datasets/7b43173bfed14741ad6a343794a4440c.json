@@ -1,0 +1,81 @@
+{
+  "id": "7b43173bfed14741ad6a343794a4440c",
+  "name": "Legacy",
+  "created_at": "2026-10-05T16:19:48.225158+00:00",
+  "sources": [
+    {
+      "name": "a.csv",
+      "sha256": "46db40f4a11f02ebc52f106b457ed21b955b32c6c15f451b8b63bc695f2f81fd"
+    }
+  ],
+  "source_manifests": [],
+  "segments": [
+    {
+      "id": "3d7f2fd67f5810f5c2483159",
+      "filename": "a.csv",
+      "kind": "segment",
+      "quality": null,
+      "sha256": "46db40f4a11f02ebc52f106b457ed21b955b32c6c15f451b8b63bc695f2f81fd",
+      "activity_id": "a",
+      "group": "unknown",
+      "label": "unknown",
+      "duration_seconds": 20.0,
+      "samples": 31,
+      "objective_samples": 21,
+      "pre_window": {
+        "available": true,
+        "samples": 10,
+        "seconds": 10
+      },
+      "start_timestamp": null,
+      "end_timestamp": null,
+      "first_lap": null,
+      "last_lap": null,
+      "signals": [
+        "raw"
+      ],
+      "warnings": [
+        "absolute_timestamps_missing"
+      ],
+      "source_metadata": {}
+    }
+  ],
+  "stats": {
+    "count": 1,
+    "duration_mean": 20.0,
+    "duration_sd": null
+  },
+  "filters": null,
+  "split": {
+    "id": "e564d88206d24995b7271d916be73917",
+    "unit": "activity",
+    "seed": 42,
+    "percentages": [
+      100.0,
+      0.0,
+      0.0
+    ],
+    "algorithm": "sorted groups; numpy PCG64 shuffle; largest remainder on group counts v1",
+    "assignments": {
+      "train": [
+        "3d7f2fd67f5810f5c2483159"
+      ],
+      "val": [],
+      "test": []
+    },
+    "group_counts": [
+      1,
+      0,
+      0
+    ],
+    "actual_percentages": [
+      100.0,
+      0.0,
+      0.0
+    ],
+    "warnings": [
+      "empty_val",
+      "empty_test"
+    ]
+  }
+}

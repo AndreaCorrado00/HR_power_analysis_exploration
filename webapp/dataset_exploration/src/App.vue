@@ -9,7 +9,7 @@ import {exportZip,loadDataset,preview,series} from './api'
 import type{Activity,ExportSegment,Inventory,Norm,Point}from'./types'
 import{formatDuration,initialSegments,mergeSegments,normalizationError,undoMerge,type LapSegment}from'./utils'
 
-const path=ref('dataset/cleaned_only_road_activieties.zip'),maxHours=ref<number|null>(null),inventory=ref<Inventory|null>(null),loading=ref(false)
+const path=ref(''),maxHours=ref<number|null>(null),inventory=ref<Inventory|null>(null),loading=ref(false)
 const browser=ref(false)
 const page=ref('extraction')
 const cache=reactive<Record<string,Point[]>>({}),selected=ref<Activity|null>(null),detail=ref<Point[]>([])

@@ -19,7 +19,8 @@ sorgente sono letti senza essere modificati.
 
 1. Usare **Sfoglia cartelle / ZIP** per navigare sul PC e dentro gli archivi,
    spuntare i FIT desiderati oppure importare la cartella e le sottocartelle.
-   Il percorso iniziale è `dataset/cleaned_only_road_activieties.zip`.
+   Il percorso iniziale è la cartella sorgente scelta con `start-athlete.ps1`
+   (`dataset/` del clone se non specificata); lasciare il campo vuoto per usarla.
    La spunta **Seleziona tutti i FIT** seleziona o deseleziona i file della
    cartella visualizzata; la selezione parziale è indicata sulla spunta.
 2. Indicare, se necessario, la durata massima in ore e caricare il dataset.

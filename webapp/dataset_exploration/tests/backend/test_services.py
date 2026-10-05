@@ -34,7 +34,7 @@ def test_runner_opens_the_selected_local_address(monkeypatch):
     monkeypatch.setattr(run,'find_free_port',lambda host:54321)
     monkeypatch.setattr(run.threading,'Timer',timer_factory)
     monkeypatch.setattr(run.uvicorn,'run',Mock())
-    run.main()
+    run.main([])
     assert timer_factory.call_args.args[0] == 1.0
     timer.start.assert_called_once_with()
     assert run.uvicorn.run.call_args.kwargs == {'host':'127.0.0.1','port':54321}

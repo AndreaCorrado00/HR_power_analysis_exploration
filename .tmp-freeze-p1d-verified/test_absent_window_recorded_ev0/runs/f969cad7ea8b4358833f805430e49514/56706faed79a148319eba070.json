@@ -1,0 +1,28 @@
+{
+  "segment_id": "56706faed79a148319eba070",
+  "filename": "a.csv",
+  "status": "failed",
+  "optimizer_success": null,
+  "identification_valid": false,
+  "failure_reasons": [
+    "pre_window_absent"
+  ],
+  "pre_window": {
+    "available": false,
+    "used": false,
+    "seconds": 10,
+    "samples": 0,
+    "signals_finite": true,
+    "power_finite": true,
+    "hr_finite": true,
+    "time": [],
+    "power": [],
+    "observed": [],
+    "first_time": null,
+    "last_time": null
+  },
+  "model_structure": "p1d_full",
+  "initialization_mode": "equilibrium",
+  "rho": null,
+  "error": "pre_window_absent"
+}

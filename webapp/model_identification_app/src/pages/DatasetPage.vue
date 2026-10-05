@@ -6,7 +6,7 @@ const props=defineProps<{datasets:Dataset[];selected:string;busy:boolean;act:(f:
 const emit=defineEmits<{select:[id:string];next:[]}>()
 const sources=ref<string[]>([]),paths=ref<string[]>([]),name=ref(''),files=ref<File[]>([])
 const groups=ref<string[]>([]),labels=ref<string[]>([]),subsetName=ref(''),rename=ref('')
-const percentages=ref([70,10,20]),seed=ref(42),unit=ref('segment')
+const percentages=ref([70,10,20]),seed=ref(60),unit=ref('segment')
 const ds=computed(()=>props.datasets.find(d=>d.id===props.selected))
 const activityCount=computed(()=>ds.value?.segments.filter(s=>s.kind==='activity').length||0)
 const qualityRows=computed(()=>ds.value?.segments.filter(s=>s.kind==='activity'&&s.warnings.length)||[])
@@ -14,7 +14,7 @@ const availableGroups=computed(()=>[...new Set(ds.value?.segments.map(s=>s.group
 const availableLabels=computed(()=>[...new Set(ds.value?.segments.map(s=>s.label)||[])].sort())
 const filtered=computed(()=>ds.value?.segments.filter(s=>groups.value.includes(s.group)&&labels.value.includes(s.label))||[])
 const filteredMean=computed(()=>filtered.value.reduce((n,s)=>n+s.duration_seconds,0)/(filtered.value.length||1))
-watch(()=>ds.value?.id,()=>{groups.value=[...availableGroups.value];labels.value=[...availableLabels.value];rename.value=ds.value?.name||'';percentages.value=[...(ds.value?.split?.percentages||[70,10,20])];seed.value=ds.value?.split?.seed??42;unit.value=ds.value?.split?.unit||(activityCount.value?'activity':'segment');subsetName.value=''}, {immediate:true})
+watch(()=>ds.value?.id,()=>{groups.value=[...availableGroups.value];labels.value=[...availableLabels.value];rename.value=ds.value?.name||'';percentages.value=[...(ds.value?.split?.percentages||[70,10,20])];seed.value=ds.value?.split?.seed??60;unit.value=ds.value?.split?.unit||(activityCount.value?'activity':'segment');subsetName.value=''}, {immediate:true})
 onMounted(()=>props.act(async()=>{sources.value=await api('/sources')},''))
 function chooseFiles(e:Event){files.value=Array.from((e.target as HTMLInputElement).files||[])}
 function importSource(upload=false){props.act(async()=>{let result:Dataset;if(upload){const data=new FormData();data.set('name',name.value||'Dataset importato');files.value.forEach(f=>data.append('files',f));result=await api('/datasets/upload','POST',data)}else result=await api('/datasets/import','POST',{paths:paths.value,name:name.value||'Dataset importato'});emit('select',result.id)},'Dataset importato e conservato su disco')}
@@ -25,11 +25,11 @@ function createSubset(){props.act(async()=>{const result=await api<Dataset>(`/da
   <div class="two-columns dataset-columns">
     <section class="card"><div class="card-heading"><span class="step">01</span><div><h2>Importa attività o segmenti</h2><p>CSV di segmenti, FIT di attività e archivi ZIP</p></div></div>
       <label>Nome del dataset<input v-model="name" placeholder="Es. UtD · segmenti brevi" maxlength="120"></label>
-      <label>Sorgenti nella repository</label><div class="source-list"><label v-for="source in sources" :key="source" class="check"><input type="checkbox" :value="source" v-model="paths"><span>{{source}}</span></label><p v-if="!sources.length" class="muted">Nessuna sorgente trovata. Puoi caricare i file dal computer.</p></div>
-      <button class="primary full" :disabled="busy||!paths.length" @click="importSource()">Importa dalla repository <span>↗</span></button>
+      <label>File nella cartella sorgente</label><div class="source-list"><label v-for="source in sources" :key="source" class="check"><input type="checkbox" :value="source" v-model="paths"><span>{{source}}</span></label><p v-if="!sources.length" class="muted">Nessuna sorgente trovata. Puoi caricare i file dal computer.</p></div>
+      <button class="primary full" :disabled="busy||!paths.length" @click="importSource()">Importa dalla sorgente <span>↗</span></button>
       <div class="or"><span>oppure</span></div><label class="upload-area"><strong>Carica dal computer</strong><span>Più CSV, FIT, ZIP o manifest JSON · max 256 MiB</span><input type="file" multiple accept=".csv,.fit,.zip,.json" @change="chooseFiles"></label>
       <button v-if="files.length" class="secondary full" :disabled="busy" @click="importSource(true)">Importa {{files.length}} file selezionati</button>
-      <p class="note">I dati vengono copiati senza filtraggi aggiuntivi. Le sorgenti restano inalterate. Gli ZIP con collegamenti ai FIT vanno importati dalla repository; per il caricamento usare ZIP con i file reali.</p>
+      <p class="note">I dati vengono copiati senza filtraggi aggiuntivi. Le sorgenti restano inalterate. Gli ZIP con collegamenti ai FIT vanno importati dalla cartella sorgente; per il caricamento usare ZIP con i file reali.</p>
     </section>
     <section class="card"><div class="card-heading"><span class="step">02</span><div><h2>Seleziona il dataset</h2><p>{{datasets.length}} dataset disponibili al riavvio</p></div></div>
       <label>Dataset salvati<select :value="selected" @change="emit('select',($event.target as HTMLSelectElement).value)"><option value="" disabled>Scegli un dataset</option><option v-for="d in datasets" :value="d.id" :key="d.id">{{d.name}} · {{d.stats.count}} serie</option></select></label>

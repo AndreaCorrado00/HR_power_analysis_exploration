@@ -1,0 +1,463 @@
+{
+  "schema_version": 3,
+  "id": "0f550856cabe471cb93f228d3c190950",
+  "manifest_filename": "20261005T161948Z__Legacy__p1d__raw__100-0-0__s42__n2-f42__0f550856.json",
+  "created_at": "2026-10-05T16:19:48.801180+00:00",
+  "status": "completed",
+  "dataset": {
+    "id": "7b43173bfed14741ad6a343794a4440c",
+    "name": "Legacy",
+    "created_at": "2026-10-05T16:19:48.225158+00:00",
+    "sources": [
+      {
+        "name": "a.csv",
+        "sha256": "46db40f4a11f02ebc52f106b457ed21b955b32c6c15f451b8b63bc695f2f81fd"
+      }
+    ],
+    "source_manifests": [],
+    "segments": [
+      {
+        "id": "3d7f2fd67f5810f5c2483159",
+        "filename": "a.csv",
+        "kind": "segment",
+        "quality": null,
+        "sha256": "46db40f4a11f02ebc52f106b457ed21b955b32c6c15f451b8b63bc695f2f81fd",
+        "activity_id": "a",
+        "group": "unknown",
+        "label": "unknown",
+        "duration_seconds": 20.0,
+        "samples": 31,
+        "objective_samples": 21,
+        "pre_window": {
+          "available": true,
+          "samples": 10,
+          "seconds": 10
+        },
+        "start_timestamp": null,
+        "end_timestamp": null,
+        "first_lap": null,
+        "last_lap": null,
+        "signals": [
+          "raw"
+        ],
+        "warnings": [
+          "absolute_timestamps_missing"
+        ],
+        "source_metadata": {}
+      }
+    ],
+    "stats": {
+      "count": 1,
+      "duration_mean": 20.0,
+      "duration_sd": null
+    },
+    "filters": null,
+    "split": {
+      "id": "e564d88206d24995b7271d916be73917",
+      "unit": "activity",
+      "seed": 42,
+      "percentages": [
+        100.0,
+        0.0,
+        0.0
+      ],
+      "algorithm": "sorted groups; numpy PCG64 shuffle; largest remainder on group counts v1",
+      "assignments": {
+        "train": [
+          "3d7f2fd67f5810f5c2483159"
+        ],
+        "val": [],
+        "test": []
+      },
+      "group_counts": [
+        1,
+        0,
+        0
+      ],
+      "actual_percentages": [
+        100.0,
+        0.0,
+        0.0
+      ],
+      "warnings": [
+        "empty_val",
+        "empty_test"
+      ]
+    }
+  },
+  "split": {
+    "id": "e564d88206d24995b7271d916be73917",
+    "unit": "activity",
+    "seed": 42,
+    "percentages": [
+      100.0,
+      0.0,
+      0.0
+    ],
+    "algorithm": "sorted groups; numpy PCG64 shuffle; largest remainder on group counts v1",
+    "assignments": {
+      "train": [
+        "3d7f2fd67f5810f5c2483159"
+      ],
+      "val": [],
+      "test": []
+    },
+    "group_counts": [
+      1,
+      0,
+      0
+    ],
+    "actual_percentages": [
+      100.0,
+      0.0,
+      0.0
+    ],
+    "warnings": [
+      "empty_val",
+      "empty_test"
+    ]
+  },
+  "model": {
+    "id": "p1d",
+    "version": "3.0.0",
+    "name": "HR-Power · struttura selezionabile",
+    "parameters": [
+      {
+        "key": "K",
+        "unit": "bpm/W"
+      },
+      {
+        "key": "L",
+        "unit": "s"
+      },
+      {
+        "key": "tau",
+        "unit": "s"
+      }
+    ],
+    "equation": "tau dx/dt + x = K (P(t-L)-P0); HRhat = HR0+x",
+    "source": "P1D richiesto nel protocollo utente; nessuna replica bibliografica rivendicata",
+    "initial_conditions": "P0=P(0), HR0=HR(0); x(0)=0; P(t<0)=P0",
+    "input_reconstruction": "zero-order hold, integrazione esatta; ritardo continuo in secondi",
+    "uncertainty": "SSE/(N-p) inv(J.T J); p=parametri liberi; CI95 Wald non troncati; condizionati a P0 e HR0",
+    "delay_domain": "0 <= L <= min(Lmax,T); T=t[-1]-t[0]; Lmax=null significa T; Lmax=0 fissa L=0",
+    "identification_validity": "Convergenza e compatibilità numerica/temporale; non certifica precisione o identificabilità",
+    "residual_conventions": "e=HR-HRhat; SD ddof=1; centered ACF denominator=sum(e_centered**2); lag in samples",
+    "multistart_conventions": "PCG64; first start nominal; log-uniform K/tau or gamma, uniform L/B; optional deterministic profile grid; select minimum SSE across all refinements",
+    "model_structure": "p1d_full",
+    "initialization_mode": "equilibrium",
+    "rho_convention": "(T-L)/tau for P1D full; null for short_transient; no exclusion thresholds",
+    "profile_conventions": "Uniform L, log tau; bounded analytic K (and B when estimated); diverse grid candidates refined with full-parameter TRF; no global optimum guarantee",
+    "structures": [
+      {
+        "id": "p1d_full",
+        "name": "P1D full",
+        "parameters": [
+          {
+            "key": "K",
+            "unit": "bpm/W"
+          },
+          {
+            "key": "L",
+            "unit": "s"
+          },
+          {
+            "key": "tau",
+            "unit": "s"
+          }
+        ],
+        "default_config": {
+          "model_structure": "p1d_full",
+          "use_pre_window": false,
+          "pre_window_seconds": 10,
+          "initialization_mode": "estimated_equilibrium",
+          "equilibrium_bounds": [
+            null,
+            null
+          ],
+          "initialization_protocol": "segment_v2",
+          "lower": [
+            1e-06,
+            0.0,
+            0.01
+          ],
+          "upper": [
+            5.0,
+            30.0,
+            1800.0
+          ],
+          "n_starts": 8,
+          "seed": 42,
+          "max_nfev": 500,
+          "search_strategy": "profile_multistart",
+          "grid_delay_points": 301,
+          "grid_tau_points": 141,
+          "grid_refinements": 8,
+          "method": "trf",
+          "loss": "linear",
+          "jac": "3-point",
+          "ftol": 1e-08,
+          "xtol": 1e-08,
+          "gtol": 1e-08,
+          "x_scale": "jac"
+        }
+      },
+      {
+        "id": "short_transient",
+        "name": "Short-transient",
+        "parameters": [
+          {
+            "key": "gamma",
+            "unit": "bpm/(W s)"
+          },
+          {
+            "key": "L",
+            "unit": "s"
+          }
+        ],
+        "default_config": {
+          "model_structure": "short_transient",
+          "use_pre_window": false,
+          "pre_window_seconds": 10,
+          "initialization_mode": "equilibrium",
+          "equilibrium_bounds": [
+            null,
+            null
+          ],
+          "initialization_protocol": "segment_v2",
+          "lower": [
+            5.555555555555555e-10,
+            0.0
+          ],
+          "upper": [
+            500.0,
+            null
+          ],
+          "n_starts": 8,
+          "seed": 42,
+          "max_nfev": 500,
+          "search_strategy": "multistart",
+          "grid_delay_points": 301,
+          "grid_tau_points": 141,
+          "grid_refinements": 8,
+          "method": "trf",
+          "loss": "linear",
+          "jac": "3-point",
+          "ftol": 1e-08,
+          "xtol": 1e-08,
+          "gtol": 1e-08,
+          "x_scale": "jac"
+        }
+      }
+    ]
+  },
+  "signal": "raw",
+  "columns": [
+    "power_w",
+    "heart_rate_bpm"
+  ],
+  "model_structure": "p1d_full",
+  "pre_window_seconds": 10,
+  "use_pre_window": false,
+  "pre_window_inventory": [
+    {
+      "segment_id": "3d7f2fd67f5810f5c2483159",
+      "available": true,
+      "seconds": 10,
+      "samples": 10,
+      "signals_finite": true,
+      "power_finite": true,
+      "hr_finite": true,
+      "first_time": -10.0,
+      "last_time": -1.0
+    }
+  ],
+  "initialization_mode": "equilibrium",
+  "P0_method": "first_record_legacy",
+  "HR0_method": "first_record_legacy",
+  "B_method": "fixed_HR0",
+  "parameter_bounds": {
+    "keys": [
+      "K",
+      "L",
+      "tau"
+    ],
+    "lower": [
+      1e-06,
+      1.0,
+      0.01
+    ],
+    "upper": [
+      5.0,
+      20.0,
+      1800.0
+    ],
+    "delay_upper_rule": "min(Lmax,T); null means T"
+  },
+  "n_multistart": 2,
+  "optimizer_settings": {
+    "method": "trf",
+    "loss": "linear",
+    "jac": "3-point",
+    "ftol": 1e-08,
+    "xtol": 1e-08,
+    "gtol": 1e-08,
+    "x_scale": "jac",
+    "max_nfev": 500,
+    "seed": 42,
+    "search_strategy": "multistart",
+    "grid_delay_points": 301,
+    "grid_tau_points": 141,
+    "grid_refinements": 8
+  },
+  "diagnostic_schema": {
+    "rho": {
+      "formula": "(T-L)/tau",
+      "applicable": true,
+      "thresholds": null
+    },
+    "residual": "observed - predicted",
+    "acf_lag_unit": "samples"
+  },
+  "config": {
+    "model_structure": "p1d_full",
+    "use_pre_window": false,
+    "pre_window_seconds": 10,
+    "initialization_mode": "equilibrium",
+    "equilibrium_bounds": [
+      null,
+      null
+    ],
+    "initialization_protocol": "legacy_v1",
+    "lower": [
+      1e-06,
+      1.0,
+      0.01
+    ],
+    "upper": [
+      5.0,
+      20.0,
+      1800.0
+    ],
+    "n_starts": 2,
+    "seed": 42,
+    "max_nfev": 500,
+    "search_strategy": "multistart",
+    "grid_delay_points": 301,
+    "grid_tau_points": 141,
+    "grid_refinements": 8,
+    "method": "trf",
+    "loss": "linear",
+    "jac": "3-point",
+    "ftol": 1e-08,
+    "xtol": 1e-08,
+    "gtol": 1e-08,
+    "x_scale": "jac"
+  },
+  "environment": {
+    "python": "3.14.5",
+    "platform": "Windows-11-10.0.26300-SP0",
+    "packages": {
+      "Pygments": "2.21.0",
+      "annotated-doc": "0.0.5",
+      "annotated-types": "0.8.0",
+      "anyio": "4.15.1",
+      "certifi": "2026.7.22",
+      "cffi": "2.1.1",
+      "charset-normalizer": "3.5.1",
+      "click": "8.5.0",
+      "colorama": "0.4.6",
+      "contourpy": "1.4.0",
+      "cryptography": "50.0.1",
+      "cycler": "0.12.1",
+      "fastapi": "0.141.1",
+      "fitdecode": "0.11.0",
+      "fonttools": "4.65.0",
+      "h11": "0.16.0",
+      "httpcore": "1.0.9",
+      "httpx": "0.28.1",
+      "idna": "3.20",
+      "iniconfig": "2.3.0",
+      "kiwisolver": "1.5.1",
+      "matplotlib": "3.11.2",
+      "numpy": "2.5.3",
+      "packaging": "26.3",
+      "pandas": "3.0.6",
+      "pdfminer.six": "20260107",
+      "pdfplumber": "0.11.10",
+      "pillow": "12.3.0",
+      "pip": "26.1.1",
+      "pluggy": "1.6.0",
+      "pycparser": "3.0",
+      "pydantic": "2.13.5",
+      "pydantic_core": "2.46.5",
+      "pyparsing": "3.3.2",
+      "pypdf": "6.19.0",
+      "pypdfium2": "5.13.0",
+      "pytest": "9.1.1",
+      "python-dateutil": "2.9.0.post0",
+      "python-multipart": "0.0.32",
+      "reportlab": "5.0.1",
+      "scipy": "1.18.1",
+      "six": "1.17.0",
+      "starlette": "1.7.0",
+      "typing-inspection": "0.4.4",
+      "typing_extensions": "4.16.0",
+      "tzdata": "2026.4",
+      "uvicorn": "0.53.0"
+    },
+    "code_blobs": {
+      "backend/__init__.py": "6f9a7331e63204f590d9e86e8c9e5158733f9f1f6ae871218a1f6fd9a9d6557a",
+      "backend/app.py": "6e08e3dbbb63aedf58cdbdf105bc33c4cb6409a36ed329d281ef7a794b8c5eaa",
+      "backend/context.py": "d392720c685db4e8f4bf547d04d2448bbaa2c0a50ca6c34e8cca7fa13029b4ea",
+      "backend/datasets.py": "3f68e816305ac60feee3e08b1bf557743794545294f4c2138dd0ac64454c5586",
+      "backend/fit_import.py": "e7a4c1bce786ed992c060ad4c6d193bb717430bbe5a6949cb828d51590cedb4a",
+      "backend/models/__init__.py": "ffc9b3288a4f637278178cfdb8d8e7b19a1548607761a1b13cd4dd6cb32c06b1",
+      "backend/models/p1d.py": "779f0d1e962587379d191fecb45f1c4579e0a49122bd9c8f89d57c89f72b0120",
+      "backend/models/profile_search.py": "f0541e7aa37f3142869bbfa51933c62f5d09b771ab9f74955f1e2dbcfd492b76",
+      "backend/population.py": "acc878949b0240044b69529bebc0779f053030a8d1ba0ad7cb65ab8a936f4393",
+      "backend/population_report.py": "2b0c90312b31384f074169539a1837b8811e755d2869c569c587916ad695c00f",
+      "backend/population_review.py": "23669b11acb55fc53494115f9e48f1d189db789a31c25176c82ecb00879d3288",
+      "backend/reporting.py": "82ec225860f9e251a18f0de5461d2b86ec034e37f2ea3866fc0d3bb6535f3846",
+      "backend/run.py": "4f49f3470b1e6fde246e3ff584c16c468c4dfc8f6c1a841ec92f7b60b6aefe64",
+      "backend/runs.py": "eaef21e51a8cd449190b86bec90cee5d25dd7c9d8b4f254a2eca662f4fd3607c",
+      "backend/source_paths.py": "988b788468fb97f48e52f3ca9a0cec41d8db93624845b4deeef31b2781367918",
+      "backend/storage.py": "cf2834f8532d03368b5a8ee299490b9a7f0de8e208427ef2618a7e8d1659de0c",
+      "package-lock.json": "e23fac5c41f1d6dea12ac3fdf122b5fc70799e55cbc9b52d7d15e63714f1650d",
+      "requirements.txt": "6a0aa45f2173a078373ec3181e5b84ab54cd07e4e8f054d4cc1ef56f9353605f",
+      "src/api.ts": "444c5499f1680f5fc21c98e698aa4a7cc56f65d687f5b3966ab48763ee3d3e76",
+      "src/App.vue": "e683ed11e4cca378b0a5945c4feddbf525a2ad4d7840e3b3b2fc793d06c15133",
+      "src/components/Chart.vue": "969e0e3fddf1e0fc6b2627e5d6f4be2b8bf2fd926e5861f5d2c7190e784cb6b5",
+      "src/components/ParameterBoxes.vue": "ca4db153a6997d22b940a870ab2750b4167b15327af3e53f1b588284e1fa8f4b",
+      "src/components/RunSummary.vue": "d1188ecc03f531fa9513cff7aa6679f3ca4f3775b1c0a494ee159587daf71697",
+      "src/main.ts": "e56ee287be5a2b6cce8e2ff32418b4002d8f6926245edb272f545138869fe0c1",
+      "src/models/charts.test.ts": "bbf71f10a122f2991362e9000a0c40d8d35e2778268624184b2478d8875b41b4",
+      "src/models/charts.ts": "0f9c78899c8397391daf5f9caaacf53d181ca6cee6f255c16fc1da92d0bc67ad",
+      "src/models/diagnostics.test.ts": "1b15882c272c8732a65ae371462920667841189965323ed0a1ab674a01aec00e",
+      "src/models/diagnostics.ts": "0fec53bde41ec26686957a59fe1144768eee337d68f71de5a460f01aa7e89b2f",
+      "src/models/P1dFit.vue": "7fbef1ed2cd366b2e0f7297f04712ea3e995f2a46afcb8474a46192e541e1783",
+      "src/models/registry.ts": "0402b4399366dac356cd5d6fcec2bc40874c773ea61f77708e5c15baf609936e",
+      "src/pages/AnalysisPage.vue": "c94836ba9d47d433ead34b4fb5e0094052c752cc498beb0a12953911f84ae5cf",
+      "src/pages/ComparisonPage.vue": "36a26365ae80887f10a4d05264b25af264ec95f25ec6ef70ed425986cde11852",
+      "src/pages/DatasetPage.vue": "affee0997a6a88e76035900bc8d3159efbd34c41aaf3efc53147dccd9b66bf4e",
+      "src/pages/IdentificationPage.vue": "b7e66c66a814a533feaeef0a90c6756cf2243316b828420293e9fcd60a47942f",
+      "src/pages/population.test.ts": "276aaeb0582566f727e57aee87c99ca465f7e651f9e5391a9a9db02d5445009e",
+      "src/pages/PopulationPage.vue": "4d311371671077df465a4191df44df80e5dc0d7ce4af8366d3369911effe888c",
+      "src/pages/workflow.test.ts": "be53e049f58ec4045a6a03073b965f3808658f1b2be57c835d297d06dcbd7e5f",
+      "src/populationReview.test.ts": "3655b5faf2c0c7bc399af52cc6754f0d56997830a69629c75cce26af8b7d229e",
+      "src/populationReview.ts": "fd0d14299b60a3381488e7e86ddfc043fa3503ecd51d2f7efac2d5e7fa77c191",
+      "src/types.ts": "9090ff3349b2dcc634b4f87c4c57a66e82b0a82f2a3c18f9523a1c717e878854"
+    },
+    "code_sha256": "dedd0ace46b46eaf7ccdcf74caa17c33dd86a60f70387dd2191cb49d83c4edce"
+  },
+  "scope": "train-only in-sample",
+  "progress": {
+    "done": 1,
+    "total": 1,
+    "failed": 0
+  },
+  "replay_of": "700aac3ae3184d50bd68860c13dd548b",
+  "code_changed_since_original": false,
+  "started_at": "2026-10-05T16:19:49.036424+00:00",
+  "finished_at": "2026-10-05T16:19:49.229685+00:00"
+}

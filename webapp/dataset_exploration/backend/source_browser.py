@@ -7,21 +7,15 @@ import fitdecode
 import pandas as pd
 from power_hr_eda.fit_reader import FitActivity, collect_activity, read_fit_activity
 from .dataset_service import DatasetPathError
+from webapp.workspace import source_root
 
 MAX_FIT_BYTES = 256 * 1024 * 1024
 
 def project_root():
-    root = Path(__file__).resolve().parents[3]
-    marker = root / '.git'
-    if marker.is_file():
-        gitdir = Path(marker.read_text().strip().removeprefix('gitdir: ').strip())
-        for parent in gitdir.parents:
-            if parent.name == '.git':
-                return parent.parent
-    return root
+    return Path(__file__).resolve().parents[3]
 
 def source_path(value):
-    path = Path(value).expanduser() if value else project_root() / 'dataset'
+    path = Path(value).expanduser() if value else source_root(project_root())
     if not path.is_absolute():
         path = project_root() / path
     if not path.exists():

@@ -17,6 +17,53 @@ Le app funzionano in locale su Windows. I FIT sorgente restano invariati.
 
 ## Preparazione iniziale
 
+### Un clone per atleta
+
+Usare un clone distinto per ogni atleta. Il nuovo launcher mantiene i dati in
+`dataset/`, gli export in `exports/` e le run in
+`webapp/model_identification_app/storage/` del clone. Queste cartelle e `.venv/`
+sono escluse da Git: un clone nuovo non eredita dati, run o parametri personali.
+Clonare il codice, senza copiare lo storage di un altro atleta.
+
+Da PowerShell nella radice del clone, prima esecuzione di ciascuna app:
+
+```powershell
+.\start-athlete.ps1 -App exploration -Setup
+.\start-athlete.ps1 -App identification -Setup
+```
+
+Ogni comando avvia un servizio: fermarlo con Ctrl+C prima del successivo, oppure
+usare due terminali. Agli avvii successivi omettere `-Setup`. La porta viene scelta
+liberamente; il terminale stampa l'indirizzo locale. `-Port` permette di fissarla.
+Python 3.14 e Node.js >=22.12 con npm servono per il setup; nessun pacchetto
+distribuibile viene prodotto.
+
+Per scegliere X e Y, anche fuori dal clone:
+
+```powershell
+.\start-athlete.ps1 -App exploration -Source 'D:\Atleti\A\FIT' -Destination 'D:\Atleti\A\Segmenti'
+.\start-athlete.ps1 -App identification -Source 'D:\Atleti\A\Segmenti' -Destination 'D:\Atleti\A\Risultati'
+```
+
+`-Source` indica una cartella esistente; i percorsi relativi sono riferiti al
+clone. Dataset Exploration parte da X e permette anche la navigazione verso
+altre cartelle o ZIP. Model Identification elenca ricorsivamente CSV, FIT e ZIP
+in X; resta disponibile il caricamento dal computer. I link negli ZIP devono
+risolversi nella sorgente consentita; preferire archivi con i FIT incorporati.
+
+Ogni export richiesto viene copiato in Y con un nome univoco e resta scaricabile
+dal browser. Sono inclusi segmenti, dati elaborati, report, tabelle e manifest.
+La destinazione ZIP esplicita già presente in Dataset Exploration resta valida
+e si aggiunge alla copia in Y. Se Y non è scrivibile, l'export segnala un errore.
+X e Y vanno specificate a ogni avvio se diverse dai default; non vengono
+memorizzate implicitamente. Lo storage dell'identificazione resta nel clone.
+
+Per ciascun atleta dichiarare i limiti di B e gli eventuali riferimenti di
+normalizzazione. I settings P1D congelati sono comuni, senza trasferire bpm
+da un atleta all'altro. Il preprocessing e il protocollo scientifico non cambiano.
+
+### Avvio manuale precedente
+
 Servono Python 3.14 (versione usata nel progetto), Node.js >=22.12 con npm e accesso
 ai registry per la prima installazione. Aprire PowerShell nella radice della repo:
 
@@ -131,6 +178,28 @@ calibrazione, screening e valutazione.
 Usare il download del manifest, **Export CSV**, **Export PDF** e gli export della
 pagina **Parametri atleta**. Accompagnare i grafici con configurazione, numero di
 casi riusciti/falliti e distinzione tra fitting, calibrazione e test.
+
+## Interpretazione dei parametri del modello P1D
+
+Per coach e atleti, i parametri descrivono tre aspetti della relazione
+potenza–frequenza cardiaca:
+
+| Parametro | Nome comprensibile | Come leggerlo |
+| --- | --- | --- |
+| `K` (bpm/W) | **Sensibilità cardiaca alla potenza** | Quanto cambia HR a regime per una variazione stabile di potenza: `ΔHR = K · ΔP`. Con `K = 0.30 bpm/W`, +100 W corrispondono a circa +30 bpm nel modello. |
+| `tau` (s) | **Tempo di risposta cardiaca** | Quanto rapidamente HR si adatta: per un gradino a partire dall'equilibrio, circa il 63% della risposta dopo `tau` e il 95% dopo `3 · tau`, con il ritardo corrente fissato a zero. |
+| `B` (bpm) | **Livello cardiaco iniziale della sessione** | Il livello di riferimento calibrato sui primi 180 s di HR del segmento test e poi mantenuto fisso. È l'equilibrio modellato alla potenza iniziale di riferimento, non necessariamente la prima HR misurata. |
+
+`K` e `tau` costituiscono il **profilo dinamico stimato dell'atleta**; `B` serve alla
+**calibrazione della singola sessione**. Dopo i 180 s iniziali, la previsione usa
+la potenza senza correggersi sulla HR successiva. La stabilità del profilo tra
+sessioni e periodi resta da verificare.
+
+Sono descrizioni funzionali del modello, non biomarcatori: `K` non misura da solo
+efficienza o stato di forma, `tau` non è da solo un indice fisiologico e `B` non è
+la HR a riposo né un indicatore automatico di fatica, recupero o idratazione.
+La [spiegazione estesa in history](history.md#interpretazione-dei-parametri-del-modello-p1d)
+riporta esempi e limiti interpretativi.
 
 ## Studio corrente e persistenza
 
