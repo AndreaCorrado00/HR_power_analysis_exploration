@@ -8,6 +8,7 @@ from pydantic import BaseModel, ConfigDict, Field
 
 from .normalization import NormalizationRequest
 from .processing_service import MAX_ARCHIVE, read_archive, inventory, process, export_archive
+from .loaded_source import LoadedRequest
 from webapp.workspace import export_headers
 
 
@@ -32,9 +33,24 @@ class ProcessingRequest(Camel):
     normalization: Normalization = Field(default_factory=Normalization)
 
 
-def processing_router(destination=None) -> APIRouter:
+def processing_router(destination=None, from_loaded=None) -> APIRouter:
     router = APIRouter(prefix='/api/processing')
-    current = {}  # One imported dataset per local application, independent of FIT state.
+    current = {}  # Independent snapshots retained for the lifetime of the local service.
+
+    @router.post('/from-loaded')
+    def use_loaded(req: LoadedRequest):
+        if from_loaded is None:
+            raise HTTPException(409, 'Caricare prima un dataset in Estrazione')
+        if any(s.first_lap is None for s in req.segments):
+            raise HTTPException(422, 'Selezionare i segmenti lap da elaborare')
+        try:
+            dataset = from_loaded(req)
+            summary = inventory(dataset)
+        except ValueError as exc:
+            raise HTTPException(422, str(exc)) from exc
+        identifier = str(uuid4())
+        current[identifier] = dataset
+        return {'datasetId': identifier, 'segments': summary, 'sha256': dataset.sha256}
 
     @router.post('/import')
     async def import_zip(request: Request):
@@ -49,7 +65,7 @@ def processing_router(destination=None) -> APIRouter:
         except (ValueError, OverflowError) as exc:
             raise HTTPException(422, str(exc)) from exc
         identifier = str(uuid4())
-        current.clear(); current[identifier] = dataset
+        current[identifier] = dataset
         return {'datasetId': identifier, 'segments': summary, 'sha256': dataset.sha256}
 
     def run(req):

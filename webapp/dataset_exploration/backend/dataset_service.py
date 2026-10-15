@@ -5,6 +5,7 @@ from pathlib import Path
 import pandas as pd
 from power_hr_eda.fit_reader import FitActivity, read_fit_activity
 from .domain import ActivitySummary, LapBoundary
+from .lap_service import close_lap_gaps
 
 class DatasetPathError(ValueError): pass
 
@@ -40,6 +41,19 @@ def summarize_decoded(a: FitActivity, activity_id: str, source_path: str)->Activ
     for i,row in enumerate(a.messages.get('lap',[]),1):
         s,e=row.get('start_time'),row.get('timestamp')
         if s is not None and e is not None and e>=s: laps.append(LapBoundary(i,s,e))
+    if laps and start is not None:
+        ordered=sorted(laps,key=lambda lap:lap.start_time)
+        stamps=ts.drop_duplicates().sort_values()
+        step=float(stamps.diff().dt.total_seconds().dropna().median()) if len(stamps)>1 else 1.
+        values=[{'index':l.index,'start':(l.start_time-start).total_seconds(),
+                 'end':(l.end_time-start).total_seconds()} for l in ordered]
+        # Preserve the previous overlap convention; positive holes are split equally.
+        for left,right in zip(values,values[1:]):
+            if left['end']>right['start']: left['end']=right['start']
+        corrected=close_lap_gaps(values,(end-start).total_seconds()+step,start)
+        laps=[LapBoundary(l.index,start+pd.Timedelta(seconds=v['start']),start+pd.Timedelta(seconds=v['end']),
+                          l.start_time,l.end_time,True,v['boundary_adjustment'],step)
+              for l,v in zip(ordered,corrected) if v['end']>v['start']]
     return ActivitySummary(activity_id,source_path,start,end,(end-start).total_seconds() if start and end else 0.0,len(records),'power' in records and records.power.notna().any(),'heart_rate' in records and records.heart_rate.notna().any(),tuple(laps),a.parse_error)
 
 def inventory_dataset(path_text: str)->DatasetInventory:

@@ -2,6 +2,8 @@ from __future__ import annotations
 from dataclasses import asdict
 from pathlib import Path
 from typing import Any
+from uuid import uuid4
+from threading import RLock
 import zipfile
 import pandas as pd
 from fastapi import FastAPI, HTTPException
@@ -16,6 +18,8 @@ from .segment_service import activity_series, extract_segment, validate_selectio
 from .normalization import NormalizationRequest, apply_normalizations, NormalizationError
 from .export_service import ExportSegment, build_export_zip, write_or_return_export
 from .processing_api import processing_router
+from .reconstruction_api import reconstruction_router
+from .loaded_source import snapshot_loaded
 from webapp.workspace import export_directory, export_headers
 
 class Camel(BaseModel):
@@ -33,7 +37,7 @@ class PreviewBody(SegmentBody,NormBody): pass
 class ExportBody(Camel): segments:list[SegmentBody]; normalization:NormBody=NormBody(); destination:str|None=None
 
 class State:
-    def __init__(self): self.root:str|None=None; self.summaries:dict[str,Any]={}; self.activities={}
+    def __init__(self): self.root:str|None=None; self.summaries:dict[str,Any]={}; self.activities={}; self.generation:str|None=None; self.lock=RLock()
 
 def _summary(s):
     d={'activityId':s.activity_id,'sourcePath':s.source_path,'durationSeconds':float(s.duration_seconds),'recordCount':int(s.record_count),'hasPower':bool(s.has_power),'hasHeartRate':bool(s.has_heart_rate),'extractable':bool(s.extractable),'exclusionReason':s.exclusion_reason,'laps':[]}
@@ -48,7 +52,6 @@ def _norm(n): return NormalizationRequest(n.weight_kg,n.hr_max_bpm,n.hr_threshol
 def create_app()->FastAPI:
     app=FastAPI(title='Dataset Exploration'); state=State()
     destination = export_directory()
-    app.include_router(processing_router(destination))
     @app.get('/api/health')
     def health(): return {'status':'ok'}
     @app.get('/api/datasets/browse')
@@ -65,9 +68,11 @@ def create_app()->FastAPI:
         activities={i:read_source_fit(root,i) for i in ids}
       except (DatasetPathError,OSError,zipfile.BadZipFile) as e: raise HTTPException(400,str(e))
       summaries={i:summarize_decoded(a,i,str(a.path)) for i,a in activities.items()}
-      state.root=str(root); state.summaries=summaries; state.activities=activities
+      generation=str(uuid4())
+      with state.lock:
+        state.root=str(root); state.summaries=summaries; state.activities=activities; state.generation=generation
       acts=[a for a in summaries.values() if req.max_duration_seconds is None or a.duration_seconds<=req.max_duration_seconds]
-      return {'datasetPath':str(root),'extractable':[_summary(a) for a in acts if a.extractable],'excluded':[_summary(a) for a in acts if not a.extractable]}
+      return {'datasetPath':str(root),'datasetId':generation,'extractable':[_summary(a) for a in acts if a.extractable],'excluded':[_summary(a) for a in acts if not a.extractable]}
     def get(activity_id):
       if not state.root or activity_id not in state.summaries: raise HTTPException(404,'Attività non trovata')
       a=state.activities[activity_id]
@@ -87,13 +92,35 @@ def create_app()->FastAPI:
       norm=_norm(req.normalization); segments=[]
       try:
        for q in req.segments:
-        a,s=get(q.activity_id); laps=validate_selection(s,SegmentSelection(q.activity_id,q.first_lap,q.last_lap)); f=apply_normalizations(extract_segment(a.records,laps),norm); segments.append(ExportSegment(q.activity_id,s.source_path,q.first_lap,q.last_lap,f,norm))
+        a,s=get(q.activity_id); laps=validate_selection(s,SegmentSelection(q.activity_id,q.first_lap,q.last_lap)); f=apply_normalizations(extract_segment(a.records,laps),norm); segments.append(ExportSegment(q.activity_id,s.source_path,q.first_lap,q.last_lap,f,norm,laps=laps))
        blob=build_export_zip(state.root,tuple(segments))
        headers=export_headers(blob,'dataset_segments.zip',destination)
        result=write_or_return_export(blob,req.destination)
       except (SelectionError,NormalizationError) as e: raise HTTPException(422,str(e))
       if result.written_path: return {'writtenPath':result.written_path}
       return Response(result.download_bytes,media_type='application/zip',headers=headers)
+    def reconstruction_extraction(body):
+      req=ExportBody.model_validate(body)
+      if not state.root: raise HTTPException(400,'Caricare prima un dataset FIT')
+      norm=_norm(req.normalization); segments=[]
+      for q in req.segments:
+        a,s=get(q.activity_id); laps=validate_selection(s,SegmentSelection(q.activity_id,q.first_lap,q.last_lap))
+        f=apply_normalizations(extract_segment(a.records,laps),norm)
+        segments.append(ExportSegment(q.activity_id,s.source_path,q.first_lap,q.last_lap,f,norm,laps=laps))
+      return build_export_zip(state.root,tuple(segments))
+    def from_loaded(req):
+      with state.lock:
+        if not state.root or req.dataset_id!=state.generation:
+          raise HTTPException(409,'Il dataset in Estrazione è cambiato: aggiornare la selezione')
+        root,activities,summaries=state.root,state.activities,state.summaries
+      def snapshot_activity(activity_id):
+        if activity_id not in activities: raise HTTPException(404,'Attività non trovata')
+        activity=activities[activity_id]
+        if activity.parse_error: raise HTTPException(422,activity.parse_error)
+        return activity,summaries[activity_id]
+      return snapshot_loaded(root,req,snapshot_activity)
+    app.include_router(processing_router(destination,from_loaded))
+    app.include_router(reconstruction_router(destination,reconstruction_extraction,from_loaded))
     dist=Path(__file__).parents[1]/'dist'
     if dist.exists():
       assets=dist/'assets'

@@ -7,6 +7,11 @@ class LapBoundary:
     index: int
     start_time: datetime
     end_time: datetime
+    source_start_time: datetime | None = None
+    source_end_time: datetime | None = None
+    end_exclusive: bool = False
+    boundary_adjustment: dict | None = None
+    source_step_seconds: float | None = None
 
 @dataclass(frozen=True)
 class ActivitySummary:

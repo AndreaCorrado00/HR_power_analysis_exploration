@@ -8,7 +8,7 @@ from fastapi.testclient import TestClient
 from backend.app import create_app
 
 
-def archive(times=(0, 1, 2, 3, 4), power=(0, 0, 90, 0, 0)):
+def archive(times=(0, 1, 2, 3, 4), power=(0, 0, 90, 0, 0), laps=None):
     bio = io.BytesIO()
     with zipfile.ZipFile(bio, 'w') as z:
         entries = []
@@ -18,6 +18,8 @@ def archive(times=(0, 1, 2, 3, 4), power=(0, 0, 90, 0, 0)):
                 'elapsed_seconds': times, 'power_w': power, 'heart_rate_bpm': 150})
             z.writestr(name, frame.to_csv(index=False))
             entries.append({'csv_file': name, 'activity_id': 'ride', 'first_lap': 1, 'last_lap': 2})
+        if laps is not None:
+            for entry in entries: entry['laps'] = laps
         z.writestr('manifest.json', json.dumps({'format_version': 1, 'segments': entries}))
     return bio.getvalue()
 

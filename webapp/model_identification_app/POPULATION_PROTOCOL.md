@@ -211,3 +211,82 @@ La scelta di 180 s deriva dal confronto esplorativo documentato in
 nella branch `milestone/2026-10-04-hr-power` (commit `c95496e`), non da
 una nuova fonte bibliografica o da una garanzia di robustezza su altri dati.
 Le assunzioni e i limiti della calibrazione e delle fasce restano quelli di v2.
+
+## Protocollo v2.2 - B di popolazione lineare in P0 (6 ottobre 2026)
+
+Modalita opzionale `population_B_P0`, approvata nella conversazione del progetto.
+E una riparametrizzazione proposta qui del modello P1D esistente, non una nuova
+replica bibliografica o un biomarcatore. Nessuna nuova covariata: P0 e gia il
+riferimento della potenza usato dalla run. Fitting train e split restano invariati.
+
+K_pop, L_pop e tau_pop sono stimati con lo stesso REML e screening delle modalita
+B locale, escludendo B dal vettore congiunto. Con K_pop fissato:
+
+    A_i = B_i - K_pop * P0_i
+    A_pop = media aritmetica non pesata degli A_i
+    B_test = A_pop + K_pop * P0_test
+
+A usa tutti i fit train riusciti, non esplicitamente invalidi, con B e P0 finiti
+salvati nei risultati. Non applica lo screening aggiuntivo REML: questa selezione
+distinta riproduce il confronto esplorativo approvato. Si conservano metodo,
+K_pop, numero e ID inclusi, esclusioni motivate e A_pop in `B_reference`.
+P0 mancante non viene sostituito con zero; senza riferimenti validi la stima si
+arresta. A e B sono in bpm, K in bpm/W, P0 in W, L e tau in secondi. La pendenza
+non e stimata con una nuova regressione. Si assume trasferibile tra segmenti
+il riferimento A; tale assunzione richiede verifica fuori campione.
+
+Sul test P0 segue la configurazione originale (media pre-window o primo campione).
+HR(0) osservata inizializza lo stato; nessun altro campione HR determina le
+traiettorie. HR_eq(P)=A_pop+K_pop*P e la relazione di equilibrio del modello,
+non una misura fisiologica della HR a riposo. B centrale fuori dai bounds del
+fitting viene segnalato per segmento, senza clipping o fallback.
+
+Le metriche usano t>=180 s, senza reset, per confronto con `local_B_180s` sullo
+stesso tratto. I primi 180 s non sono una calibrazione in questa modalita.
+Servono HR(0) finita e almeno un campione temporale a t>=180 s; potenza e tempi
+seguono i controlli esistenti. HR mancante successiva non modifica le previsioni.
+Confronti: B comune non corretto come baseline piu semplice e B locale a 180 s;
+valutare gli stessi segmenti/campioni, MAE, RMSE, bias e fallimenti separati.
+
+Per ogni estrazione congiunta di K,L,tau, A_pop resta fisso e B=A_pop+K*P0.
+I bounds delle fasce si applicano solo a K,L,tau, non al B derivato. Le fasce
+non includono incertezza di A_pop, sua variabilita residua tra segmenti o rumore
+HR; sono descrittive e condizionate al riferimento stimato, non intervalli
+predittivi completi. Non si attribuisce ad A una distribuzione REML o un CI.
+
+La scelta della media e fissata prima del nuovo test; il confronto che ha
+motivato questa opzione rimane esplorativo. Verifiche automatiche: formula e
+provenienza train-only, equivalenza K,L,tau alle modalita locali, indipendenza
+dalla HR futura anche per le fasce, P0 pre-window, mancanti, bounds, metriche
+da 180 s, persistenza API, selezione UI e export PDF/JSON.
+
+
+## Protocollo v2.3 - HR(0) uguale alla media train (6 ottobre 2026)
+
+Modalita opzionale `population_B_P0_mean_HR0`, approvata dopo il confronto
+esplorativo tra inizializzazione osservata, regressione HR(0)-P(0) e costante.
+Mantiene integralmente B=A_pop+K_pop*P0 del protocollo v2.2; sostituisce soltanto
+HR(0) con la media aritmetica non pesata delle HR iniziali finite di tutti i
+segmenti train, indipendentemente da riuscita o screening del fitting.
+La misura e il primo campione con t>=0 nei blob sorgente congelati della run,
+non la media pre-window o la prima HR finita successiva. Nessuna interpolazione.
+
+La media (bpm), il numero di segmenti, gli ID inclusi/esclusi e gli hash dei
+blob inclusi sono persistiti in HR0_reference. Una misura iniziale mancante
+viene esclusa; senza misure train finite la procedura si arresta, senza fallback.
+Non si impone HR(0)=B: tutti i segmenti partono dalla stessa HR prevista ma
+mantengono la propria P0 e il proprio B. E un'inizializzazione proposta nel
+progetto, non una nuova relazione fisiologica o una regressione aggiuntiva.
+
+Nessuna HR del test, nemmeno quella iniziale, condiziona traiettorie o fasce.
+La HR osservata serve solo alle metriche e ai grafici; se tutta mancante, la
+previsione resta disponibile senza metriche. Metriche da t>=180 s, senza reset,
+come nella modalita con HR(0) osservata. Per valutare il costo iniziale confrontare
+anche [0,180 s) separatamente. Baseline: identico modello con HR(0) osservata.
+Fasce condizionate ad A e HR(0) fissi: non comprendono la loro incertezza o
+variabilita residua. Si assume sufficiente una partenza comune per il dominio
+predittivo di interesse; validazione fuori campione necessaria.
+
+Verifiche: media train anche con fit falliti e mancanti, esclusione di val/test,
+lettura dal primo campione non negativo, indipendenza da tutta la HR test,
+persistenza API, selezione UI, export e retrocompatibilita delle altre modalita.

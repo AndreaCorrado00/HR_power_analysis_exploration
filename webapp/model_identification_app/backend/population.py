@@ -10,7 +10,10 @@ from scipy.stats import norm
 
 from .models.p1d import simulate
 
-VERSION = '2.1.0'
+VERSION = '2.3.0'
+P0_B_MODE = 'population_B_P0'
+MEAN_HR0_MODE = 'population_B_P0_mean_HR0'
+P0_B_MODES = (P0_B_MODE, MEAN_HR0_MODE)
 LOCAL_B_WINDOWS = {'local_B_10s': 10, 'local_B_180s': 180}
 DEFAULTS = {'max_rse_pct': 100., 'max_correlation': .98,
             'exclude_near_bounds': False, 'draws': 200, 'seed': 42, 'prediction_mode': 'legacy_power_only'}
@@ -29,7 +32,7 @@ def configuration(value=None):
         raise ValueError('Simulazioni: intero tra 50 e 1000')
     if isinstance(c['seed'], bool) or not isinstance(c['seed'], int) or not 0 <= c['seed'] < 2**32:
         raise ValueError('Seed: intero tra 0 e 2^32-1')
-    if c['prediction_mode'] not in ('legacy_power_only', 'observed_hr', *LOCAL_B_WINDOWS):
+    if c['prediction_mode'] not in ('legacy_power_only', 'observed_hr', *P0_B_MODES, *LOCAL_B_WINDOWS):
         raise ValueError('Modalita predittiva sconosciuta')
     return c
 
@@ -104,7 +107,7 @@ def descriptive(values):
                    'observed': np.sort(a).tolist()}}
 
 
-def analyze(manifest, results, config=None):
+def analyze(manifest, results, config=None, *, train_initial_hr=None):
     c = configuration(config)
     params = manifest['model']['parameters']; keys = [p['key'] for p in params]
     train = set(manifest['split']['assignments']['train'])
@@ -119,7 +122,8 @@ def analyze(manifest, results, config=None):
         out.update(status='incompatible', reason='Protocollo storico non compatibile: creare una run segment_v2 con B stimato.')
         return out
     original_keys = keys[:]
-    indices = [i for i,k in enumerate(keys) if c['prediction_mode'] not in LOCAL_B_WINDOWS or k != 'B']
+    separate_B = c['prediction_mode'] in (*LOCAL_B_WINDOWS, *P0_B_MODES)
+    indices = [i for i,k in enumerate(keys) if not separate_B or k != 'B']
     params = [params[i] for i in indices]; keys = [p['key'] for p in params]
     out['parameters'] = params
     raw = {k: [] for k in keys}; retained = {k: [] for k in keys}
@@ -206,6 +210,48 @@ def analyze(manifest, results, config=None):
                         sd=np.sqrt(np.diag(omega)).tolist(), correlation=correlation(omega),
                         observed_correlation=correlation(np.atleast_2d(np.cov(y,rowvar=False))),
                         included_segments=ids, fixed=fixed.tolist())
+    if c['prediction_mode'] in P0_B_MODES:
+        # Same K,L,tau population as local-B modes. A uses all successful train fits,
+        # not the narrower REML screening; preserve the membership explicitly.
+        k_pop = float(mean[keys.index('K')])
+        references, reference_ids, excluded = [], [], []
+        for sid in manifest['split']['assignments']['train']:
+            r = fits.get(sid, {})
+            b = r.get('parameters', {}).get('B', {}).get('estimate')
+            p0 = r.get('initial_conditions', {}).get('P0')
+            if r.get('status') != 'fitted' or r.get('identification_valid') is False:
+                reason = 'fit_failed_or_missing'
+            elif b is None or not np.isfinite(b): reason = 'missing_or_nonfinite_B'
+            elif p0 is None or not np.isfinite(p0): reason = 'missing_or_nonfinite_P0'
+            else:
+                references.append(float(b-k_pop*p0)); reference_ids.append(sid)
+                continue
+            excluded.append({'segment_id': sid, 'reason': reason})
+        out['B_reference'] = {'method': 'arithmetic_mean_train_B_minus_Kpop_P0',
+                              'A': float(np.mean(references)) if references else None,
+                              'unit': 'bpm', 'K_population': k_pop, 'n': len(references),
+                              'included_segments': reference_ids, 'excluded': excluded}
+        if not references:
+            out.update(model=None, reason='Nessun fit train valido con B e P0 finiti per stimare A.')
+            return out
+        out['warnings'].append('A = media train di B-K_pop*P0 sui fit riusciti, senza screening REML aggiuntivo. '
+                               'Fasce condizionate ad A fisso: non includono la sua incertezza o variabilita residua.')
+    if c['prediction_mode'] == MEAN_HR0_MODE:
+        initial = train_initial_hr or {}
+        included = [sid for sid in manifest['split']['assignments']['train']
+                    if initial.get(sid) is not None and np.isfinite(initial[sid])]
+        out['HR0_reference'] = {
+            'method': 'arithmetic_mean_all_train_initial_HR', 'unit': 'bpm',
+            'mean': float(np.mean([initial[sid] for sid in included])) if included else None,
+            'n': len(included), 'included_segments': included,
+            'excluded': [{'segment_id': sid, 'reason': 'missing_or_nonfinite_initial_HR'}
+                         for sid in manifest['split']['assignments']['train'] if sid not in included],
+            'source_blobs': {s['id']: s.get('sha256') for s in manifest['dataset']['segments'] if s['id'] in included}}
+        if not included:
+            out.update(model=None, reason='Nessuna HR(0) train finita: impossibile stimare la media iniziale.')
+            return out
+        out['warnings'].append('HR(0) fissata alla media di tutti i segmenti train disponibili, inclusi i fit falliti. '
+                               'Nessuna HR test usata nelle previsioni. Fasce prive di incertezza e variabilita di HR(0).')
     out['status'] = 'estimated'
     return out
 
@@ -228,9 +274,12 @@ def predict(manifest, analysis, time, power, observed):
     model = analysis['model']; mean = np.asarray(model['mean'])
     mode = analysis['config'].get('prediction_mode', 'legacy_power_only')
     local = mode in LOCAL_B_WINDOWS
-    calibration_s = LOCAL_B_WINDOWS.get(mode, 10)
+    p0_adjusted = mode in P0_B_MODES
+    mean_hr0 = mode == MEAN_HR0_MODE
+    initial_hr = float(analysis['HR0_reference']['mean']) if mean_hr0 else hr[0]
+    calibration_s = 180 if p0_adjusted else LOCAL_B_WINDOWS.get(mode, 10)
     legacy = mode == 'legacy_power_only'
-    if not legacy and not np.isfinite(hr[0]):
+    if not legacy and not np.isfinite(initial_hr):
         raise ValueError('HR iniziale mancante o non finita')
     if not legacy and not np.any(t >= calibration_s):
         raise ValueError(f'Segmento senza tratto di valutazione dopo {calibration_s} s')
@@ -266,6 +315,12 @@ def predict(manifest, analysis, time, power, observed):
             if 1.96*se > abs(equilibrium): warnings.append('Incertezza locale di B elevata')
             diagnostic = {'duration_s': calibration_s, 'samples': int(calibration_mask.sum()),
                           'B_se_conditional': se, 'at_bound': at_bound, 'warnings': warnings}
+        elif p0_adjusted:
+            intercept = analysis['B_reference']['A']
+            equilibrium = float(intercept + theta[model['keys'].index('K')]*p0)
+            result = simulate(t, u, initial_hr, [*theta, equilibrium], p0,
+                              'p1d_full', 'estimated_equilibrium')
+            diagnostic = None
         else:
             equilibrium = float(theta[model['keys'].index('B')])
             result = simulate(t, u, equilibrium if legacy else hr[0], theta, p0,
@@ -293,7 +348,13 @@ def predict(manifest, analysis, time, power, observed):
                    'constant_B_RMSE': float(np.sqrt(np.mean((hr[valid]-equilibrium)**2))),
                    'band_coverage': float(np.mean((hr[valid]>=band[0,valid])&(hr[valid]<=band[1,valid]))) if band is not None else None}
     clean = lambda a: [float(v) if np.isfinite(v) else None for v in a]
+    reference = None
+    if p0_adjusted:
+        outside = bool(equilibrium < lo_full[b_index] or equilibrium > hi_full[b_index])
+        reference = {'A': analysis['B_reference']['A'], 'outside_bounds': outside,
+                     'warnings': ['B da A+K*P0 fuori dai bounds originali; nessun clipping.'] if outside else []}
     return {'status': 'predicted', 'P0': p0, 'initial_HR': float(central[0]), 'equilibrium_B': equilibrium,
+            **({'B_reference': reference} if p0_adjusted else {}),
             'prediction_mode': mode, 'evaluation_start_s': 0 if legacy else calibration_s,
             'calibration': calibration, 'metrics': metrics,
             'missing_hr': int((~np.isfinite(hr)).sum()), 'gaussian_domain_acceptance': float(admissible.mean()),

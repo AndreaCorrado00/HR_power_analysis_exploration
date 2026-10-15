@@ -13,6 +13,26 @@ const config={max_rse_pct:100,max_correlation:.98,exclude_near_bounds:false,draw
 const saved={id:'analysis',created_at:'2026-09-29',status:'insufficient_data',reason:'Dati insufficienti',config,train_count:4,retained_vectors:3,minimum_vectors:6,parameters:[],warnings:[],distributions:{},screening:[],model:null,test:[]}
 afterEach(()=>{vi.unstubAllGlobals();sessionStorage.clear()})
 describe('parametri atleta',()=>{
+  it.each(['population_B_P0','population_B_P0_mean_HR0'])('invia e recupera %s con riferimenti visibili',async(mode)=>{
+    const result={...saved,model:{keys:[],mean:[],sd:[],mean_ci95:[],fixed:[],covariance:[],correlation:[],observed_correlation:[]},config:{...config,prediction_mode:mode},B_reference:{A:82.9,n:211,excluded:[]},...(mode==='population_B_P0_mean_HR0'?{HR0_reference:{mean:102.6,n:239,excluded:[]}}:{})}
+    const mock=vi.fn(async(_url:string,options?:RequestInit)=>({ok:true,json:async()=>options?.method==='POST'?result:null}))
+    vi.stubGlobal('fetch',mock)
+    const options={props:{runs:[run],selected:run.id},global:{stubs:{Chart:true}}}
+    let w=mount(PopulationPage,options);await flushPromises()
+    await w.get('select[aria-label="Protocollo predittivo"]').setValue(mode)
+    expect(w.text()).toContain(mode==='population_B_P0_mean_HR0'?'Nessuna HR test usata per prevedere':'nessuna calibrazione sul test')
+    await w.get('form').trigger('submit');await flushPromises()
+    expect(JSON.parse(mock.mock.calls[1]![1]!.body as string).prediction_mode).toBe(mode)
+    expect(w.text()).toContain('A_pop = 82,9 bpm')
+    expect(w.text()).toContain('211 fit train riusciti')
+    if(mode==='population_B_P0_mean_HR0')expect(w.text()).toContain('HR(0) = 102,6 bpm')
+    w.unmount()
+    vi.stubGlobal('fetch',vi.fn(async()=>({ok:true,json:async()=>result})))
+    w=mount(PopulationPage,options);await flushPromises()
+    expect((w.get('select[aria-label="Protocollo predittivo"]').element as HTMLSelectElement).value).toBe(mode)
+    w.unmount()
+  })
+
   it('propone 180 s nelle nuove analisi e conserva la scelta storica di 10 s',async()=>{
     const mock=vi.fn(async(_url:string,_options?:RequestInit)=>({ok:true,json:async()=>null}))
     vi.stubGlobal('fetch',mock)

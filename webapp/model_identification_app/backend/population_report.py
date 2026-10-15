@@ -4,7 +4,7 @@ import numpy as np
 from matplotlib.figure import Figure
 from matplotlib.ticker import FuncFormatter
 from .population_review import metric_color, elapsed
-from .population import LOCAL_B_WINDOWS
+from .population import LOCAL_B_WINDOWS, P0_B_MODES, MEAN_HR0_MODE
 
 
 def append_population(a, p, heading, table, plot, page):
@@ -65,6 +65,15 @@ def append_population(a, p, heading, table, plot, page):
         p('Protocollo storico: HR_hat=B+x; x(0)=0; HR iniziale=B_sub. HR test solo per valutazione.')
     elif mode == 'observed_hr':
         p('B di popolazione; x(0)=HR(0)-B_sub. HR iniziale osservata, nessuna ristima. Metriche da t >= 10 s.')
+    elif mode in P0_B_MODES:
+        ref = a['B_reference']
+        p(f"B = A_pop + K_pop*P0; A_pop = {ref['A']:.5g} bpm, media di B-K_pop*P0 su {ref['n']} fit train riusciti. Pendenza K di popolazione, nessuna regressione aggiuntiva.")
+        if mode == MEAN_HR0_MODE:
+            ref_hr = a['HR0_reference']
+            p(f"HR(0) = media train: {ref_hr['mean']:.5g} bpm su {ref_hr['n']} segmenti, inclusi fit falliti. Nessuna HR test nelle previsioni; fasce prive di incertezza o variabilita iniziale.")
+        else:
+            p('HR(0) osservata.')
+        p('Nessuna calibrazione test. Metriche da 180 s. Per le fasce A resta fisso e B segue il K campionato; bounds applicati solo a K,L,tau. Non inclusa incertezza o variabilita residua di A. B fuori bounds segnalato senza clipping.')
     else:
         duration = LOCAL_B_WINDOWS[mode]
         p(f'K,L,tau di popolazione; B locale calibrato su HR e potenza in [0,{duration} s). x(0)=HR(0)-B_locale. Stato propagato senza reset; metriche da t >= {duration} s. B ricalibrato per ogni estrazione. Fasce prive di incertezza del rumore di calibrazione.')
@@ -91,6 +100,8 @@ def append_population(a, p, heading, table, plot, page):
         p(f"P0={r['P0']:.5g} W; HR iniziale={r['initial_HR']:.5g} bpm; HR mancanti={r['missing_hr']}; accettazione dominio={r['gaussian_domain_acceptance']:.1%}; fascia disponibile={r['band_available']}.")
         p(f"Equilibrio B: {r.get('equilibrium_B', r['initial_HR'])}; valutazione da {r.get('evaluation_start_s', 0)} s.")
         if r.get('calibration'): p('Calibrazione B (SE condizionale approssimato): '+json.dumps(r['calibration'], ensure_ascii=True))
+        if r.get('B_reference'):
+            for warning in r['B_reference']['warnings']: p('AVVISO: '+warning)
         if r['metrics']:
             m = r['metrics']
             p('Campioni valutati: '+str(m['N'])+'; SD residui: '+(f"{m['residual_sd']:.4g} bpm" if m['residual_sd'] is not None else 'n.d.')+'; copertura empirica fascia: '+(f"{m['band_coverage']:.1%}" if m['band_coverage'] is not None else 'n.d.'))

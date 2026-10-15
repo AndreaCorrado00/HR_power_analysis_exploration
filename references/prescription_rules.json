@@ -1,0 +1,36 @@
+{
+  "version": "prescription-inference-v2",
+  "above_z6_policy": "categorical_maximal",
+  "workout_selection": "all_laps_assigned",
+  "ftp_w": 325,
+  "power_assignment": "nearest_integer_watt_half_up_for_membership",
+  "z1_policy": "rounded_lap_mean",
+  "z2_open_upper_policy": "cap_at_6h",
+  "z1_rounding_w": 5,
+  "zones": [
+    {"id":"Z1", "low_w":0, "high_w":179, "min_s":60, "max_s":1800, "linear":false},
+    {"id":"Z2", "low_w":180, "high_w":244, "min_s":1800, "max_s":21600, "linear":false},
+    {"id":"Z3", "low_w":245, "high_w":293, "min_s":600, "max_s":5400, "linear":true},
+    {"id":"sweet_spot", "low_w":286, "high_w":306, "min_s":600, "max_s":3600, "linear":true},
+    {"id":"Z4_low", "low_w":296, "high_w":309, "min_s":600, "max_s":2400, "linear":true},
+    {"id":"Z4_central", "low_w":312, "high_w":325, "min_s":480, "max_s":1800, "linear":true},
+    {"id":"Z4_high", "low_w":328, "high_w":341, "min_s":300, "max_s":1200, "linear":true},
+    {"id":"Z5", "low_w":342, "high_w":390, "min_s":120, "max_s":480, "linear":true},
+    {"id":"Z6", "low_w":391, "high_w":488, "min_s":30, "max_s":180, "linear":true}
+  ],
+  "patterns": {
+    "max_period_laps":6,
+    "min_complete_cycles":2,
+    "min_short_complete_cycles":3,
+    "short_on_limit_s":120,
+    "duration_tolerance_fraction":0.20,
+    "duration_tolerance_floor_s":5,
+    "power_tolerance_fraction":0.12,
+    "power_tolerance_floor_w":30,
+    "minimum_phase_contrast_w":40,
+    "maximum_boundary_gap_s":5,
+    "maximum_boundary_overlap_s":1,
+    "extensive_on_min_s":120,
+    "snap_grids_s":[[120,5],[600,30],[1000000,60]]
+  }
+}

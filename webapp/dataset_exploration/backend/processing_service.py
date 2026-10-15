@@ -70,15 +70,20 @@ def read_archive(blob: bytes) -> SegmentDataset:
                     if key not in entry or not frame[key].eq(entry[key]).all():
                         raise ValueError(f'{name}: {key} incoerente con il manifest')
                 frames[name] = frame.drop(columns=list(DERIVED), errors='ignore')
+                if 'sample_support_end' in entry:
+                    end, step = float(entry['sample_support_end']), float(entry['sample_step'])
+                    if not np.isfinite(end) or not np.isfinite(step) or end <= times[-1] or step <= 0:
+                        raise ValueError(f'{name}: supporto temporale non valido')
+                    frames[name].attrs.update(reconstruction_end=end, reconstruction_step=step)
             return SegmentDataset(manifest, frames, hashlib.sha256(blob).hexdigest())
     except (zipfile.BadZipFile, KeyError, UnicodeError, pd.errors.ParserError, TypeError, RuntimeError) as exc:
         raise ValueError(f'ZIP dei segmenti non valido: {exc}') from exc
 
 
-def time_blocks(frame: pd.DataFrame):
+def time_blocks(frame: pd.DataFrame, reference_step: float | None = None):
     times = frame.elapsed_seconds.to_numpy(dtype=float)
     delta = np.diff(times)
-    step = float(np.median(delta)) if len(delta) else 1.0
+    step = reference_step if reference_step is not None else (float(np.median(delta)) if len(delta) else 1.0)
     starts = np.r_[0, np.flatnonzero(delta > 1.5 * step) + 1]
     return times, step, list(zip(starts, np.r_[starts[1:], len(times)]))
 
@@ -96,9 +101,10 @@ def inventory(dataset: SegmentDataset) -> list[dict]:
     return result
 
 
-def smooth(frame: pd.DataFrame, window: int, norm: NormalizationRequest) -> pd.DataFrame:
+def smooth(frame: pd.DataFrame, window: int, norm: NormalizationRequest,
+           reference_step: float | None = None) -> pd.DataFrame:
     out = frame.copy()
-    times, step, blocks = time_blocks(frame)
+    times, step, blocks = time_blocks(frame, reference_step)
     for source, target in zip(RAW, ('power_ma_w', 'heart_rate_ma_bpm')):
         out[target] = np.nan
     out['ma_sample_count'] = 0

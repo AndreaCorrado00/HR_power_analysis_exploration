@@ -1,6 +1,6 @@
 """Shared presentation conventions for manual review; never alters predictions."""
 import math
-from .population import LOCAL_B_WINDOWS
+from .population import LOCAL_B_WINDOWS, P0_B_MODES, MEAN_HR0_MODE
 
 LABELS = {
     'observed_hr_delay': 'Ritardo della HR osservata rispetto alla prevista',
@@ -39,10 +39,18 @@ def review_context(manifest, analysis):
         b += (f'B locale calibrato su potenza e HR in [0,{duration} s), senza assumere equilibrio nella finestra; '
               f'x(0)=HR(0)-B. Può essere debolmente identificato. Metriche da {duration} s; '
               'fasce condizionate ai dati iniziali, prive del rumore di calibrazione e dell’incertezza residua di B.')
+    elif mode in P0_B_MODES:
+        b += ('B=A_pop+K_pop*P0; A stimato come media di B-K_pop*P0 sui fit train riusciti. '
+              'HR(0) osservata, nessuna calibrazione sul test. Metriche da 180 s. '
+              'Fasce condizionate ad A fisso e ai bounds K,L,tau; non includono incertezza '
+              'o variabilita residua di A. B fuori bounds segnalato senza clipping.')
     elif mode == 'observed_hr':
         b += 'B di popolazione; x(0)=HR(0)-B, HR iniziale osservata senza ristima. Metriche da 10 s.'
     else:
         b += 'Protocollo storico: B di popolazione, x(0)=0 e HR iniziale=B; equilibrio iniziale assunto.'
+    if mode == MEAN_HR0_MODE:
+        b = b.replace('HR(0) osservata, nessuna calibrazione sul test.',
+                      'HR(0) = media train, nessuna HR test usata nella previsione. Fasce condizionate anche a HR(0) fisso.')
     warnings.append(b)
     scales = {}
     for key in METRICS:

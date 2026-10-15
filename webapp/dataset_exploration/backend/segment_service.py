@@ -12,7 +12,7 @@ def validate_selection(summary: ActivitySummary, selection: SegmentSelection)->t
     return tuple(by[i] for i in wanted)
 def extract_segment(records: pd.DataFrame,laps:tuple[LapBoundary,...])->pd.DataFrame:
     ts=pd.to_datetime(records['timestamp'],utc=True,errors='coerce'); start=pd.Timestamp(laps[0].start_time); end=pd.Timestamp(laps[-1].end_time)
-    out=records.loc[ts.between(start,end,inclusive='both')].copy(); out['timestamp']=ts.loc[out.index]
+    out=records.loc[ts.between(start,end,inclusive='left' if laps[-1].end_exclusive else 'both')].copy(); out['timestamp']=ts.loc[out.index]
     out=out.drop_duplicates('timestamp').sort_values('timestamp').reset_index(drop=True)
     out['elapsed_seconds']=(out.timestamp-out.timestamp.iloc[0]).dt.total_seconds() if len(out) else pd.Series(dtype=float)
     return out

@@ -232,14 +232,24 @@ class RunService:
             return data, name
 
     def estimate_population(self, key, config):
-        from .population import analyze, predict
+        from .population import analyze, predict, MEAN_HR0_MODE
         import json
         with self.store.lock:
             manifest = self.get(key)
             if manifest['status'] not in ('completed', 'completed_with_errors'):
                 raise ValueError('Richiesta una run completata')
             results = self.results(key, detail=True)
-        analysis = analyze(manifest, results, config)
+        train_initial_hr = None
+        if config.get('prediction_mode') == MEAN_HR0_MODE:
+            import numpy as np
+            train_initial_hr = {}
+            segments = {s['id']: s for s in manifest['dataset']['segments']}
+            for sid in manifest['split']['assignments']['train']:
+                t, _, hr = series(self.store.read_blob(segments[sid]['sha256']), manifest['signal'])
+                indices = np.flatnonzero(t >= 0)
+                value = hr[indices[0]] if len(indices) else np.nan
+                train_initial_hr[sid] = float(value) if np.isfinite(value) else None
+        analysis = analyze(manifest, results, config, train_initial_hr=train_initial_hr)
         analysis.update(created_at=utc_now(), id=uuid.uuid4().hex,
                         source_results_sha256=sha(json.dumps(results, sort_keys=True, allow_nan=False).encode()),
                         environment=self.provenance(), split=manifest['split'])

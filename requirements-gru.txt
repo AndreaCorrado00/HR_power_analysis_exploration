@@ -1,0 +1,4 @@
+# Additional dependencies for the GRU CLI (base requirements.txt also required).
+torch==2.14.1
+tqdm==4.70.1
+filelock==4.1.1

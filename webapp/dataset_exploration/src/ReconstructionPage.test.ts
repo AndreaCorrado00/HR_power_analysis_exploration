@@ -1,0 +1,75 @@
+import {flushPromises,mount} from '@vue/test-utils'
+import {afterEach,expect,it,vi} from 'vitest'
+import App from './App.vue'
+import ReconstructionChart from './components/ReconstructionChart.vue'
+vi.mock('vue-echarts',()=>({default:{template:'<div />'}}))
+afterEach(()=>vi.unstubAllGlobals())
+
+it('opens reconstruction, edits a target and puts both cut parts in shared review',async()=>{
+  const points=Array.from({length:90},(_,i)=>({elapsed_seconds:i,power_w:i<30?300:100,power_ma_w:i<30?300:100,heart_rate_bpm:150}))
+  vi.stubGlobal('fetch',vi.fn(async(url:string)=>({ok:true,json:async()=>url.endsWith('/import')?
+    {datasetId:'d',segments:[{id:'a.csv',activityId:'ride',durationSeconds:89,sampleCount:90}]}:
+    {points,blocks:[{start:0,end:30,power:300},{start:30,end:90,power:100}],end:90,step:1,gapCount:0,missingPower:0,sensitivity:50,saved:null}})))
+  const w=mount(App)
+  const button=(text:string)=>w.findAll('button').find(b=>b.text()===text)!
+  expect(button('Ricostruzione allenamenti')).toBeDefined()
+  await button('Ricostruzione allenamenti').trigger('click')
+  const file=w.get('#reconstruction-file')
+  Object.defineProperty(file.element,'files',{value:[new File(['zip'],'segments.zip')]})
+  await file.trigger('change');await flushPromises()
+  await w.get('#reconstruction-source').setValue('a.csv');await flushPromises()
+  expect(w.find('.reconstruction-page table').exists()).toBe(false)
+  await w.get('[data-block="0"] rect').trigger('click')
+  await button('Valori precisi').trigger('click')
+  await w.get('[aria-label="Potenza blocco 1"]').setValue(320)
+  expect(w.findComponent(ReconstructionChart).props('blocks')[0].power).toBe(320)
+  await button('Taglia').trigger('click')
+  const svg=w.findComponent(ReconstructionChart).get('svg')
+  vi.spyOn(svg.element,'getBoundingClientRect').mockReturnValue({left:0,top:0,width:1000,height:350} as DOMRect)
+  svg.element.dispatchEvent(new MouseEvent('pointerdown',{bubbles:true,clientX:515,clientY:100}))
+  svg.element.dispatchEvent(new MouseEvent('pointerup',{bubbles:true,clientX:515,clientY:100}))
+  await flushPromises()
+  await svg.trigger('click')
+  const reviewButton=w.findAll('button').find(b=>b.text().startsWith('Pre-esportazione'))!
+  await reviewButton.trigger('click');await flushPromises()
+  const cards=w.findAll('.review-card')
+  expect(cards).toHaveLength(2)
+  expect(cards[0].text()).toContain('Ricostruzione allenamenti')
+  expect(cards[0].text()).toContain('45 campioni')
+  expect(cards[1].text()).toContain('45 campioni')
+  await cards[0].findAll('button').find(b=>b.text()==='Rimuovi')!.trigger('click')
+  expect(w.findAll('.review-card')).toHaveLength(1)
+  await w.get('.review').findAll('button').find(b=>b.text()==='Chiudi')!.trigger('click')
+  await w.get('[data-block="0"] rect').trigger('click')
+  await w.get('[aria-label="Potenza blocco 1"]').setValue(330)
+  await reviewButton.trigger('click');await flushPromises()
+  expect(w.get('.review').text()).toContain('Bozza modificata')
+  expect(button('Esporta 1 segmenti').attributes('disabled')).toBeDefined()
+  w.unmount()
+})
+
+it('commits a dragged power handle using plot coordinates',async()=>{
+  const w=mount(ReconstructionChart,{props:{points:[],blocks:[{start:0,end:30,power:200}],start:0,end:30}})
+  const svg=w.get('svg')
+  vi.spyOn(svg.element,'getBoundingClientRect').mockReturnValue({left:0,top:0,width:1000,height:350} as DOMRect)
+  w.get('[data-power-handle="0"]').element.dispatchEvent(new MouseEvent('pointerdown',{bubbles:true,clientX:300,clientY:85}))
+  await flushPromises()
+  svg.element.dispatchEvent(new MouseEvent('pointermove',{bubbles:true,clientX:300,clientY:140}))
+  await flushPromises()
+  svg.element.dispatchEvent(new MouseEvent('pointerup',{bubbles:true}))
+  await flushPromises()
+  expect((w.emitted('change')![0][0] as any)[0].power).toBe(150)
+  await w.setProps({blocks:[{start:0,end:30,power:1000}]})
+  expect(w.text()).toContain('1200 W')
+})
+
+it('can extend a shortened final block back into the source time range',async()=>{
+  const w=mount(ReconstructionChart,{props:{points:[],blocks:[{start:0,end:60,power:200}],start:0,end:90}})
+  const svg=w.get('svg')
+  vi.spyOn(svg.element,'getBoundingClientRect').mockReturnValue({left:0,top:0,width:1000,height:350} as DOMRect)
+  w.findAll('.time-handle').at(-1)!.element.dispatchEvent(new MouseEvent('pointerdown',{bubbles:true,clientX:668,clientY:200}))
+  svg.element.dispatchEvent(new MouseEvent('pointermove',{bubbles:true,clientX:55+80/90*920,clientY:200}))
+  svg.element.dispatchEvent(new MouseEvent('pointerup',{bubbles:true}))
+  await flushPromises()
+  expect((w.emitted('change')![0][0] as any)[0].end).toBe(80)
+})

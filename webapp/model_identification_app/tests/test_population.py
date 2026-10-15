@@ -17,6 +17,7 @@ def fixture(n=30):
     fits = []
     for i, theta in enumerate(rng.normal([.3, 5, 45, 120], [.02, 1, 4, 3], (n, 4))):
         fits.append({'segment_id': str(i), 'filename': str(i)+'.csv', 'status': 'fitted', 'warnings': [],
+            'initial_conditions': {'P0': float(i*10)},
             'parameters': {k: {'estimate': float(x), 'se': float(np.sqrt(covariance[j,j])),
                 'rse_pct': float(100*np.sqrt(covariance[j,j])/abs(x)), 'at_bound': False, 'fixed': False}
                 for j, (k,x) in enumerate(zip(keys, theta))},
@@ -115,7 +116,7 @@ def test_invalid_covariance_and_multistart_failures_are_excluded():
     assert not any(s['included'] for s in a['screening'][:3])
 
 
-@pytest.mark.parametrize('mode', ['legacy_power_only', 'observed_hr', 'local_B_10s', 'local_B_180s'])
+@pytest.mark.parametrize('mode', ['legacy_power_only', 'observed_hr', 'local_B_10s', 'local_B_180s', 'population_B_P0', 'population_B_P0_mean_HR0'])
 def test_population_api_persistence_and_export(tmp_path, mode):
     import io
     import zipfile
@@ -130,6 +131,10 @@ def test_population_api_persistence_and_export(tmp_path, mode):
         service = c.app.state.runs
         data = ('elapsed_seconds,power_w,heart_rate_bpm\n'+''.join(f'{i},100,120\n' for i in range(201))).encode()
         digest = service.store.blob(data)
+        if mode == 'population_B_P0_mean_HR0':
+            for i, segment in enumerate(manifest['dataset']['segments']):
+                raw = f'elapsed_seconds,power_w,heart_rate_bpm\n-1,100,999\n0,100,{100+i}\n1,100,150\n'.encode()
+                segment['sha256'] = service.store.blob(raw)
         manifest['dataset']['segments'].append({'id':'test','filename':'test.csv','sha256':digest,'activity_id':'unseen'})
         folder = tmp_path/'runs'/manifest['id']; folder.mkdir()
         for r in fits: service.store.write_path(folder/(r['segment_id']+'.json'),r)
@@ -139,7 +144,7 @@ def test_population_api_persistence_and_export(tmp_path, mode):
         assert response.status_code == 200, response.text
         analysis = response.json()
         assert analysis['config']['prediction_mode'] == mode
-        assert analysis['test'][0]['series']['predicted'][0] == (analysis['model']['mean'][3] if mode == 'legacy_power_only' else 120)
+        assert analysis['test'][0]['series']['predicted'][0] == (analysis['model']['mean'][3] if mode == 'legacy_power_only' else 105.5 if mode == 'population_B_P0_mean_HR0' else 120)
         assert c.get('/api/runs/population-test/population').json() == analysis
         assert len(c.get('/api/runs/population-test/results').json()) == 12
         assert (folder/'population'/(analysis['id']+'.json')).exists()
@@ -156,7 +161,7 @@ def test_population_api_persistence_and_export(tmp_path, mode):
         assert exported_review.status_code == 200
         assert exported_review.json()['reviews']['test']['labels'] == ['systematic_overestimate']
         assert exported_review.json()['review_context']['warnings']
-        if mode == 'local_B_180s':
+        if mode in ('local_B_180s', 'population_B_P0', 'population_B_P0_mean_HR0'):
             assert analysis['test'][0]['evaluation_start_s'] == 180
             assert analysis['test'][0]['metrics']['N'] == 21
             assert '180 s' in ' '.join(exported_review.json()['review_context']['warnings'])
@@ -276,3 +281,85 @@ def test_local_180s_calibration_uses_full_prefix_but_never_future_hr():
         mask = t < stop
         with pytest.raises(ValueError, match='valutazione.*180'):
             predict(manifest, long, t[mask], power[mask], hr[mask])
+
+def test_population_B_P0_uses_train_mean_and_preserves_dynamic_population():
+    from webapp.model_identification_app.backend.population import analyze, predict
+    from webapp.model_identification_app.backend.models.p1d import simulate
+    manifest, fits = fixture(12)
+    local = analyze(manifest, fits, {'prediction_mode': 'local_B_180s', 'draws': 50})
+    extra = copy.deepcopy(fits[0]); extra['segment_id'] = 'test'
+    extra['parameters']['B']['estimate'] = 9999
+    a = analyze(manifest, fits+[extra], {'prediction_mode': 'population_B_P0', 'draws': 50})
+    assert a['model'] == local['model']
+    k, delay, tau = a['model']['mean']
+    expected = np.mean([r['parameters']['B']['estimate']-k*r['initial_conditions']['P0'] for r in fits])
+    assert a['B_reference']['A'] == pytest.approx(expected)
+    assert a['B_reference']['included_segments'] == manifest['split']['assignments']['train']
+    t = np.arange(-10., 241.)
+    power = np.where(t < 0, 50., 170.)
+    hr = np.full(len(t), 100.)
+    first = predict(manifest, a, t, power, hr)
+    assert first['P0'] == 50
+    assert first['equilibrium_B'] == pytest.approx(expected+k*50)
+    np.testing.assert_allclose(first['series']['predicted'], simulate(t[t>=0], power[t>=0], 100.,
+        [k, delay, tau, expected+k*50], 50., 'p1d_full', 'estimated_equilibrium'))
+    hr[t>0] = np.nan
+    second = predict(manifest, a, t, power, hr)
+    for key in ('predicted','lower','upper'):
+        assert first['series'][key] == second['series'][key]
+    assert first['calibration'] is None
+    assert first['evaluation_start_s'] == 180
+    assert first['metrics']['N'] == 61
+    assert second['metrics'] is None
+    assert first['initial_HR'] == 100
+    manifest['parameter_bounds']['upper'][3] = 80
+    outside = predict(manifest, a, t, power, hr)
+    assert outside['equilibrium_B'] == first['equilibrium_B']
+    assert outside['B_reference']['outside_bounds']
+    hr[t==0] = np.nan
+    with pytest.raises(ValueError, match='HR iniziale'):
+        predict(manifest, a, t, power, hr)
+
+
+def test_population_B_P0_records_missing_reference_and_does_not_fallback():
+    from webapp.model_identification_app.backend.population import analyze
+    manifest, fits = fixture(12)
+    del fits[0]['initial_conditions']
+    fits[1]['initial_conditions']['P0'] = float('nan')
+    a = analyze(manifest, fits, {'prediction_mode': 'population_B_P0'})
+    assert a['B_reference']['n'] == 10
+    assert [r['segment_id'] for r in a['B_reference']['excluded']] == ['0', '1']
+    for r in fits: r.pop('initial_conditions', None)
+    a = analyze(manifest, fits, {'prediction_mode': 'population_B_P0'})
+    assert a['status'] == 'insufficient_data'
+    assert a['model'] is None
+    assert 'P0' in a['reason']
+
+
+def test_train_mean_HR0_includes_failed_train_and_never_conditions_on_test_HR():
+    from webapp.model_identification_app.backend.population import analyze, predict
+    manifest, fits = fixture(12)
+    fits[0]['status'] = 'failed'
+    values = {str(i): float(80+4*i) for i in range(12)}
+    values['test'] = 9999.
+    values['1'] = None
+    a = analyze(manifest, fits, {'prediction_mode':'population_B_P0_mean_HR0','draws':50}, train_initial_hr=values)
+    expected = np.mean([80+4*i for i in range(12) if i != 1])
+    assert a['HR0_reference']['mean'] == pytest.approx(expected)
+    assert a['HR0_reference']['n'] == 11
+    assert '0' in a['HR0_reference']['included_segments']
+    assert 'test' not in a['HR0_reference']['included_segments']
+    t = np.arange(-10.,241.)
+    power = np.where(t<0,100.,200.)
+    first = predict(manifest,a,t,power,np.full(len(t),110.))
+    second = predict(manifest,a,t,power,np.full(len(t),np.nan))
+    for key in ('predicted','lower','upper'):
+        assert first['series'][key] == second['series'][key]
+    assert first['initial_HR'] == pytest.approx(expected)
+    assert first['metrics']['N'] == 61
+    assert second['metrics'] is None
+    assert first['calibration'] is None
+    old = analyze(manifest,fits,{'prediction_mode':'population_B_P0','draws':50})
+    assert a['model'] == old['model'] and a['B_reference'] == old['B_reference']
+    missing = analyze(manifest,fits,{'prediction_mode':'population_B_P0_mean_HR0'},train_initial_hr={})
+    assert missing['model'] is None and missing['status'] == 'insufficient_data'
