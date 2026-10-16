@@ -14,4 +14,8 @@
 /test/*
 /tmp/
 /reports/
+/power_response_estimation/results.js
+/power_response_estimation/legacy.zip
+/power_response_estimation/*.tmp
+/power_response_estimation/__pycache__/
 webapp/model_identification_app\storage
