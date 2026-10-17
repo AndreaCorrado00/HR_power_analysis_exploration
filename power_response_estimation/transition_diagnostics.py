@@ -33,6 +33,23 @@ def run():
                     age=age,bin=bins,phase=np.where(age<30,'transition',np.where(age<60,'30-59','plateau60')),
                     residual=residual[start:end],innovation=eps[start:end])))
     d=pd.concat(frames,ignore_index=True).dropna(subset=['innovation'])
+    # Exact-second SD across events, with optional fixed event cohort through 120 s.
+    tau_rows=[]
+    complete=d.groupby('event').age.agg(['min','max','size'])
+    complete=complete.index[(complete['min']==0)&(complete['max']>=120)]
+    for cohort,source in [('available',d),('complete120',d[d.event.isin(complete)])]:
+        source=source[source.age<=120]
+        for direction in ['all','up','down']:
+            part=source if direction=='all' else source[source.direction==direction]
+            for amplitude in ['all','0-25','25-75','75-150','150+']:
+                subset=part if amplitude=='all' else part[part.amplitude==amplitude]
+                table=subset.groupby(['split','age']).agg(n=('innovation','size'),workouts=('workout','nunique'),
+                    mean_w=('innovation','mean'),sd_w=('innovation','std')).reset_index()
+                table['cohort']=cohort;table['direction']=direction;table['amplitude']=amplitude
+                tau_rows.append(table)
+    tau=pd.concat(tau_rows,ignore_index=True)
+    atomic_text(out/'transition_tau.csv',tau.to_csv(index=False,lineterminator='\n'))
+    atomic_text(out/'transition_tau.js','window.TRANSITION_TAU = '+encode(tau.astype(object).where(tau.notna(),None).to_dict('records'))+';\n')
     long=d.melt(id_vars=[c for c in d if c not in ['residual','innovation']],value_vars=['residual','innovation'],var_name='signal',value_name='error')
     keys=['split','signal','direction','amplitude','bin']
     profile=long.groupby(keys).agg(n=('error','size'),events=('event','nunique'),workouts=('workout','nunique'),
@@ -78,6 +95,11 @@ Controllo fuori dal train: sottrazione diagnostica della media train della stess
 minimo5 eventi e3 workout train, nessuna stima sulla validation. Confronto sugli stessi campioni supportati.
 La sottrazione non cambia il modello: misura quanto una semplice forma sistematica trasferibile spiega gli errori.
 Nessun p-value iid o IC sui secondi correlati. Celle sparse, durata e livelli target possono confondere i confronti.
+transition_tau.csv/js e transition_tau.html: SD campionaria (ddof=1) delle innovazioni a ogni secondo tau=0..120,
+peso uguale per evento a ciascun tau, centrata sulla media degli eventi a quello stesso tau.
+Available: eventi disponibili fino al prossimo salto/gap. Complete120: stessi eventi con dati continui da0 a120s,
+per separare andamento temporale e cambiamento della composizione; rappresenta solo transizioni sufficientemente lunghe.
+Filtri direzione/ampiezza; nessuno smoothing. n<2: SD non definita. Non e una SD stimabile da una singola osservazione.
 Un mancato miglioramento non dimostra l'assenza di ogni errore sistematico possibile.
 Riproduzione: .venv/Scripts/python -B -m power_response_estimation.transition_diagnostics
 

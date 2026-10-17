@@ -16,6 +16,11 @@ Controllo fuori dal train: sottrazione diagnostica della media train della stess
 minimo5 eventi e3 workout train, nessuna stima sulla validation. Confronto sugli stessi campioni supportati.
 La sottrazione non cambia il modello: misura quanto una semplice forma sistematica trasferibile spiega gli errori.
 Nessun p-value iid o IC sui secondi correlati. Celle sparse, durata e livelli target possono confondere i confronti.
+transition_tau.csv/js e transition_tau.html: SD campionaria (ddof=1) delle innovazioni a ogni secondo tau=0..120,
+peso uguale per evento a ciascun tau, centrata sulla media degli eventi a quello stesso tau.
+Available: eventi disponibili fino al prossimo salto/gap. Complete120: stessi eventi con dati continui da0 a120s,
+per separare andamento temporale e cambiamento della composizione; rappresenta solo transizioni sufficientemente lunghe.
+Filtri direzione/ampiezza; nessuno smoothing. n<2: SD non definita. Non e una SD stimabile da una singola osservazione.
 Un mancato miglioramento non dimostra l'assenza di ogni errore sistematico possibile.
 Riproduzione: .venv/Scripts/python -B -m power_response_estimation.transition_diagnostics
 
