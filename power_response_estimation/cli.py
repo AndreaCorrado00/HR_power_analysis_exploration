@@ -19,7 +19,7 @@ from .model import DecompositionModel, all_metrics, compose, error_metrics, sele
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent
 PREFIX = 'window.POWER_RESPONSE_RESULTS = '
-ASSETS = ['index.html','app.js','garch.html','garch_app.js','echarts.min.js','LICENSE-echarts']
+ASSETS = ['index.html','app.js','echarts.min.js','LICENSE-echarts']
 
 
 def read_json(path):
@@ -235,16 +235,6 @@ def main(argv=None):
     p=subs.add_parser('test',help='Frozen free prediction on validation, test or both')
     p.add_argument('--output',type=Path,default=HERE)
     p.add_argument('--split',choices=['validation','test','both'],default='test')
-    p=subs.add_parser('fit-garch',help='Fit GARCH(1,1) variance on frozen training innovations; evaluate validation/test')
-    p.add_argument('--output',type=Path,default=HERE)
-    p.add_argument('--overwrite',action='store_true')
-    p=subs.add_parser('test-garch',help='Evaluate frozen GARCH without refitting the mean or variance')
-    p.add_argument('--output',type=Path,default=HERE)
-    p.add_argument('--split',choices=['validation','test','both'],default='both')
     args=parser.parse_args(argv)
-    if args.command in ('fit-garch','test-garch'):
-        from .garch_run import run
-        run(args)
-        return 0
     (fit if args.command=='fit' else test)(args)
     return 0

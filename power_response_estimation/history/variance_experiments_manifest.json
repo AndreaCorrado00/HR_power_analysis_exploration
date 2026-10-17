@@ -1,0 +1,999 @@
+{
+  "source_commit": "1e6bb568792582de31977b224eb6bfcdcd45d085",
+  "created_utc": "2026-10-17T13:57:35.443280+00:00",
+  "files": [
+    {
+      "path": "AGENTS.md",
+      "sha256": "fc156273813aba92439ed90fcfcc73fd1b63947c6d6b689c377b84e4e73f666a",
+      "bytes": 21802,
+      "remove_from_active": false
+    },
+    {
+      "path": "power_response_estimation/__init__.py",
+      "sha256": "6c2d2b2097144fb5e2688ef8274dfb9dc609d055b54cfaa9d52492db3f90250f",
+      "bytes": 79,
+      "remove_from_active": false
+    },
+    {
+      "path": "power_response_estimation/__main__.py",
+      "sha256": "4fb9bc6611767dd41b80937cf58bfd1c09687ceb1559d2af69e0214516b53f56",
+      "bytes": 109,
+      "remove_from_active": false
+    },
+    {
+      "path": "power_response_estimation/app.js",
+      "sha256": "01369118e0895ee6943aa78b20fc9c01d0c21b49777e2ed4ad1ed96dfc720239",
+      "bytes": 10799,
+      "remove_from_active": false
+    },
+    {
+      "path": "power_response_estimation/ar.py",
+      "sha256": "4f0d76698a86fe532ebe5d58ac873c26397e2c7b5cb2fac8691e8e3d8500e4b3",
+      "bytes": 5966,
+      "remove_from_active": false
+    },
+    {
+      "path": "power_response_estimation/cli.py",
+      "sha256": "f6652b6f73c93e89b23b74368415f93b35dd67b37e1f19aca9265ef3e2c5282f",
+      "bytes": 14162,
+      "remove_from_active": false
+    },
+    {
+      "path": "power_response_estimation/data.py",
+      "sha256": "c7109e5d949b0f9cf8a82915085debef895440bef0c6fcf081453d4716667d4b",
+      "bytes": 4149,
+      "remove_from_active": false
+    },
+    {
+      "path": "power_response_estimation/diagnostics/acf_aggregate.csv",
+      "sha256": "6c45b6ce751895ca7378a87bc147d7ffccaa9eb1c2601b966b00323dbdd4cb5c",
+      "bytes": 67631,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/diagnostics/acf_squared.csv",
+      "sha256": "e84e3c4d61d324577ec770b9cff6bd0b8ff9ea72cde3388d6f0f37a75d471b18",
+      "bytes": 699929,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/diagnostics/acf_summary.png",
+      "sha256": "dca732a916f60c5a4410a986d0aacbe31480eae45af28e51ec552cbe645e7f39",
+      "bytes": 280192,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/diagnostics/acf_workouts.png",
+      "sha256": "4922e4685a74cf0993f15909ba0e842087da0368fce4e46594f55a87aee6d800",
+      "bytes": 993289,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/diagnostics/arch_lm_aggregate.csv",
+      "sha256": "421eeaa49daed581774151d46e786531a48718f8052dacf7cd36f695992d6f54",
+      "bytes": 1598,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/diagnostics/arch_lm_workouts.csv",
+      "sha256": "ce86395e551ab15a9a6b20e9039267ecc3dd2af5104ef2912b09c3073fb972db",
+      "bytes": 36108,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/diagnostics/context_variance_ratios.csv",
+      "sha256": "7460dd2063aef02349525312dfdf46e328f102cd280a086ba790dc10f6f10ba8",
+      "bytes": 260,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/diagnostics/interval_acf.csv",
+      "sha256": "6f23768678fb14686d422d7ee15c8a0c2ec3f52e976fbb1046fe277e21ec1b9d",
+      "bytes": 1935322,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/diagnostics/interval_acf_summary.png",
+      "sha256": "9de0cb58d68d569e82282b21206c6444d3a668fc7e03ac64a6f38efd52706922",
+      "bytes": 394873,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/diagnostics/interval_acf_workouts.png",
+      "sha256": "f81e8949d591454c4d247e643c8619a051de9b798faacd735f60c499d53015d1",
+      "bytes": 1306320,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/diagnostics/interval_arch.csv",
+      "sha256": "37c27f1afa049807994d1f72e940a86dfa80452cb1478aeb7511a49b8179225d",
+      "bytes": 59876,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/diagnostics/interval_arch_aggregate.csv",
+      "sha256": "913c73563c91df5c3eb1b2a4552c5848974198818918acf8a0171946f1c1e8f6",
+      "bytes": 2464,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/diagnostics/interval_catalog.csv",
+      "sha256": "1b1d4b7b62a10cbb7c46daba2b701624980da80f70f54aefe1b81ef8db3da8dd",
+      "bytes": 46710,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/diagnostics/interval_contributions.csv",
+      "sha256": "aea568c3825dea0637512a35f44e3e53ce3b546bf2daab9c86b14c3071e309bf",
+      "bytes": 10114,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/diagnostics/interval_manifest.json",
+      "sha256": "29f67613eb585a3d372b7861684b2492e0baad7f9710050f0a98d8acbc17c219",
+      "bytes": 4669,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/diagnostics/interval_null_aggregate.npz",
+      "sha256": "65bbf28137368c39bca6ad8978af04264c94ad6ecd2f98f397b746e6f6ae8f67",
+      "bytes": 4583391,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/diagnostics/interval_peak_localization.csv",
+      "sha256": "39bd04bd86191083a32ebcf4e3d21779e7ad91820904b4db8bc1d341b1a4ea24",
+      "bytes": 3673,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/diagnostics/interval_permutation_summary.csv",
+      "sha256": "743ef43ae864e98a08c72969b59c3f8069eab724e0a61a5655c91c83427d4f5d",
+      "bytes": 1142,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/diagnostics/interval_permutation_windows.csv",
+      "sha256": "b40fed6ebd53479c7aca302dec01c8c6a4bde22caa8c36cd6081caf23b674e29",
+      "bytes": 36413,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/diagnostics/interval_report.md",
+      "sha256": "74a52736d67c1c7cf378b7b0ce5692e47fca63f7b2fee5cba1f274ec99383ee3",
+      "bytes": 17847,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/diagnostics/manifest.json",
+      "sha256": "77fc86625acac8b06cf45ebd1de42bdbc78a1ffed4d39b1827b6ea5b36696771",
+      "bytes": 4500,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/diagnostics/report.md",
+      "sha256": "552ccad380b3f77c1b3853b3f2373369ac5a4489876daa8aa1cd81c335ff9f56",
+      "bytes": 15753,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/diagnostics/rolling_variance.csv",
+      "sha256": "0120ce58d043d193d22b7399c822dae1c74120d972a2ae60416f921ba935e052",
+      "bytes": 7042329,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/diagnostics/variance_lap.csv",
+      "sha256": "537fc21e22655394eed16acd84fd9d2e851cb2c96a9686dbf60509a55fc915af",
+      "bytes": 63701,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/diagnostics/variance_phase.csv",
+      "sha256": "459a1d9ca7a0f13e8ffb5487dffd474ac76d7db1f87aecd38ac5abe2465bffab",
+      "bytes": 3178,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/diagnostics/variance_target.csv",
+      "sha256": "ee3a193c286018a2bd869fa964a38a75ecf9a599dac385d0c950bbf7bb4b8299",
+      "bytes": 12778,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/diagnostics/variance_target.png",
+      "sha256": "5352ce706ca30a202c5dd9a95230c45f5cfc774f503eaee991438712f83465d7",
+      "bytes": 147495,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/diagnostics/variance_target_aggregate.csv",
+      "sha256": "1ce13f8b508d6d04eb67530fd4072232dc6cc55766df033d2f22fd2579444fb3",
+      "bytes": 2558,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/diagnostics/variance_test_260819062707.png",
+      "sha256": "d2f7bc2883b7010f113704c0855da779ddec203ba97f6f240e1c77fc38628639",
+      "bytes": 155607,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/diagnostics/variance_test_260826062619.png",
+      "sha256": "ea38399336746ee65ffa8e16e0ef4e20b9d76d547ffc15751c40d828d26041ee",
+      "bytes": 164250,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/diagnostics/variance_test_260827070608.png",
+      "sha256": "2f8d72cff38b7162fafeeb8e1c89ceb5307b7b461740ec4420cda6b27f62b590",
+      "bytes": 127938,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/diagnostics/variance_test_260829063044.png",
+      "sha256": "a9b3c05ed63782b7a294662df993cea87da55dc4242b7eda89c5f5bd0a57b5f7",
+      "bytes": 128832,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/diagnostics/variance_test_260830095410.png",
+      "sha256": "ae8a91ec79731f250884f708697adbc3017d48d88845af89d44ca135d99e9088",
+      "bytes": 150106,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/diagnostics/variance_test_260901062237.png",
+      "sha256": "d3921c478cbe6efea77fd8c0cb24c45904b2d569f23c6377549b1653471240f8",
+      "bytes": 181219,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/diagnostics/variance_test_260902062649.png",
+      "sha256": "89d1a39d4eaec0be483b8cd8868834523cead393a5bbd4b07e66fd511a84b922",
+      "bytes": 134704,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/diagnostics/variance_test_260904062108.png",
+      "sha256": "b77ffd0b980fa9929f99155d4d77dab2c790adf1a1e4cc2f62c1a1978e2481c0",
+      "bytes": 138931,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/diagnostics/variance_test_260905142842.png",
+      "sha256": "025f6cdf3d5ed83d54b6cb1f67156ccb584ebe81b7580fa5deaec751f80c9717",
+      "bytes": 140022,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/diagnostics/variance_test_260908061657.png",
+      "sha256": "89b253d11e4d6cff176b00671a760af7e7a4bf0c5d033b85a5928b369269a17f",
+      "bytes": 165551,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/diagnostics/variance_test_260915062325.png",
+      "sha256": "4781c1b13bfc59fd3b1c1ead96df413157991763398ca79433c24bc7e0a782cc",
+      "bytes": 155493,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/diagnostics/variance_test_260919065417.png",
+      "sha256": "f6148e0b003ae545972a31a5f37c9e3dd3338941d62d6352141361af64e6c761",
+      "bytes": 132549,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/diagnostics/variance_transition.csv",
+      "sha256": "78b5adc896fc1aaa83e6f1db91800147f534e41333055ef87e0ece6f11742c17",
+      "bytes": 8249,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/diagnostics/variance_transition_aggregate.csv",
+      "sha256": "d6cdda7475dd87e347ee1b94889fbe47e8dc5651bc0a146cbaedac04e2986829",
+      "bytes": 989,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/diagnostics/variance_validation_260606075342.png",
+      "sha256": "e2f96514dd288688b458d1da7793594a3a3f2b31fc25f5892b0194ec8b02ec5e",
+      "bytes": 161330,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/diagnostics/variance_validation_260609170059.png",
+      "sha256": "ef00e4b3a27386379ee301c75cf339fe8f8dbfc944677687b2842829828801c0",
+      "bytes": 147995,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/diagnostics/variance_validation_260616171138.png",
+      "sha256": "a6bb1fdebb55e373a5d42e726e1c97465a7e325127a4fbcf9acb538a0a1a686e",
+      "bytes": 163677,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/diagnostics/variance_validation_260621150426.png",
+      "sha256": "7f9c5731e6f1a036c3028d3acd43eeb84f56645608a7330b9c51bf4288fbd8e5",
+      "bytes": 164998,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/diagnostics/variance_validation_260623171613.png",
+      "sha256": "1bab0d170910fccbea9e955cfddd0798205befe74a340da2f66a1a7273d51cea",
+      "bytes": 142734,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/diagnostics/variance_validation_260624171412.png",
+      "sha256": "3030e3f52dd6769d192a91d8a2cee6d1de416f72c0b926ae3265c09ed640993f",
+      "bytes": 160152,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/diagnostics/variance_validation_260708172128.png",
+      "sha256": "e45f20cc6f5a8b6b9f2d26f8842b387f4f5ef708a8d1d4032857ba22ad245c4e",
+      "bytes": 159772,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/diagnostics/variance_validation_260714172507.png",
+      "sha256": "95abee1173cc0589c2af561946979835f7c519179fd18ff3ce68b65d5ad859f8",
+      "bytes": 146832,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/diagnostics/variance_validation_260716153012.png",
+      "sha256": "e464879203be2e629798c1c4acf7e73fff9119516a8936d5856fb4041afe8bf1",
+      "bytes": 136552,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/diagnostics/variance_validation_260721071628.png",
+      "sha256": "605ebc3fe7f44db5acb4bf61200158f3ada5d819ec8161b3baf1c13436bdbc78",
+      "bytes": 154221,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/diagnostics/variance_validation_260801060832.png",
+      "sha256": "157f9b136c5938a9470e0bc863d83c4146f6a68f8b3dc962b21920670ded3acd",
+      "bytes": 172338,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/diagnostics/variance_validation_260811165713.png",
+      "sha256": "fb3ab65d73df2d114160eba93f0afed94b20df39e86cc34928c7d4b914ffb576",
+      "bytes": 175937,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/diagnostics/variance_workouts.csv",
+      "sha256": "7da1e4a884c6a247c2b8f4b83ad4e458d5e41529d9ef3f598de34efbcc4dfde8",
+      "bytes": 2524,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/diagnostics_analysis.py",
+      "sha256": "02f522132fa25e425510b02644997b022dc7c8c309cbec6aa5cab4bdb8435dd3",
+      "bytes": 24566,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/dynamics.py",
+      "sha256": "571721ce51ac85c735953bbc85aa55125540001bc18b2ab7bfe2a876fb02bf77",
+      "bytes": 9346,
+      "remove_from_active": false
+    },
+    {
+      "path": "power_response_estimation/echarts.min.js",
+      "sha256": "b66b25aeb4df84e33199dc21694014d336d222cbd9deb0e5a7c14bd6aa0d0fd0",
+      "bytes": 1121883,
+      "remove_from_active": false
+    },
+    {
+      "path": "power_response_estimation/garch.html",
+      "sha256": "78877a3d3681572ba9ca7d359474d08777e397c58926bf069d5e702ad67734a1",
+      "bytes": 5424,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/garch.py",
+      "sha256": "8fc3c9bf2bb05bdaeebd0eca6691c0af9d7b76fc2578cd4101230092da068d67",
+      "bytes": 7462,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/garch_app.js",
+      "sha256": "9e8187845acadfbdb41c2909dc60b5d692b6ae547d625547464f77d3d30a3e71",
+      "bytes": 7895,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/garch_diagnostics.csv",
+      "sha256": "41612df119f2ae0b38e3b35596fe7894611237da330f08a2c0d097c0cc00bed7",
+      "bytes": 23399,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/garch_evaluation.json",
+      "sha256": "741a0ae11ce0fbde36a0748a0be3e553f2d20c711ee2396aab7924c9a703850c",
+      "bytes": 1344,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/garch_metrics.csv",
+      "sha256": "9d3372e4e4c57e19d88a19de513c1d52d9af3828448adaf94f4ea5cb7e211f10",
+      "bytes": 12593,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/garch_model.json",
+      "sha256": "e1e3f6121cb0999e07aa922e31ca359db51ca834e1a7e4aca25ed8d03e6b1ce3",
+      "bytes": 8689,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/garch_predictions.csv",
+      "sha256": "9713a703e104e319c5b06cefa6bb4e35c3a0ef28991b7b95ea83fbf2803562f6",
+      "bytes": 23548812,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/garch_report.md",
+      "sha256": "645d1477e5c7a3aba3dccb5f4c57ca0b80f2c234a9fd11ac9fedca68cc4a0604",
+      "bytes": 5013,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/garch_results.js",
+      "sha256": "e812e970797e74e39a62cb7c3173bb251d0ac6c0a71dd923e903052465b6a6b3",
+      "bytes": 22175336,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/garch_run.py",
+      "sha256": "620a3c047766aabb0dc17ee3c6a13d56db357636923e04afccf87ae3e79ff007",
+      "bytes": 15647,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/garch_summary.csv",
+      "sha256": "2f57aa3743f7da5e9dee1295f0c8f2a43d3ec9d867f0d51ed3f5e6c0e503a203",
+      "bytes": 867,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/index.html",
+      "sha256": "7439a16d0e8d7dfa12686fd552057e70eb1dde410d6c08f254aba5b7479b4f90",
+      "bytes": 6286,
+      "remove_from_active": false
+    },
+    {
+      "path": "power_response_estimation/interval_diagnostics.py",
+      "sha256": "d41719e7bd403378058269fa0a8338762b389b0a5dc9173c84027353bab73e7d",
+      "bytes": 24382,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/lap_ar.html",
+      "sha256": "12fc94f84992c1986b61b65289811b28081076f41cf259df8c4b529a350422e7",
+      "bytes": 6165,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/lap_ar_boundaries.csv",
+      "sha256": "2246fc62b94437c9d062841f4fe4d364c12c64f602762553bbb12b1d92ddef1f",
+      "bytes": 206570,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/lap_ar_lap_summary.csv",
+      "sha256": "579b4965a827700685950f43d9e6c4a991e3670af01d1a27f6a0925dcf3ca5ae",
+      "bytes": 1401,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/lap_ar_laps.csv",
+      "sha256": "2fbc85a77c4c7f3d1cc34afb94da453608352bb0642e2d0966b30ce02695bbe6",
+      "bytes": 860057,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/lap_ar_manifest.json",
+      "sha256": "b7e0dd0ed12de7f281cc16623c0beae2e0c8023dee278c42278378aad305e93d",
+      "bytes": 4561,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/lap_ar_metrics.csv",
+      "sha256": "fce65c897e832832b5ec42c6cc7ec60fb4706ec45f2720df2a7660ebdf16fd9c",
+      "bytes": 13182,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/lap_ar_models.json",
+      "sha256": "354cf0ef2ffa744a7a07b6ccbe65b1ab7eb6693c94ded6eccd5d55fedcab5d5e",
+      "bytes": 2387,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/lap_ar_phases.csv",
+      "sha256": "d650ff55390e48615e0ae3f5c3cbe03dfd3ae04d4a2446e5e3d4468929033192",
+      "bytes": 30105,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/lap_ar_profile.csv",
+      "sha256": "5992f4648951cfba9eb302eb3bca7d1a8e3ba68d0c71d56d31970bc7faa96d56",
+      "bytes": 319,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/lap_ar_report.md",
+      "sha256": "2b98ba71681209ca113712878b1a52643dbd7ba2070f3c0b6a40aa43d0ee12a9",
+      "bytes": 6942,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/lap_ar_results.js",
+      "sha256": "e9e05dc35b04c2a704428d1b67e9f1637f7e47962d144428470f996e845c2bb9",
+      "bytes": 38548586,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/lap_ar_summary.csv",
+      "sha256": "8b19c2e92c5b1ec84c82a6aaa13ca0123ff62c172b218f07dcd58214dd12482e",
+      "bytes": 1607,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/lap_ar_target_audit.json",
+      "sha256": "9283877bd9cd8ae3b6a776c9b5c1249cbd398ef99743fe24cecda2f05520994d",
+      "bytes": 348,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/lap_random_ar.py",
+      "sha256": "ec3332d13c1eac4afed192bbe7fb06d8f8e39879c811b0b5519121f5f0455478",
+      "bytes": 4623,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/lap_random_ar_run.py",
+      "sha256": "f2f71f52451e071b763aaad867f8feffd87dd2f4ac7f1dc97cc8090e53e4ab86",
+      "bytes": 15971,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/lap_variability.py",
+      "sha256": "a8d4884a56cf02fc5be1fb08ca916df30700fbc1ca6cbfc9ff14345f85405e70",
+      "bytes": 6870,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/lap_variability_laps.csv",
+      "sha256": "d3c288cfc64d8d06339665fb930fbe0ecbb6967d1aeb6d3182de22449bc1f69f",
+      "bytes": 1276208,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/lap_variability_manifest.json",
+      "sha256": "cd4c8c3e8729b907563f08cacf6cdb36ac04d1871ea119099a661a256810be5f",
+      "bytes": 4485,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/lap_variability_report.md",
+      "sha256": "1ce15f5cb6fea0ea1dc84cda9b4722d6f3e2a47af3c089c7ed782e26adc880e6",
+      "bytes": 3611,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/lap_variability_summary.csv",
+      "sha256": "78ff100f4e237c0d956d81ef3cbad4a5fa47c407b05012a3550169034d14d7ee",
+      "bytes": 3162,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/lap_variability_workouts.csv",
+      "sha256": "31f300eedd660699412d1081a98510c5309dcc160b34a7e94b717b2d564b3e49",
+      "bytes": 40599,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/LICENSE-echarts",
+      "sha256": "634293835b43a6dd2094fa39182a3d9a6b9ca43b7fdb9ac354e8037af2a3093a",
+      "bytes": 11990,
+      "remove_from_active": false
+    },
+    {
+      "path": "power_response_estimation/metrics.csv",
+      "sha256": "76a79efdce1ca4f74ea543ec4218ffbee9a5bddf8dba3b569867d99c3a6a732b",
+      "bytes": 23302,
+      "remove_from_active": false
+    },
+    {
+      "path": "power_response_estimation/model.json",
+      "sha256": "47a53c90e4d811d471377745e765492150aa889fc894c7eafc5a63b02581e454",
+      "bytes": 32119,
+      "remove_from_active": false
+    },
+    {
+      "path": "power_response_estimation/model.py",
+      "sha256": "182912baf9c9a17a8a395443a933d444ac7f2b96e4df2027d1d82040bd384ee9",
+      "bytes": 5598,
+      "remove_from_active": false
+    },
+    {
+      "path": "power_response_estimation/predictions.csv",
+      "sha256": "575636eee1c40cfc14f31f0fdbb9638beaab1fa22cb47e998296ccc9ee627670",
+      "bytes": 34914744,
+      "remove_from_active": false
+    },
+    {
+      "path": "power_response_estimation/README.md",
+      "sha256": "6c285781700bc993edbcabfe7e7f986699aa35c25687bd73672b35612f807334",
+      "bytes": 10007,
+      "remove_from_active": false
+    },
+    {
+      "path": "power_response_estimation/report.md",
+      "sha256": "ef39c1b021143e76b1508267b8733450137a885d06ea18ae7b57087447af4617",
+      "bytes": 2738,
+      "remove_from_active": false
+    },
+    {
+      "path": "power_response_estimation/results.js",
+      "sha256": "82205d50c119502e9e9d04a09147b6105a52042b2b458611c727fa6e0f7201e4",
+      "bytes": 16290140,
+      "remove_from_active": false
+    },
+    {
+      "path": "power_response_estimation/scaled_ar.html",
+      "sha256": "35e2bf3d2d838ed4ebcb40b510ff4ae15f81f744449e8498b26b3d0be4413268",
+      "bytes": 4483,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/scaled_ar.py",
+      "sha256": "0e1e9440e68557c8d9a6d4317f3a2ad5c6d4c8a78d379c0311d0b36294a1a9e2",
+      "bytes": 3252,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/scaled_ar_assessment.md",
+      "sha256": "64d2bbab94242d4196fcd477a08f8cb28b0fc972cb37bcab72233061a9645195",
+      "bytes": 1500,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/scaled_ar_diagnostics.csv",
+      "sha256": "e55a179761869ef186d6feb5b6152d38e932c81e76a14d37c225c423c85cf09f",
+      "bytes": 42881,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/scaled_ar_lap_summary.csv",
+      "sha256": "2c800fa08414149f12b42e06a7f80a8b8e80eaf82f1a5a3d798ef23c7e53fa6c",
+      "bytes": 1414,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/scaled_ar_laps.csv",
+      "sha256": "a8368958525e1144872202106d64666c4561579fa527e657c7eae380de844980",
+      "bytes": 487764,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/scaled_ar_manifest.json",
+      "sha256": "644f101035c9b2fc060bf76906d4cf7c3b4fbf0e6e9912fced484933c8172610",
+      "bytes": 4500,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/scaled_ar_metrics.csv",
+      "sha256": "f2410e546c89835c9888c5baa2f4d432f4a0799f46220f1a0fdaff00dba0df4b",
+      "bytes": 26374,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/scaled_ar_models.json",
+      "sha256": "eae3c6075d1a96a156659f1acfe499ae6049387d480ad632cb3329ac34b5a1b4",
+      "bytes": 1143,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/scaled_ar_phases.csv",
+      "sha256": "6ed47e2813ea51ea38b9285618e0a757703ae35559150ddf169db44c971a84ea",
+      "bytes": 20154,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/scaled_ar_report.md",
+      "sha256": "fa5f0b61ac1c935cf923d20db218806e0720b2ca84b81a0a5fada0783009b5b8",
+      "bytes": 4421,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/scaled_ar_results.js",
+      "sha256": "95fce9dede2f607c815b00fbce0ad28589b612d4060e9fcca73e841a84d6b026",
+      "bytes": 37474229,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/scaled_ar_run.py",
+      "sha256": "b501b6e849359b0f2462059f23385e42fa01f7e86d59543acb75af411f3447da",
+      "bytes": 9331,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/scaled_ar_summary.csv",
+      "sha256": "91f474b5d4f38e2ff97092ca2b17945e3429f5688b44c4209a3015e62efb6c74",
+      "bytes": 2317,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/transition.html",
+      "sha256": "d0a8cec3dbd9f525b020e0d04361a22dd20817bc3273b853b2102dea7df75aab",
+      "bytes": 2957,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/transition_diagnostics.py",
+      "sha256": "13541ff2820a5dd536de6fb6567e8c83aa8638c6343a370c5e08db9ea3feea85",
+      "bytes": 8625,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/transition_manifest.json",
+      "sha256": "2a630068d718031d6c5040730082e993fe3c96c8b3c34a35f722c3881b341fee",
+      "bytes": 4137,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/transition_profiles.csv",
+      "sha256": "2a4e81b9a100eede084c51fe8ae77a267d4fb84993c6dea23a0dbae9e68af93c",
+      "bytes": 24927,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/transition_profiles.js",
+      "sha256": "aacc24dd181bc227c8078f0120e77cbd4e1e2e921ca9514825e2ea541973893e",
+      "bytes": 52277,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/transition_report.md",
+      "sha256": "a048f5df218e830fc5bf9469cf94be3b83a2f5a9a65d25dd86cbc1635775cd54",
+      "bytes": 4183,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/transition_summary.csv",
+      "sha256": "6880741a6af3b89fba40f9cebf2a9ec529a1fc2e9928bc667554e603d667fcdd",
+      "bytes": 1405,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/transition_tau.csv",
+      "sha256": "f4f24a3edd5b40a639fc8096b1fab5ebffbed9a05e274d4d3c8602786e5a7940",
+      "bytes": 544988,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/transition_tau.html",
+      "sha256": "da180fac829adb494bf40b79f7ec0d401cfa294ade50553af048d6c1214ad54c",
+      "bytes": 3494,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/transition_tau.js",
+      "sha256": "def2630022140249a00be5830d6dd9360fdf4346f00837ca3a017a2c4d5310f6",
+      "bytes": 1177543,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/transition_test_groups.csv",
+      "sha256": "20793be44485709117ad465eff8868840440f33c6240737291a25c36e8023a9d",
+      "bytes": 745,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/transition_test_leave_one_out.csv",
+      "sha256": "0ec9a115455bb70bfaea06bcea9db845246e7dbfac974a1a3a96307165193f56",
+      "bytes": 8445,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/transition_test_manifest.json",
+      "sha256": "788d0a815fb183bac3912a61769e9c36ed6f12f3148e3535f4723d6557d89bbf",
+      "bytes": 4174,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/transition_test_report.md",
+      "sha256": "01900516115d1dc851d9ed2e5d566d49ffdbc4fb1c1748e78d33a28a752b970c",
+      "bytes": 4812,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/transition_test_results.csv",
+      "sha256": "8792bcba2134c93ffda2c684ca445541885cf00f5ed3cf5cdced465e3b7437cb",
+      "bytes": 1616,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/transition_train_centering.csv",
+      "sha256": "c457a233f958aa6175d46faacd7133231239660b35d2a2a69d5af901367f4edf",
+      "bytes": 862,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/transition_variance_test.py",
+      "sha256": "a1e6737606746fd2ac65ba92d98de36f47b4dc908e9fd253106f42cedbf086f6",
+      "bytes": 8893,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/transition_workouts.csv",
+      "sha256": "88a482e34bcffe1b649dae7102bc9c368e67a820d8dec4fcd6e8ad5713ce23e4",
+      "bytes": 28967,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/variance.html",
+      "sha256": "9b05d904795ce39aee115cf96258aea3e7738accf97186bc982f485cf0bc9ff7",
+      "bytes": 3182,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/variance_app.js",
+      "sha256": "64f66a697e6c828d4b9d36c8f7c394af7eb16bee6a901c8d19954ea6132a51e0",
+      "bytes": 3050,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/variance_comparison.py",
+      "sha256": "bed86933a4d197006b364d57fd33bd8cae11d706cff1e77db94b5ff88131f39b",
+      "bytes": 12851,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/variance_diagnostics.csv",
+      "sha256": "a7b7b3eba81f57428a8c55c5c3055acfe11a50d6ea095a773918fa19f3d1411a",
+      "bytes": 81191,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/variance_group_summary.csv",
+      "sha256": "0ebfc9d84cb16e3f3e7d67bfd40c565764fb30e78c9ffb809d6635aa8352e952",
+      "bytes": 19067,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/variance_groups.csv",
+      "sha256": "6041d33913db92cb311a7e17063ba977c2b50aaa9084f4df521f3f98185652aa",
+      "bytes": 342586,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/variance_manifest.json",
+      "sha256": "431fcd9cf191d7de730a7822174c29d9af8e5c08e1ede68abc2c6440277cc551",
+      "bytes": 4595,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/variance_metrics.csv",
+      "sha256": "99385a82da52ced2222e7fb9f2c44de74929ec29f9e7728f5a64d6b34c6b2e0f",
+      "bytes": 49941,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/variance_models.json",
+      "sha256": "df4eecbb385c74a4d4a7c92a063e310f90ba30c99718f22c0a3b5c82cbb14980",
+      "bytes": 1111,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/variance_models.py",
+      "sha256": "5112cef27253ea6b4e69ef57148790e751dd667328f18dba4377b29e3bf923e7",
+      "bytes": 2796,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/variance_report.md",
+      "sha256": "ede0b5bab7479aa83dbbd5e189882ff437cab1d54510e242f827f3f9c3176e15",
+      "bytes": 6651,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/variance_results.js",
+      "sha256": "89c588adbd6370df0cf4372f746fce588668d146733c25e70953fb7488ecdc4e",
+      "bytes": 57116891,
+      "remove_from_active": true
+    },
+    {
+      "path": "power_response_estimation/variance_summary.csv",
+      "sha256": "72f77a7f208656e4d760465b72dc48c746dc773dc5c7ac5784ff983b642914d8",
+      "bytes": 1533,
+      "remove_from_active": true
+    },
+    {
+      "path": "requirements.txt",
+      "sha256": "3d412fe8be856de392038805365bb4fcaa3d1bd3f763af20131d2df698110f56",
+      "bytes": 494,
+      "remove_from_active": false
+    },
+    {
+      "path": "tests/garch_browser_check.py",
+      "sha256": "0a0e7ece13b398ad0f7f0d46425e853a4660ce7be0afd5a396980b19fe58c27e",
+      "bytes": 4324,
+      "remove_from_active": true
+    },
+    {
+      "path": "tests/lap_ar_browser_check.py",
+      "sha256": "d4b36dbe6f7084236f2e768581d5b838e61c39a48f6710813c64337d7bcd761d",
+      "bytes": 2787,
+      "remove_from_active": true
+    },
+    {
+      "path": "tests/test_lap_random_ar.py",
+      "sha256": "2618fc7d55f080b21ffd4c8ceae2d8cfaf969eb692638e8add177b73977693f1",
+      "bytes": 2458,
+      "remove_from_active": true
+    },
+    {
+      "path": "tests/test_power_response_diagnostics.py",
+      "sha256": "e143da0112a393c9c35161f8d56423e4ccf1d525c9cbcfe02925c09884b2924b",
+      "bytes": 4737,
+      "remove_from_active": true
+    },
+    {
+      "path": "tests/test_power_response_estimation.py",
+      "sha256": "c3bc34d235044f7bcd4298c74f504dc5c9eba6a6cc054aeed4da585dbd63e22a",
+      "bytes": 6363,
+      "remove_from_active": false
+    },
+    {
+      "path": "tests/test_power_response_estimation_core.py",
+      "sha256": "d755adea0ce5bd12e00760c29c0971da14cf01a5d2be1e218d1ae44fa6353334",
+      "bytes": 9323,
+      "remove_from_active": false
+    },
+    {
+      "path": "tests/test_power_response_garch.py",
+      "sha256": "39ad823e96d286c53e958b84289d7fd64b94a18da73982b4f5b5e083ecc2efcd",
+      "bytes": 2464,
+      "remove_from_active": true
+    },
+    {
+      "path": "tests/test_scaled_ar.py",
+      "sha256": "2c0c84442e2ecdfdd538637905706e8e16291615f8f63bd5a258c99956557941",
+      "bytes": 2203,
+      "remove_from_active": true
+    },
+    {
+      "path": "tests/test_variance_comparison.py",
+      "sha256": "90b4e8c05749ddbd476afe577fb3c8676917290afb3ccd70802e280ae9080db6",
+      "bytes": 2494,
+      "remove_from_active": true
+    },
+    {
+      "path": "tests/variance_browser_check.py",
+      "sha256": "5817e98b78f549c9da7f23f54eb0514ce04b1df3d5258869d6ee94d980f21087",
+      "bytes": 2619,
+      "remove_from_active": true
+    }
+  ],
+  "protected": {
+    "model.json": "47a53c90e4d811d471377745e765492150aa889fc894c7eafc5a63b02581e454",
+    "results.js": "82205d50c119502e9e9d04a09147b6105a52042b2b458611c727fa6e0f7201e4",
+    "predictions.csv": "575636eee1c40cfc14f31f0fdbb9638beaab1fa22cb47e998296ccc9ee627670",
+    "metrics.csv": "76a79efdce1ca4f74ea543ec4218ffbee9a5bddf8dba3b569867d99c3a6a732b",
+    "report.md": "ef39c1b021143e76b1508267b8733450137a885d06ea18ae7b57087447af4617",
+    "legacy.zip": "9426233c485e1a1d8ab0091e5ed29cccc4d28da964e9cc13e2978495e4f38223"
+  },
+  "archive_sha256": "fa626a27e252b3f89ef7c39ea1a749c7dde01031e4fb4d5e372333f7fd6816dd"
+}

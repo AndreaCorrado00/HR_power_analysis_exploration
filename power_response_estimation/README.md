@@ -1,46 +1,40 @@
 # Power response estimation
 
-## Esperimento GARCH(1,1) — branch analysis/ar-garch-11
+## Riferimento congelato
 
-Aprire **`index.html`** per confrontare simulazioni libere con varianza costante o GARCH.
-Aprire **`garch.html`** per la previsione a un passo, la varianza condizionata,
-le innovazioni standardizzate, ACF/ARCH-LM e metriche di incertezza.
-Entrambe le pagine funzionano offline con ECharts locale; nessuna immagine statica aggiuntiva.
+Modello attivo: **dinamica ordine 4 + AR(2) a varianza costante**. La scelta privilegia
+semplicita e costo predittivo; coefficienti, split e artefatti baseline non sono stati
+ristimati durante la pulizia. La pagina attiva e `index.html` e la CLI espone solo
+`fit` e `test`; `fit` resta disponibile per riproducibilita, non e necessario per consultare il modello.
 
-```powershell
-# Stima solo omega, alpha, beta sul training del modello congelato; valuta entrambi gli split.
-.venv/Scripts/python -B -m power_response_estimation fit-garch
-# Sostituzione esplicita di un fit GARCH già presente:
-.venv/Scripts/python -B -m power_response_estimation fit-garch --overwrite
-# Valutazione riproducibile senza fitting:
-.venv/Scripts/python -B -m power_response_estimation test-garch --split both
-```
+Tutti gli esperimenti successivi, inclusa l'alternativa GARCH variance targeting,
+sono nello [storico verificato](history/README.md), con codice, risultati, HTML e test.
+La branch di analisi e conservata; nessun merge o riscrittura della storia.
 
-Equazioni: `epsilon_t = sqrt(h_t) z_t`, `h_t = omega + alpha epsilon_(t-1)^2 + beta h_(t-1)`.
-Fonte: Bollerslev (1986), DOI `10.1016/0304-4076(86)90063-1`.
-Gaussian QML con 6 partenze e peso uguale per campione; `omega > 0`, `alpha,beta >= 0`,
-`alpha+beta <= 1-1e-6`. Nessun rifit della dinamica o dell'AR, nessuna covariata aggiunta.
-Omega/h in W², alpha/beta adimensionali. Le innovazioni di training derivano dalla stessa
-decomposizione congelata. All'inizio dei tratti reali h è inizializzata alla varianza
-incondizionata; nessun reset ai cambi lap/target. La simulazione congiunta AR/GARCH usa
-un warm-up deterministico nella durata e seed fisso, senza residui osservati.
+Limiti da mantenere espliciti: SD simulata eccessiva nei lap stabili (rapporto mediano
+circa1.53 sulla validation nel confronto a1000 traiettorie); potenze negative possibili;
+target ricostruiti dalle medie osservate, non prescrizioni esterne indipendenti;
+nessuna validazione della catena verso HR ancora completata. Il viewer originale
+conserva le sue100 traiettorie e i suoi risultati; i confronti a1000 sono nello storico.
 
-La vista a un passo usa soltanto il passato osservato, con le stesse medie per le due varianti.
-La simulazione libera non può sapere quando si verificherà un episodio osservato di alta varianza.
-Le metriche principali sono NLL, copertura/ampiezza P10–P90 e interval score all'80%;
-il RMSE della media non misura il beneficio del GARCH. Validation/test rimangono descrittivi
-perché già esaminati. La baseline è l'AR originale a varianza costante.
+## Potenza negativa: opzioni proposte, non applicate
 
-Artefatti separati: `garch_model.json`, `garch_results.js`, `garch_predictions.csv`,
-`garch_metrics.csv`, `garch_summary.csv`, `garch_diagnostics.csv`, `garch_report.md`.
-`garch_evaluation.json` registra hash del codice e degli output dell'ultima valutazione;
-gli hash in `garch_model.json` conservano invece la provenienza del fit originale.
-Il modello contiene hash della baseline, split, versioni, seed, tutte le partenze e convenzioni.
-Il report documenta anche persistenza, disponibilità degli IC e condizione del quarto momento.
-Gli artefatti originali `model.json`, `results.js`, `predictions.csv`, `metrics.csv`, `report.md`
-non vengono sovrascritti dai comandi GARCH. Se la baseline cambia, la valutazione GARCH viene rifiutata.
+1. **Limite a zero solo sull'uscita:** P=max(0,P_latente), lasciando invariata la ricorsione AR latente.
+   E la prima sensibilita da valutare: nessun nuovo parametro, ma massa di probabilita a zero,
+   media/energia in aumento e correlazione dell'uscita modificata. Non prova che gli zeri siano coasting reale.
+2. **Normale condizionata a P>=0:** campionare la distribuzione predittiva troncata al limite fisico.
+   Cambia media, varianza e dinamica della simulazione; richiede inizializzazione coerente e
+   rivalutazione/possibile ristima. Non equivale a tagliare i valori negativi; con distribuzione
+   continua non produce periodi esattamente a zero. Riferimento: https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.truncnorm.html.
+3. **Modello su scala positiva o a due parti:** componente zero/pedalata piu distribuzione positiva,
+   oppure trasformazione positiva con AR latente. E un nuovo modello; aggiunge fitting e cambia
+   la struttura additiva. Una lognormale pura non rappresenta zeri esatti. Non e il primo passo consigliato.
 
-Test: `.venv/Scripts/python -B -m pytest tests/test_power_response_garch.py tests/test_power_response_estimation.py tests/test_power_response_estimation_core.py -q -p no:cacheprovider`.
+Prima di scegliere: quantificare quota/profondita/durata dei negativi e, dopo correzione, variazione
+di media, energia, SD interna lap e zero-run; usare gli stessi numeri casuali e train/validation,
+per fasce target e fase. Se il clipping altera sensibilmente il carico nei recuperi, non considerarlo
+una correzione innocua. Evitare valore assoluto/riflessione: trasforma escursioni negative in potenza positiva.
+Non rinormalizzare usando le medie osservate della validation. Nessuna di queste correzioni e attiva.
 
 Un solo modello per atleta:
 
@@ -85,22 +79,6 @@ Target ricostruiti da `data/processed/prescribed_workouts_final/`: risultati con
 Le predizioni non usano la potenza osservata come feedback. Gli IC dinamici sono locali, per cluster workout; gli SE AR sono OLS iid diagnostici. Il test già visto è descrittivo, non una nuova conferma indipendente. Il modello consegnato conserva esattamente i coefficienti e le simulazioni del run accettato (n=4 + AR(2)), senza nuovo fitting.
 
 ## Contenuto essenziale
-
-Esperimento con offset casuale per lap e AR(2): `lap_ar.html`, metodo e lettura in
-`lap_ar_report.md`. Rigenerare con
-`.venv/Scripts/python -B -m power_response_estimation.lap_random_ar_run`.
-Fit marginale train, simulazione libera validation; gli offset della pagina sono
-estrazioni predittive, non stime dai dati validation. Il fit attuale colloca la
-varianza degli offset a zero; i target ricostruiti dalle medie dei lap limitano
-l'identificazione di questa componente. Modelli precedenti conservati.
-
-Confronto della varianza su **train e validation soltanto**: aprire `variance.html`.
-Include varianza costante, GARCH originale, GARCH con variance targeting e una proposta
-contestuale basata sul target. Protocollo in `variance_report.md`, parametri in
-`variance_models.json`, metriche per workout e per fascia nei file `variance_*.csv`.
-Rigenerare con `.venv/Scripts/python -B -m power_response_estimation.variance_comparison`.
-La pagina utilizza ECharts locale; nessuna nuova immagine statica. I modelli originali
-restano congelati; le bande libere del confronto usano 1.000 traiettorie per segmento.
 
 - `model.json`: modello completo, split/hash, candidati, selezione e statistiche dei parametri.
 - `results.js`: campioni validation/test e quattro combinazioni in entrambe le modalità, leggibili dalla pagina senza server.

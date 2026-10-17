@@ -1,19 +1,16 @@
 'use strict';
 const $ = id => document.getElementById(id);
 const dataset = window.POWER_RESPONSE_RESULTS;
-const garchDataset = window.POWER_GARCH_RESULTS;
 const chart = echarts.init($('chart'), null, {renderer:'canvas'});
 const colors = {real:'#8b9aa2', target:'#b58226', model:'#087e8b', dynamic:'#bd5444', ar:'#8060a4'};
 let current, start=0, end=100, values;
 const format = (x,d=2) => x==null ? '—' : Number(x).toLocaleString('it-IT',{minimumFractionDigits:d,maximumFractionDigits:d});
 function clock(seconds){const t=Math.max(0,Math.round(seconds));return [Math.floor(t/3600),Math.floor(t/60)%60,t%60].map(v=>String(v).padStart(2,'0')).join(':');}
-function options(){return {dynamic:$('dynamic').checked,ar:$('ar').checked,mode:$('mode').value,variance:$('variance').value};}
-function stochastic(data,opts){return opts.variance==='garch'?garchDataset.splits[$('split').value].workouts[$('workout').value]:data;}
+function options(){return {dynamic:$('dynamic').checked,ar:$('ar').checked,mode:$('mode').value};}
 function compose(data,opts){
  const prediction=[],residual=[],response=[],noise=[];
- const source=stochastic(data,opts);
  for(let i=0;i<data.t.length;i++){
-  const r=opts.dynamic?data.r[i]:0,a=opts.ar?(opts.mode==='mean'?data.arMean:source.arSample[i]):0;
+  const r=opts.dynamic?data.r[i]:0,a=opts.ar?(opts.mode==='mean'?data.arMean:data.arSample[i]):0;
   response.push(r);noise.push(a);prediction.push(data.target[i]+r+a);residual.push(data.real[i]-prediction[i]);
  }
  return {prediction,residual,response,noise};
@@ -31,7 +28,7 @@ function updateMetrics(){
  $('window-label').textContent=bounds().map(clock).join(' → ');
  $('metric-note').textContent=(opts.mode==='simulation'&&opts.ar?'Errore della prima realizzazione casuale: non misura la capacità di prevedere i singoli picchi.':'Errore della previsione media, senza feedback osservato.')+' Residuo aggiornato = potenza reale − curva attiva.';
  let html='<tr><th>Dinamica / AR</th><th>RMSE W</th><th>MAE W</th><th>Bias W</th></tr>';
- for(const dynamic of [false,true])for(const ar of [false,true]){const q=stats(compose(current,{dynamic,ar,mode:opts.mode,variance:opts.variance}).residual,range);html+='<tr class="'+(dynamic===opts.dynamic&&ar===opts.ar?'active':'')+'"><td>'+(dynamic?'ON':'OFF')+' / '+(ar?'ON':'OFF')+'</td><td>'+format(q.rmse)+'</td><td>'+format(q.mae)+'</td><td>'+format(q.bias)+'</td></tr>';}
+ for(const dynamic of [false,true])for(const ar of [false,true]){const q=stats(compose(current,{dynamic,ar,mode:opts.mode}).residual,range);html+='<tr class="'+(dynamic===opts.dynamic&&ar===opts.ar?'active':'')+'"><td>'+(dynamic?'ON':'OFF')+' / '+(ar?'ON':'OFF')+'</td><td>'+format(q.rmse)+'</td><td>'+format(q.mae)+'</td><td>'+format(q.bias)+'</td></tr>';}
  $('ablations').innerHTML=html;
 }
 function points(series){
@@ -46,8 +43,7 @@ function draw(){
  const opts=options();values=compose(current,opts);
  const raw=current.real.map((v,i)=>v-current.target[i]);
  const series=[];
- const source=stochastic(current,opts);
- if(opts.ar){const low=current.target.map((v,i)=>v+values.response[i]+source.low[i]),width=source.high.map((v,i)=>v-source.low[i]);
+ if(opts.ar){const low=current.target.map((v,i)=>v+values.response[i]+current.low[i]),width=current.high.map((v,i)=>v-current.low[i]);
   series.push({...line('Banda P10',low,0,colors.ar),stack:'interval',stackStrategy:'all',lineStyle:{opacity:0},silent:true},
    {...line('Banda P10–P90',width,0,colors.ar),stack:'interval',stackStrategy:'all',lineStyle:{opacity:0},areaStyle:{opacity:.09,color:colors.ar},silent:true});}
  series.push(line('Reale',current.real,0,colors.real,.9),line('Prescritta',current.target,0,colors.target,1.4,true),line('Modello attivo',values.prediction,0,colors.model,1.3),
@@ -72,14 +68,12 @@ function openWorkout(){
  $('readout').textContent='';draw();
 }
 function openSplit(){
- const available=garchDataset?.baselineModelHash===dataset.model_hash&&garchDataset?.splits[$('split').value];
- $('variance').options[1].disabled=!available;if(!available)$('variance').value='constant';
  $('workout').replaceChildren();for(const wid of Object.keys(dataset.splits[$('split').value].workouts))$('workout').add(new Option(wid,wid));
  $('notice').textContent='Target ricostruiti dalla potenza: risultati condizionati al dataset. '+($('split').value==='test'?'TEST già esaminato: confronto descrittivo.':'VALIDATION usato per scegliere l’ordine.')+' Coefficienti congelati dal training.';openWorkout();
 }
 function moveWindow(a,b){const width=Math.min(100,b-a);a=Math.max(0,Math.min(100-width,a));b=a+width;chart.dispatchAction({type:'dataZoom',start:a,end:b});}
 chart.on('datazoom',()=>{const z=chart.getOption().dataZoom[0];start=z.start;end=z.end;updateMetrics();});
-for(const id of ['dynamic','ar','mode','variance'])$(id).addEventListener('change',draw);
+for(const id of ['dynamic','ar','mode'])$(id).addEventListener('change',draw);
 $('scope').addEventListener('change',updateMetrics);$('workout').addEventListener('change',openWorkout);$('split').addEventListener('change',openSplit);
 $('previous').addEventListener('click',()=>{$('workout').selectedIndex--;openWorkout();});$('next').addEventListener('click',()=>{$('workout').selectedIndex++;openWorkout();});
 $('reset').addEventListener('click',()=>moveWindow(0,100));
