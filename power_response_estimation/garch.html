@@ -5,7 +5,7 @@
 </style></head><body>
 <header><small style="color:#a8c9cd">POTENZA / VARIANZA DELLE INNOVAZIONI</small><h1>AR(2) + GARCH(1,1)</h1><p id="model-info">Caricamento…</p></header>
 <main>
-<p><a href="index.html">← Simulazione libera e contributi del modello</a> · <a href="garch_report.md">Report e protocollo</a></p>
+<p><a href="index.html">← Simulazione libera e contributi del modello</a> · <a href="garch_report.md">Report e protocollo</a> ? <a href="variance.html">Confronto varianza train/validation</a></p>
 <div class="notice">Questa vista mostra previsioni <b>a un passo</b>: media AR e varianza utilizzano solo osservazioni precedenti. Non è una simulazione autonoma. I primi due campioni di ogni tratto non sono valutabili. Validation e test già esaminati: risultati descrittivi.</div>
 <div id="error" hidden></div>
 <div class="toolbar"><label>Dataset<select id="split"></select></label><button id="previous" aria-label="Workout precedente">‹</button><label>Workout<select id="workout"></select></label><button id="next" aria-label="Workout successivo">›</button><label>Varianza visualizzata<select id="variance"><option value="garch">GARCH(1,1)</option><option value="constant">Costante · AR originale</option></select></label><label>Metriche su<select id="scope"><option value="workout">Intero workout</option><option value="window">Finestra visibile</option></select></label><button id="reset">Intero workout</button><span id="window" class="help"></span></div>

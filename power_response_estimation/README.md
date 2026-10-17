@@ -86,6 +86,14 @@ Le predizioni non usano la potenza osservata come feedback. Gli IC dinamici sono
 
 ## Contenuto essenziale
 
+Confronto della varianza su **train e validation soltanto**: aprire `variance.html`.
+Include varianza costante, GARCH originale, GARCH con variance targeting e una proposta
+contestuale basata sul target. Protocollo in `variance_report.md`, parametri in
+`variance_models.json`, metriche per workout e per fascia nei file `variance_*.csv`.
+Rigenerare con `.venv/Scripts/python -B -m power_response_estimation.variance_comparison`.
+La pagina utilizza ECharts locale; nessuna nuova immagine statica. I modelli originali
+restano congelati; le bande libere del confronto usano 1.000 traiettorie per segmento.
+
 - `model.json`: modello completo, split/hash, candidati, selezione e statistiche dei parametri.
 - `results.js`: campioni validation/test e quattro combinazioni in entrambe le modalità, leggibili dalla pagina senza server.
 - `metrics.csv`, `report.md`: risultati sintetici.
