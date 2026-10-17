@@ -24,6 +24,22 @@ def sample_model():
     return mod('model').DecompositionModel(dynamic, ar, seed=42, paths=5)
 
 
+def test_clipping_is_output_only_and_mean_is_expectation_after_clipping():
+    model = sample_model()
+    model.ar.intercept = 0.
+    s = mod('data').Segment('zero', 1, np.arange(200), np.zeros(200), np.zeros(200))
+    table = model.decompose([s])
+    latent = mod('ar').simulate_workout(model.ar, [s], seed=model.seed, paths=model.paths)[0][0]
+    np.testing.assert_array_equal(table.ar_sample_w, latent)
+    assert np.any(latent < 0)
+    simulated, _ = mod('model').compose(table, mode='simulation')
+    np.testing.assert_array_equal(simulated, np.maximum(latent, 0))
+    mean, _ = mod('model').compose(table)
+    sd = np.sqrt(mod('ar').stationary_state(model.ar)[1][0, 0])
+    np.testing.assert_allclose(mean, sd/np.sqrt(2*np.pi))
+    np.testing.assert_array_equal(mod('model').compose(table, ar=False)[0], 0)
+
+
 def test_all_four_component_combinations_and_residuals():
     target = np.array([100.,100.,200.,200.,200.,100.])
     segment = mod('data').Segment('w',1,np.arange(6),np.arange(6.),target)

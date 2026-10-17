@@ -11,7 +11,7 @@ import numpy as np
 import pandas as pd
 import scipy
 
-from .ar import fit_ar
+from .ar import fit_ar, ARModel, stationary_state
 from .data import inventory, chronological_split, load_segments, verify_inputs, sha256
 from .dynamics import fit_response
 from .model import DecompositionModel, all_metrics, compose, error_metrics, select_order
@@ -37,7 +37,7 @@ def digest(value):
 def atomic_text(path, text):
     path = Path(path)
     temporary = path.with_name(path.name+'.tmp')
-    temporary.write_text(text,encoding='utf-8')
+    temporary.write_text(text,encoding='utf-8',newline='')
     os.replace(temporary,path)
 
 
@@ -77,6 +77,9 @@ def pack(table, coverage):
     for wid, part in table.groupby('workout_id',sort=False):
         data = {key:part[col].astype(object).where(part[col].notna(),None).tolist() for key,col in fields.items()}
         data['arMean'] = float(part.ar_mean_w.iloc[0])
+        data['arSd'] = float(part.ar_sd_w.iloc[0])
+        data['clippedMean'] = compose(part)[0].tolist()
+        data['clippedMeanNoDynamics'] = compose(part, dynamic=False)[0].tolist()
         workouts[str(wid)] = data
     return dict(workouts=workouts,metrics=all_metrics(table),coverage=coverage)
 
@@ -104,7 +107,7 @@ def report(bundle, results):
         'Il vecchio test è già stato esaminato: il confronto è descrittivo. Coefficienti sempre stimati sul training, senza refit su train+validation.', '',
         '## Uso della pagina', '',
         'Aprire `index.html`. Rotella per zoom, trascinamento per scorrere, barra inferiore per selezionare/spostare l’intervallo. I quattro pannelli condividono il tempo. Interruttori dinamica/AR e modalità media/simulazione aggiornano curve, residui, RMSE, MAE e bias. Scegliere metriche dell’intero workout o della finestra visibile.',
-        'La stessa realizzazione AR rimane fissa cambiando contributi e zoom. Nessuna linea attraversa gap reali. Le bande P10–P90 sono puntuali, senza incertezza parametrica; nessun clipping della potenza negativa.', '',
+        'La stessa realizzazione AR rimane fissa cambiando contributi e zoom. Nessuna linea attraversa gap reali. Le bande P10–P90 sono puntuali, senza incertezza parametrica; clipping a zero sulla sola uscita, anche sui limiti della banda. La previsione media e la media analitica dopo clipping; i contributi e le innovazioni restano latenti.', '',
         'Codice, modello, pagina, risultati e questo report stanno nella stessa cartella. Comandi e convenzioni in `README.md`.']
     return '\n'.join(lines)+'\n'
 
@@ -121,9 +124,12 @@ def prediction_table(results):
             frame.insert(0,'workout_id',wid)
             frame.insert(0,'split',split)
             frame['ar_mean_w'] = data['arMean']
+            frame['ar_sd_w'] = data['arSd']
             frame['final_residual_w'] = frame.real_w-frame.target_w-frame.response_w
             for mode in ('mean','simulation'):
                 frame['predicted_'+mode+'_w'], frame['residual_'+mode+'_w'] = compose(frame,mode=mode)
+            frame['power_low_w'] = np.maximum(0., frame.target_w+frame.response_w+frame.ar_low_w)
+            frame['power_high_w'] = np.maximum(0., frame.target_w+frame.response_w+frame.ar_high_w)
             frames.append(frame)
     return pd.concat(frames,ignore_index=True)
 
@@ -131,6 +137,21 @@ def prediction_table(results):
 def publish(output, bundle, results, *, write_model=False):
     output = Path(output)
     output.mkdir(parents=True,exist_ok=True)
+    # Upgrade saved components without refitting, resampling, or reading test inputs.
+    sd = float(np.sqrt(stationary_state(ARModel.from_dict(bundle['decomposition']['ar']))[1][0,0]))
+    for result in results['splits'].values():
+        for data in result['workouts'].values():
+            data['arSd'] = sd
+    table = prediction_table(results)
+    for split, result in results['splits'].items():
+        selected = table[table['split'] == split]
+        result['metrics'] = all_metrics(selected)
+        for wid, part in selected.groupby('workout_id', sort=False):
+            data = result['workouts'][str(wid)]
+            data['clippedMean'] = compose(part)[0].tolist()
+            data['clippedMeanNoDynamics'] = compose(part, dynamic=False)[0].tolist()
+    results['output_transform'] = dict(name='clip_at_zero', latent_ar_unchanged=True,
+        mean='exact expectation of clipped Gaussian', adopted='2026-10-17')
     for asset in ASSETS:
         if (HERE/asset).resolve() != (output/asset).resolve():
             shutil.copyfile(HERE/asset,output/asset)

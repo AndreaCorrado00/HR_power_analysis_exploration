@@ -2,6 +2,7 @@
 from dataclasses import dataclass
 import numpy as np
 import pandas as pd
+from scipy.special import ndtr
 
 from .ar import ARModel, simulate_workout, stationary_state
 from .data import Segment
@@ -33,7 +34,9 @@ class DecompositionModel:
 
     def decompose(self, segments):
         """Generate once per workout, independently of observed residuals."""
-        ar_mean = float(stationary_state(self.ar)[0][0])
+        mean, covariance = stationary_state(self.ar)
+        ar_mean = float(mean[0])
+        ar_sd = float(np.sqrt(covariance[0, 0]))
         frames = []
         for wid in dict.fromkeys(s.workout_id for s in segments):
             parts = [s for s in segments if s.workout_id == wid]
@@ -51,10 +54,17 @@ class DecompositionModel:
                 frames.append(pd.DataFrame(dict(workout_id=str(wid), segment_id=s.segment_id, time_s=s.time,
                     target_w=s.target, real_w=s.target+s.residual, input_w=input_delta(s.target),
                     response_w=response, final_residual_w=e, innovation_w=innovation,
-                    ar_mean_w=ar_mean, ar_sample_w=simulated[0], ar_low_w=low, ar_high_w=high)))
+                    ar_mean_w=ar_mean, ar_sd_w=ar_sd,
+                    ar_sample_w=simulated[0], ar_low_w=low, ar_high_w=high)))
         if not frames:
             raise ValueError('No valid continuous segments')
         return pd.concat(frames, ignore_index=True)
+
+
+def clipped_normal_mean(mean, sd):
+    """E[max(0, X)] for Gaussian X, not max(0, E[X])."""
+    z = np.asarray(mean, float)/np.asarray(sd, float)
+    return np.maximum(0., mean*ndtr(z)+sd*np.exp(-.5*z*z)/np.sqrt(2*np.pi))
 
 
 def compose(table, *, dynamic=True, ar=True, mode='mean'):
@@ -65,6 +75,10 @@ def compose(table, *, dynamic=True, ar=True, mode='mean'):
         predicted += table.response_w.to_numpy()
     if ar:
         predicted += table['ar_mean_w' if mode == 'mean' else 'ar_sample_w'].to_numpy()
+    if ar and mode == 'mean':
+        predicted = clipped_normal_mean(predicted, table.ar_sd_w.to_numpy())
+    else:
+        predicted = np.maximum(0., predicted)
     return predicted, table.real_w.to_numpy()-predicted
 
 

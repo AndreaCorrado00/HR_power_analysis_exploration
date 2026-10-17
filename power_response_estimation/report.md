@@ -19,13 +19,13 @@ RMSE medio per workout della **previsione media**, senza feedback osservato. Gli
 | Split | Dinamica | AR | RMSE medio W | MAE medio W | Bias medio W |
 | --- | --- | --- | ---: | ---: | ---: |
 | validation | False | False | 77.574 | 52.054 | 0.062 |
-| validation | False | True | 77.574 | 52.057 | 0.247 |
-| validation | True | False | 73.314 | 49.614 | 0.067 |
-| validation | True | True | 73.314 | 49.620 | 0.252 |
+| validation | False | True | 77.596 | 52.138 | -0.816 |
+| validation | True | False | 73.270 | 49.560 | 0.013 |
+| validation | True | True | 73.238 | 49.495 | -1.064 |
 | test | False | False | 77.588 | 49.028 | 0.396 |
-| test | False | True | 77.589 | 49.031 | 0.581 |
-| test | True | False | 74.637 | 47.320 | 0.418 |
-| test | True | True | 74.639 | 47.324 | 0.603 |
+| test | False | True | 77.599 | 49.086 | -0.362 |
+| test | True | False | 74.627 | 47.307 | 0.404 |
+| test | True | True | 74.601 | 47.261 | -0.512 |
 
 ## Interpretazione e controlli
 
@@ -37,6 +37,6 @@ Il vecchio test è già stato esaminato: il confronto è descrittivo. Coefficien
 ## Uso della pagina
 
 Aprire `index.html`. Rotella per zoom, trascinamento per scorrere, barra inferiore per selezionare/spostare l’intervallo. I quattro pannelli condividono il tempo. Interruttori dinamica/AR e modalità media/simulazione aggiornano curve, residui, RMSE, MAE e bias. Scegliere metriche dell’intero workout o della finestra visibile.
-La stessa realizzazione AR rimane fissa cambiando contributi e zoom. Nessuna linea attraversa gap reali. Le bande P10–P90 sono puntuali, senza incertezza parametrica; nessun clipping della potenza negativa.
+La stessa realizzazione AR rimane fissa cambiando contributi e zoom. Nessuna linea attraversa gap reali. Le bande P10–P90 sono puntuali, senza incertezza parametrica; clipping a zero sulla sola uscita, anche sui limiti della banda. La previsione media e la media analitica dopo clipping; i contributi e le innovazioni restano latenti.
 
 Codice, modello, pagina, risultati e questo report stanno nella stessa cartella. Comandi e convenzioni in `README.md`.

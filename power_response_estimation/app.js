@@ -11,7 +11,8 @@ function compose(data,opts){
  const prediction=[],residual=[],response=[],noise=[];
  for(let i=0;i<data.t.length;i++){
   const r=opts.dynamic?data.r[i]:0,a=opts.ar?(opts.mode==='mean'?data.arMean:data.arSample[i]):0;
-  response.push(r);noise.push(a);prediction.push(data.target[i]+r+a);residual.push(data.real[i]-prediction[i]);
+  const p=opts.ar&&opts.mode==='mean'?(opts.dynamic?data.clippedMean[i]:data.clippedMeanNoDynamics[i]):Math.max(0,data.target[i]+r+a);
+  response.push(r);noise.push(a);prediction.push(p);residual.push(data.real[i]-p);
  }
  return {prediction,residual,response,noise};
 }
@@ -43,7 +44,7 @@ function draw(){
  const opts=options();values=compose(current,opts);
  const raw=current.real.map((v,i)=>v-current.target[i]);
  const series=[];
- if(opts.ar){const low=current.target.map((v,i)=>v+values.response[i]+current.low[i]),width=current.high.map((v,i)=>v-current.low[i]);
+ if(opts.ar){const low=current.target.map((v,i)=>Math.max(0,v+values.response[i]+current.low[i])),width=current.high.map((v,i)=>Math.max(0,current.target[i]+values.response[i]+v)-low[i]);
   series.push({...line('Banda P10',low,0,colors.ar),stack:'interval',stackStrategy:'all',lineStyle:{opacity:0},silent:true},
    {...line('Banda P10–P90',width,0,colors.ar),stack:'interval',stackStrategy:'all',lineStyle:{opacity:0},areaStyle:{opacity:.09,color:colors.ar},silent:true});}
  series.push(line('Reale',current.real,0,colors.real,.9),line('Prescritta',current.target,0,colors.target,1.4,true),line('Modello attivo',values.prediction,0,colors.model,1.3),

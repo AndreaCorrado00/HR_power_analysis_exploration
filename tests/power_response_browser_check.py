@@ -22,7 +22,11 @@ def run():
         $('workout').value=wid;openWorkout();
         for(const mode of ['mean','simulation'])for(const dynamic of [false,true])for(const ar of [false,true]){
           const v=compose(current,{mode,dynamic,ar}),j=Math.floor(current.t.length/2);
-          const expected=current.target[j]+(dynamic?current.r[j]:0)+(ar?(mode==='mean'?current.arMean:current.arSample[j]):0);
+          const expected=ar&&mode==='mean'?(dynamic?current.clippedMean[j]:current.clippedMeanNoDynamics[j]):Math.max(0,current.target[j]+(dynamic?current.r[j]:0)+(ar?current.arSample[j]:0));
+          check(v.prediction.every(p=>p>=0),'nonnegative output');
+          const metric=dataset.splits.validation.metrics.find(m=>m.workout_id===wid&&m.mode===mode&&m.dynamic===dynamic&&m.ar===ar);
+          const measured=stats(v.residual,[current.t[0],current.t.at(-1)]);
+          check(close(measured.rmse,metric.rmse_w)&&close(measured.bias,metric.bias_w),'Python JS metrics');
           check(close(v.prediction[j],expected),'composition');check(close(v.residual[j],current.real[j]-expected),'residual');
         }
       }
@@ -35,7 +39,8 @@ def run():
     result=subprocess.run(['C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe','--headless','--disable-gpu','--no-first-run',
         f'--user-data-dir={temp/"profile"}','--dump-dom','--virtual-time-budget=10000',page.as_uri()],capture_output=True,timeout=90)
     found=re.search(r'<pre id="qa-result">(.*?)</pre>',result.stdout.decode('utf-8',errors='replace'),re.S)
-    assert found,'No browser result';report=json.loads(html.unescape(found.group(1)));print(report);assert not report['failures']
+    assert found, 'No browser result: '+result.stderr.decode('utf-8',errors='replace')[-2000:]
+    report=json.loads(html.unescape(found.group(1)));print(report);assert not report['failures']
 
 
 if __name__=='__main__':run()
