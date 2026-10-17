@@ -86,6 +86,14 @@ Le predizioni non usano la potenza osservata come feedback. Gli IC dinamici sono
 
 ## Contenuto essenziale
 
+Esperimento con offset casuale per lap e AR(2): `lap_ar.html`, metodo e lettura in
+`lap_ar_report.md`. Rigenerare con
+`.venv/Scripts/python -B -m power_response_estimation.lap_random_ar_run`.
+Fit marginale train, simulazione libera validation; gli offset della pagina sono
+estrazioni predittive, non stime dai dati validation. Il fit attuale colloca la
+varianza degli offset a zero; i target ricostruiti dalle medie dei lap limitano
+l'identificazione di questa componente. Modelli precedenti conservati.
+
 Confronto della varianza su **train e validation soltanto**: aprire `variance.html`.
 Include varianza costante, GARCH originale, GARCH con variance targeting e una proposta
 contestuale basata sul target. Protocollo in `variance_report.md`, parametri in
