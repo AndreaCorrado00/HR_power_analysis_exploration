@@ -79,4 +79,3 @@ Il manifest originale usa rounded_observed_mean, arrotondamento 5 W. Alcune ripe
 - Negative probability e la quota media simulativa di potenze negative, non una correzione applicata al segnale.
 - Il risultato non identifica offset rispetto a prescrizioni esterne indipendenti, perche i target qui sono ricostruiti
   dalle medie osservate. Non sostituire i modelli precedenti se non si osserva un miglioramento fuori dal fitting.
-
