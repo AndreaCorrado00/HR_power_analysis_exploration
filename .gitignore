@@ -19,3 +19,4 @@
 /power_response_estimation/*.tmp
 /power_response_estimation/__pycache__/
 webapp/model_identification_app\storage
+power_response_estimation\diagnostics
