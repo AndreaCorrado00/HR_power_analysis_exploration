@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="it"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Prescrizione → Potenza → HR · Esperimento 42/9/9</title>
+<style>
+:root{font-family:system-ui,Segoe UI,sans-serif;color:#183046;background:#eef2f5;font-size:15px}*{box-sizing:border-box}body{margin:0}main{max-width:1480px;margin:auto;padding:28px}h1{font-size:29px;letter-spacing:-.7px;margin:4px 0 10px}h2{font-size:18px}.eyebrow{font-size:12px;font-weight:700;letter-spacing:1.4px;color:#49667b}p{line-height:1.55}.muted{color:#526678}.panel{background:white;border:1px solid #d9e2e9;border-radius:12px;padding:20px;margin:16px 0}.notice{border-left:4px solid #bc7b16;background:#fff9ed}.controls{display:flex;gap:18px;flex-wrap:wrap;align-items:end}label{display:flex;flex-direction:column;gap:6px;font-size:13px;font-weight:600}select{font:inherit;min-width:150px;border:1px solid #bacbd6;border-radius:7px;padding:9px;background:white;color:#183046}a{color:#176184}.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:18px 0}.card{border:1px solid #dce5eb;border-radius:8px;padding:16px}.card b{font-size:25px;display:block;margin-top:7px}.card small{display:block;color:#526678;margin-top:5px}#chart{height:900px;width:100%}.scroll{overflow:auto}table{border-collapse:collapse;width:100%;font-size:13px}th,td{text-align:right;padding:10px;border-bottom:1px solid #e4ebef;white-space:nowrap}th:first-child,td:first-child{text-align:left}thead{background:#f3f6f8}summary{cursor:pointer;font-weight:650}#error{color:#a12222}.badge{display:inline-block;border-radius:20px;padding:4px 9px;background:#e4eff2;font-size:12px}footer{font-size:12px;color:#526678;margin:22px 0}#status{font-size:13px}.links{display:flex;gap:18px;flex-wrap:wrap}@media(max-width:750px){main{padding:14px}.cards{grid-template-columns:repeat(2,1fr)}h1{font-size:23px}#chart{height:820px}.panel{padding:12px}}
+</style></head><body><main>
+<div class="eyebrow">ESPERIMENTO INDIVIDUALE · CICLISMO</div>
+<h1>Prescrizione → Potenza → Frequenza cardiaca</h1>
+<p class="muted">Nuovo fitting sui 60 workout prescritti · split cronologico comune <b>42 train / 9 validation / 9 test</b>.</p>
+<div class="panel notice"><b>Valutazione retrospettiva</b> · I target sono ricostruiti dai dati osservati. Le fasce mostrano la variabilità propagata da potenza e parametri HR, non tutti gli errori possibili. Nessuna HR di validation o test viene usata per inizializzare le previsioni.</div>
+<div id="error" role="alert"></div>
+<section class="panel"><div class="controls">
+<label>Dataset<select id="split"></select></label>
+<label>Workout<select id="workout"></select></label>
+<label>Tratto visualizzato<select id="segment"></select></label>
+<label>Metriche HR<select id="window"><option value="all">Intero tratto</option><option value="tail">Da 180 s in poi</option><option value="initial">Primi 180 s</option></select></label>
+</div><p id="status" class="muted"></p><div id="cards" class="cards"></div>
+<div id="chart" aria-label="Grafici di potenza, frequenza cardiaca e residui"></div>
+<p class="muted">Zoom con rotella o cursore inferiore; trascina per spostarti. Clicca la legenda per mostrare i confronti. I vuoti separano tratti distinti. La finestra delle metriche è riferita all’inizio di ciascun tratto; lo zoom non cambia le metriche.</p>
+</section>
+<section class="panel"><h2>Metriche del workout</h2><p class="muted">Stesso supporto HR per tutti i confronti. Potenza “tutti i tratti” include anche i tratti brevi esclusi dall’analisi HR. Bias = osservato − predetto.</p><div id="workoutMetrics" class="scroll"></div></section>
+<section class="panel"><h2>Risultati complessivi dello split</h2><p class="muted">Media delle metriche per workout, con peso uguale. Errori potenza in W; errori HR in bpm.</p><div id="summary" class="scroll"></div></section>
+<details class="panel"><summary>Modelli, variabilità e copertura dei dati</summary><div id="models"></div><div id="quality" class="scroll"></div><p>Per HR si conservano tratti di almeno 300 s. Nel train, HR mancante interrompe il tratto; in validation/test viene soltanto esclusa dalle metriche. Nessuna interpolazione. Un cambio di lap o target non azzera gli stati.</p><p>Monte Carlo: 1.000 traiettorie, seed 42, AR inizializzato stazionario e parametri HR congiunti entro i bounds. A e HR iniziale sono stimati sul train e restano fissi. Non sono inclusi rumore residuo HR, incertezza delle medie o dei coefficienti potenza. Fasce puntuali, non simultanee. Indipendenza assunta tra rumore potenza e parametri HR.</p></details>
+<section id="failures" class="panel" hidden></section>
+<footer class="links"><a href="PROTOCOL.md">Protocollo</a><a href="results/report.md">Report tecnico</a><a id="csv" href="results/validation_metrics.csv">Metriche CSV</a><a href="results/manifest.json">Split, sorgenti e qualità</a><a href="results/hr_model.json">Modello HR</a><a href="results/power/model.json">Modello potenza</a></footer>
+</main><script src="../../power_response_estimation/echarts.min.js"></script><script src="results/results.js"></script><script src="app.js"></script></body></html>
