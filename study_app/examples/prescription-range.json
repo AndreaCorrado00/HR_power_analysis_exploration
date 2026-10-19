@@ -1,0 +1,7 @@
+{
+  "schema_version": 1,
+  "name": "Range: richiede scelta esplicita nell'editor",
+  "blocks": [
+    {"duration_s": 300, "target": {"kind": "range", "low_w": 180, "high_w": 220}}
+  ]
+}

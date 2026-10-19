@@ -1,0 +1,26 @@
+{
+  "name": "local-cycling-study",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1",
+    "build": "vue-tsc --noEmit && vite build",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "echarts": "6.1.0",
+    "vue": "3.5.43",
+    "vue-echarts": "8.3.0"
+  },
+  "devDependencies": {
+    "@types/node": "24.19.0",
+    "@vitejs/plugin-vue": "6.0.9",
+    "@vue/test-utils": "2.4.6",
+    "jsdom": "27.4.0",
+    "typescript": "5.9.3",
+    "vite": "7.3.6",
+    "vitest": "3.2.7",
+    "vue-tsc": "3.3.11"
+  }
+}

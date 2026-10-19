@@ -1,0 +1,2 @@
+<script setup lang="ts">import {fmt} from '../api';defineProps<{value:any;title?:string}>()</script>
+<template><section v-if="value" class="metrics"><h3 v-if="title">{{title}}</h3><div class="metric-grid"><div v-for="[key,label,unit] in [['MAE','MAE','bpm'],['RMSE','RMSE','bpm'],['bias','Bias','bpm'],['residual_sd','SD residui','bpm'],['coverage','Copertura fascia',''],['width','Ampiezza fascia','bpm'],['N','Campioni','']]" :key="key"><small>{{label}}</small><strong>{{fmt(value[key])}} <em>{{unit}}</em></strong></div></div></section></template>

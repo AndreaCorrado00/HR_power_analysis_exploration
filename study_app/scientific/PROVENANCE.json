@@ -1,0 +1,100 @@
+[
+  {
+    "source": "archive\\power_response_estimation\\ar.py",
+    "destination": "study_app\\scientific\\frozen\\power\\ar.py",
+    "sha256": "4f0d76698a86fe532ebe5d58ac873c26397e2c7b5cb2fac8691e8e3d8500e4b3",
+    "destination_sha256": "4f0d76698a86fe532ebe5d58ac873c26397e2c7b5cb2fac8691e8e3d8500e4b3",
+    "adaptation": "byte-identical copy"
+  },
+  {
+    "source": "archive\\power_response_estimation\\dynamics.py",
+    "destination": "study_app\\scientific\\frozen\\power\\dynamics.py",
+    "sha256": "571721ce51ac85c735953bbc85aa55125540001bc18b2ab7bfe2a876fb02bf77",
+    "destination_sha256": "571721ce51ac85c735953bbc85aa55125540001bc18b2ab7bfe2a876fb02bf77",
+    "adaptation": "byte-identical copy"
+  },
+  {
+    "source": "archive\\power_response_estimation\\model.py",
+    "destination": "study_app\\scientific\\frozen\\power\\model.py",
+    "sha256": "a221747364d1ad82cf3dd5a808dcc3b667d7206a2aa7b2b49a0c789dc1ca31c7",
+    "destination_sha256": "a221747364d1ad82cf3dd5a808dcc3b667d7206a2aa7b2b49a0c789dc1ca31c7",
+    "adaptation": "byte-identical copy"
+  },
+  {
+    "source": "archive\\power_response_estimation\\data.py",
+    "destination": "study_app\\scientific\\frozen\\power\\data.py",
+    "sha256": "c7109e5d949b0f9cf8a82915085debef895440bef0c6fcf081453d4716667d4b",
+    "destination_sha256": "c7109e5d949b0f9cf8a82915085debef895440bef0c6fcf081453d4716667d4b",
+    "adaptation": "byte-identical copy"
+  },
+  {
+    "source": "archive\\webapp\\model_identification_app\\backend\\context.py",
+    "destination": "study_app\\scientific\\frozen\\hr\\context.py",
+    "sha256": "d392720c685db4e8f4bf547d04d2448bbaa2c0a50ca6c34e8cca7fa13029b4ea",
+    "destination_sha256": "d392720c685db4e8f4bf547d04d2448bbaa2c0a50ca6c34e8cca7fa13029b4ea",
+    "adaptation": "byte-identical copy"
+  },
+  {
+    "source": "archive\\webapp\\model_identification_app\\backend\\population.py",
+    "destination": "study_app\\scientific\\frozen\\hr\\population.py",
+    "sha256": "d7bccf02b3d56f7045e808265a34f8a6a98d17429956608326a08a7d385c7107",
+    "destination_sha256": "d7bccf02b3d56f7045e808265a34f8a6a98d17429956608326a08a7d385c7107",
+    "adaptation": "byte-identical copy"
+  },
+  {
+    "source": "archive\\webapp\\model_identification_app\\backend\\models\\p1d.py",
+    "destination": "study_app\\scientific\\frozen\\hr\\models\\p1d.py",
+    "sha256": "779f0d1e962587379d191fecb45f1c4579e0a49122bd9c8f89d57c89f72b0120",
+    "destination_sha256": "779f0d1e962587379d191fecb45f1c4579e0a49122bd9c8f89d57c89f72b0120",
+    "adaptation": "byte-identical copy"
+  },
+  {
+    "source": "archive\\webapp\\model_identification_app\\backend\\models\\profile_search.py",
+    "destination": "study_app\\scientific\\frozen\\hr\\models\\profile_search.py",
+    "sha256": "f0541e7aa37f3142869bbfa51933c62f5d09b771ab9f74955f1e2dbcfd492b76",
+    "destination_sha256": "f0541e7aa37f3142869bbfa51933c62f5d09b771ab9f74955f1e2dbcfd492b76",
+    "adaptation": "byte-identical copy"
+  },
+  {
+    "source": "archive\\src\\power_hr_eda\\fit_reader.py",
+    "destination": "study_app\\scientific\\frozen\\data\\fit_reader.py",
+    "sha256": "bb6b7979107fa220152bdea0fe0614668a150e48eb9cce6dcd70b4725d5b8a0b",
+    "destination_sha256": "bb6b7979107fa220152bdea0fe0614668a150e48eb9cce6dcd70b4725d5b8a0b",
+    "adaptation": "byte-identical copy"
+  },
+  {
+    "source": "archive\\src\\power_hr_eda\\prescriptions.py",
+    "destination": "study_app\\scientific\\frozen\\data\\prescriptions.py",
+    "sha256": "231c8a1157872ef4d8c61d2a3ae6bfc48a8e13fa75b564026185ed660ec2d566",
+    "destination_sha256": "66274836834d70806e3d41af034fd23d36a1945a22e4e3e1346d7b6a9fb970f5",
+    "adaptation": "FTP ratio applied to zone membership and thresholds only; observed-W targets, duration and pattern rules unchanged"
+  },
+  {
+    "source": "archive\\src\\power_hr_eda\\prescription_segments.py",
+    "destination": "study_app\\scientific\\frozen\\data\\prescription_segments.py",
+    "sha256": "dba756fcd0182400a971d9a3022b257faea633077e2b4f42380dd43376726535",
+    "destination_sha256": "dba756fcd0182400a971d9a3022b257faea633077e2b4f42380dd43376726535",
+    "adaptation": "byte-identical copy"
+  },
+  {
+    "source": "archive\\src\\power_hr_eda\\prescription_gaps.py",
+    "destination": "study_app\\scientific\\frozen\\data\\prescription_gaps.py",
+    "sha256": "01175631c0ff458a3ad8e524b4d1f1419ef884459d7305f9e79cfc474f4ffb99",
+    "destination_sha256": "01175631c0ff458a3ad8e524b4d1f1419ef884459d7305f9e79cfc474f4ffb99",
+    "adaptation": "byte-identical copy"
+  },
+  {
+    "source": "archive\\src\\power_hr_eda\\prescription_cli.py",
+    "destination": "study_app\\scientific\\frozen\\data\\prescription_cli.py",
+    "sha256": "f4e53973ee88fb6d001c58e60aaa1d3ec1954b5cd7e8807d210a6a9b895a2a1a",
+    "destination_sha256": "f4e53973ee88fb6d001c58e60aaa1d3ec1954b5cd7e8807d210a6a9b895a2a1a",
+    "adaptation": "byte-identical copy"
+  },
+  {
+    "source": "archive\\experiments\\prescribed_joint\\simulation.py",
+    "destination": "study_app\\scientific\\frozen\\joint\\simulation.py",
+    "sha256": "b6ad0574e790e3edd963318632aea3627ea3b059bed706744058b033386e94db",
+    "destination_sha256": "b6ad0574e790e3edd963318632aea3627ea3b059bed706744058b033386e94db",
+    "adaptation": "byte-identical copy"
+  }
+]

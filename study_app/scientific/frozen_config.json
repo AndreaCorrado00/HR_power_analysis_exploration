@@ -1,0 +1,48 @@
+{
+  "hr": {
+    "model_structure": "p1d_full",
+    "use_pre_window": false,
+    "pre_window_seconds": 10,
+    "initialization_mode": "estimated_equilibrium",
+    "equilibrium_bounds": [
+      60.0,
+      200.0
+    ],
+    "initialization_protocol": "segment_v2",
+    "lower": [
+      1e-06,
+      0.0,
+      0.01
+    ],
+    "upper": [
+      5.0,
+      30.0,
+      1800.0
+    ],
+    "n_starts": 8,
+    "seed": 42,
+    "max_nfev": 500,
+    "search_strategy": "profile_multistart",
+    "grid_delay_points": 301,
+    "grid_tau_points": 141,
+    "grid_refinements": 8,
+    "method": "trf",
+    "loss": "linear",
+    "jac": "3-point",
+    "ftol": 1e-08,
+    "xtol": 1e-08,
+    "gtol": 1e-08,
+    "x_scale": "jac"
+  },
+  "population": {
+    "prediction_mode": "population_B_P0_mean_HR0",
+    "draws": 1000,
+    "seed": 42
+  },
+  "power": {
+    "order": 2,
+    "starts": 6,
+    "max_nfev": 250,
+    "seed": 42
+  }
+}

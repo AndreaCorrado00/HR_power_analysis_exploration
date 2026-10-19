@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "name": "Esempio: riscaldamento, ripetute e recupero",
+  "blocks": [
+    {"duration_s": 600, "target": {"kind": "constant", "watts": 150}},
+    {"repeat": 3, "blocks": [
+      {"duration_s": 180, "target": {"kind": "constant", "watts": 220}},
+      {"duration_s": 120, "target": {"kind": "constant", "watts": 100}}
+    ]},
+    {"duration_s": 300, "target": {"kind": "constant", "watts": 120}}
+  ]
+}
