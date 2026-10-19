@@ -4,7 +4,7 @@ Data: 18 ottobre 2026. Branch: `feature/local-study-webapp`.
 Stato: implementazione autorizzata il 18 ottobre 2026; D1-D4 approvate in CONTROL.md.
 Documento operativo collegato: [PLAN.md](PLAN.md). Registro di perimetro: [CONTROL.md](CONTROL.md).
 
-## 1. Obiettivo e vincoli vincolanti
+## 1. Obiettivo e vincoli 
 
 Una sola webapp locale Vue per gestire atleti, dati, identificazioni, versioni,
 prescrizioni, previsioni salvate e confronti successivi. Il successo è completare
